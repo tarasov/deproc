@@ -50,6 +50,9 @@ class UserPost(models.Model):
     date_end = models.DateField("Дата", null=True, blank=True)
 
 
+#    UserPost.objects.filter()[0].status.all(), UserPost.objects.get(user=UserPost.objects.filter()[0].user).date_begin
+    #for status in post.status.all():
+    #     print status, UserPost.objects.get(user=post.user).date_begin
     def get_user_status(self):
         post = []
         for p in self.status.filter(): post.append(p.name)
