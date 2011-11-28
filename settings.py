@@ -81,7 +81,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'deproc.urls'
 
 TEMPLATE_DIRS = (
-    '/home/'
+    PROJECT_ROOT+'/templates/',
 )
 
 INSTALLED_APPS = (

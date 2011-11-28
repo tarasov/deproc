@@ -13,10 +13,11 @@ class AdminUserStatus(ModelAdmin):
     pass
 
 class AdminPost(ModelAdmin):
-    list_display = ('user', 'status', 'get_user_posts')
+    list_display = ('user', 'get_user_status')
 
 
 site.register(models.User, AdminUser)
 site.register(models.Group, AdminGroup)
 site.register(models.UserStatus, AdminUserStatus)
-site.register(models.Post, AdminPost)
+site.register(models.UserPost, AdminPost)
+site.register(models.HistoryStatus)

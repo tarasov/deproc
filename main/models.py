@@ -7,12 +7,6 @@ choise_sex = (
     ('B', 'баба',)
 )
 
-class Group(Group):
-    describe = models.CharField(u"Описание", max_length=150 )
-
-    class Meta:
-            verbose_name = u'группа'
-            verbose_name_plural = u'группы'
 
 class User(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
@@ -32,29 +26,44 @@ class UserStatus(models.Model):
             verbose_name_plural = u'статусы'
 
     def __unicode__(self):
-        return u'%s' % self.name
+#        self.group_name = Group.objects.filter(status=self.pk)
+#        return u'%s %s' % (self.name, self.group_name)
 
+        self.group_name = Group.objects.filter(status=self.pk)[0]
+        return u'%s %s' % (self.name, self.group_name)
 
-class Post(models.Model):
+class Group(Group):
+    describe = models.CharField(u"Описание", max_length=150 )
+    status = models.ManyToManyField(UserStatus, verbose_name="Статусы")
+
+    class Meta:
+            verbose_name = u'группа'
+            verbose_name_plural = u'группы'
+
+    def __unicode__(self):
+        return u'%s' % (self.name, )
+
+class UserPost(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь")
-    status = models.ForeignKey(UserStatus, verbose_name="Статус")
-    user_post = models.ManyToManyField(Group)
+    status = models.ManyToManyField(UserStatus, verbose_name="Статус")
+    date_begin = models.DateField("Дата начала", null=False,blank=False)
+    date_end = models.DateField("Дата", null=True, blank=True)
 
-    def get_user_posts(self):
-        posts = []
-        for post in self.user_post.filter(): posts.append(post.name)
-        return posts
 
-    def teachers(self):
-        return Post.objects.filter(user_post=self).count()
+    def get_user_status(self):
+        post = []
+        for p in self.status.filter(): post.append(p.name)
+        return post
+#
+#    def teachers(self):
+#        return Post.objects.filter(user_post=self).count()
 
     class Meta:
         verbose_name = u'должность'
         verbose_name_plural = u'должности'
 
     def __unicode__(self):
-        return u'%s' % self.user_post
-    
-#from main import models
-#user = models.User.objects.all()[0]
-#models.Post.objects.get(user=user).teachers()
+        return u'%s' % self.user
+
+class HistoryStatus(models.Model):
+    status = models.ForeignKey(UserPost)
