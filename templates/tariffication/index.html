@@ -2,6 +2,13 @@
 
 {% block main %}
 
-Wellcome !!!
+    1) добавить 2-ух пользователей Иван, Петр и Екатерина
+    2) добавить назначить им должности 2 преподователя и 1 студент
+
+<br>
+    {% for model in list_models %}
+        <a href="/add/{{ model.0 }}/">{{ model.1 }}</a><br/>
+    {% endfor %}
+
 
 {% endblock %}
