@@ -34,6 +34,7 @@ class UserStatusForm(ModelForm):
     class Meta:
         model = models.UserStatus
 
+
 class GroupForm(ModelForm):
     class Meta:
         model = models.Group
