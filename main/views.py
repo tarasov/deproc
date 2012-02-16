@@ -26,5 +26,8 @@ def action(request, app):
     for appmodel in appmodels:
         if appmodel.__name__.lower() == app:
             app = appmodel._meta.verbose_name
+            app1 = appmodel.__name__
+#    print '%s%s' % (app[0].upper(), app[1:])
+    form = getattr(forms, '%sForm' % app1)
 
     return render_to_response('tariffication/action.html', locals(), context_instance=RequestContext(request))

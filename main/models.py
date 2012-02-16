@@ -76,17 +76,6 @@ class UserPost(models.Model):
     def __unicode__(self):
         return u'%s' % self.user
 
-class HistoryStatus(models.Model):
-    status = models.ForeignKey(UserPost)
-
-    class Meta:
-        verbose_name = u'история'
-        verbose_name_plural = u'истории'
-
-    def __unicode__(self):
-        return u'%s' % self.status
-
-
 class PO(models.Model):
     name = models.CharField(u"Профессиональное образование", max_length=150, null=False, blank=False)
 

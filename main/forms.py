@@ -29,3 +29,24 @@ class GroupsForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = models.User
+
+class UserStatusForm(ModelForm):
+    class Meta:
+        model = models.UserStatus
+
+class GroupForm(ModelForm):
+    class Meta:
+        model = models.Group
+
+class UserPostForm(ModelForm):
+    class Meta:
+        model = models.UserPost
+
+class SpecialitypForm(ModelForm):
+    class Meta:
+        model = models.Speciality
+
+class Disc_typeForm(ModelForm):
+    class Meta:
+        model = models.Disc_type
+
