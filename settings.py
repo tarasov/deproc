@@ -15,11 +15,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'base.db',
-#        'USER': 'root',
-#        'PASSWORD': 'dpk',
-#        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tarasov',
+        'USER': 'tarasov',
+        'PASSWORD': 'tarasov',
+        'HOST': '192.168.5.7',
 #        'PORT': '',
     }
 }
@@ -71,4 +71,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # apps
     'deproc.main',
+    # utils
+    'south',
 )

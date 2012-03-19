@@ -2,6 +2,10 @@ from django.forms import ModelForm
 from django import forms
 from deproc.main import models
 
+class DeForm(ModelForm):
+    pass
+
+
 class UserForm(ModelForm):
     def as_table(self):
         return self._html_output(
@@ -50,4 +54,17 @@ class SpecialitypForm(ModelForm):
 class Disc_typeForm(ModelForm):
     class Meta:
         model = models.Disc_type
+
+class TarificationForm(ModelForm):
+    def as_p(self):
+        "Returns this form rendered as HTML <p>s."
+        return self._html_output(
+            normal_row = u'<p%(html_class_attr)s>%(label)s %(field)s<a href="">+</a>%(help_text)s</p>',
+            error_row = u'%s',
+            row_ender = '</p>',
+            help_text_html = u' <span class="helptext">%s</span>',
+            errors_on_separate_row = False)
+
+    class Meta:
+        model = models.Tariffication
 

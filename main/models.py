@@ -4,7 +4,7 @@ from django.db import models
 
 choise_sex = (
     ('M', 'мужик',),
-    ('B', 'баба',)
+    ('B', 'женщина',)
 )
 
 choice_otch = (
@@ -17,9 +17,8 @@ choice_typeh = (
     ('P', 'практика',),
     ('S', 'консультация',)
 )
-
-st = User.objects.filter(groups__name="Students")
-students = [(s.pk, s.username) for s in st]
+choice_students = []
+choice_teachers = []
 
 class User(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
@@ -110,7 +109,7 @@ class Disc_type(models.Model):
 class Discipline(models.Model):
     name = models.CharField(u"Дисциплина", max_length=150, null=False, blank=False) # Программное обеспечени компьютерных сетей
     short_name = models.CharField(u"Короткое название", max_length=100, null=False, blank=False) # ПОКС
-    id_type = models.ForeignKey(Disc_type, verbose_name=u"Тип часа") # лекция, практика, консультация
+    type = models.ForeignKey(Disc_type, verbose_name=u"Тип часа") # лекция, практика, консультация
 
     class Meta:
         verbose_name = u'дисциплина'
@@ -121,8 +120,8 @@ class Discipline(models.Model):
 
 
 class UchPlan(models.Model):
-    id_disc = models.ForeignKey(Discipline, verbose_name=u"Дисциплина")
-    id_spec = models.ForeignKey(Speciality, verbose_name=u"Специальность")
+    disc = models.ForeignKey(Discipline, verbose_name=u"Дисциплина")
+    spec = models.ForeignKey(Speciality, verbose_name=u"Специальность")
     semestr = models.IntegerField(u"Семестр", max_length=100)
     otch = models.CharField(u"Отчетность", max_length=100, null=True, blank=True, choices=choice_otch)
 
@@ -131,7 +130,7 @@ class UchPlan(models.Model):
         verbose_name_plural = u'учебные планы'
 
 class UchPlanHour(models.Model):
-    id_uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100) # учебный план
+    uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100) # учебный план
     type = models.CharField(u"Тип часа", max_length=100, null=True, blank=True, choices=choice_typeh) # лекция, практика, консультация
     count_hours = models.IntegerField(u"Количество часов", max_length=100)
 
@@ -151,19 +150,19 @@ class Year(models.Model):
         return u'%s %s' % (self.date_begin, self.date_end )
 
 class Groups(models.Model):
-    id_spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
+    spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100) # 808
 
     class Meta:
-        verbose_name = u'группа'
-        verbose_name_plural = u'группы'
+        verbose_name = u'группу студентов'
+        verbose_name_plural = u'группа студентов'
 
     def __unicode__(self):
         return u'%s' % (self.name, )
 
 class Groups_stud(models.Model):
-    id_group = models.ForeignKey(Groups, verbose_name=u'Группа')
-    id_student = models.CharField(u"Студент", max_length=100, null=True, blank=True, choices=students)
+    group = models.ForeignKey(Groups, verbose_name=u'Группа')
+    student = models.CharField(u"Студент", max_length=100, null=True, blank=True, choices=choice_students)
 
     class Meta:
         verbose_name = u'студент группы'
@@ -173,25 +172,36 @@ class Groups_plan(models.Model):
     """
     план группы на определенный учебный год
     """
-    id_year = models.ForeignKey(Year, verbose_name=u'Год')
-    id_group = models.ForeignKey(Groups, verbose_name=u'Группа')
+    year = models.ForeignKey(Year, verbose_name=u'Год')
+    group = models.ForeignKey(Groups, verbose_name=u'Группа')
 
     class Meta:
         verbose_name = u'план группы'
         verbose_name_plural = u'планы группы'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.id_year.date_begin, self.id_group.name)
+        return u'%s - %s' % (self.year.date_begin, self.group.name)
 
 
-class tariffication(models.Model):
-    id_teacher = models.IntegerField(u"Учитель", max_length=100)
-    id_group = models.ForeignKey(Groups_plan, verbose_name=u"Группа")
-    id_uch_plan_hour = models.IntegerField(u"Час учебного плана", max_length=100)
+class Tariffication(models.Model):
+    teacher = models.IntegerField(u"Учитель", max_length=100, choices=choice_teachers)
+    group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
+    uch_plan_hour = models.IntegerField(u"Час учебного плана", max_length=100)
 
     class Meta:
         verbose_name = u'тарификация'
         verbose_name_plural = u'тарификации'
+
+
+
+# Студенты
+#students = User.objects.filter(groups__name="Students")
+#choice_students = [(student.pk, student.username) for student in students]
+# Преподаватели
+#teachers = User.objects.filter(groups__name="Teachers")
+#choice_teachers = [(teacher.pk, teacher.username) for teacher in teachers]
+
+
 
 #class Absences(models.Model):
 #class Schedule(models.Model):
