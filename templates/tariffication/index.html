@@ -25,9 +25,21 @@
     {% for tariff in tariffs %}
         <tr>
             <td align="center">{{ forloop.counter }}</td>
+            <td align="left"><a href="">{{ tariff.uch_plan_hour.uch_plan.pk }}<b></b></a></td>
             <td align="left"><a href="">{{ tariff.set_teacher }}<b></b></a></td>
-            <td align="left"><a href=""><b>{{ tariff.group_plan }}</b></a></td>
-            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour }}</b></a></td>
+            <td align="left"><a href=""><b>{{ tariff.group_plan.group }}</b></a></td>
+            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour.uch_plan.disc }}</b></a></td>
+            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour.type }}</b></a></td>
+            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour.count_hours}}</b></a></td>
+
+
+            <td align="left"><a href=""><b>{{ teacher }}</b></a></td>
+            <td align="left"><a href=""><b>{{ group }}</b></a></td>
+            <td align="left"><a href=""><b>{{ disc }}</b></a></td>
+
+
+
+            <td align="left"><a href=""><b></b></a></td>
         </tr>
     {% endfor %}
     </tbody>
