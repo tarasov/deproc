@@ -202,12 +202,18 @@ class Tariffication(models.Model):
     group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
 
+    def get_teacher(self):
+        return Profile.objects.get(pk=self.teacher)
+
+    set_teacher = property(get_teacher)
+
     class Meta:
         verbose_name = u'тарификация'
         verbose_name_plural = u'тарификации'
 
     def __unicode__(self):
         return u'%s - %s' % (Profile.objects.get(pk=self.teacher), self.group_plan)
+
 
 
 

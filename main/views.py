@@ -9,15 +9,14 @@ from main import forms
 from main import models
 from django.db.models import get_models
 from main.forms import DeForm
+from main.models import Tariffication
 
 def wellcome(request):
     userforms = forms.UserForm()
     bad_models = ['message', u'сайт', u'сессия']
     appmodels = get_models()
+    tariffs = Tariffication.objects.all()
 
-
-
-    list_models = ((appmodel.__name__.lower(), appmodel._meta.verbose_name) for appmodel in appmodels if not appmodel._meta.verbose_name in bad_models)
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 
 def tarification(request):

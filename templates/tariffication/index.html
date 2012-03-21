@@ -7,7 +7,29 @@
     <br>
     <a href="{% url tarification %}">Тарификация</a>
 
-
-
-
+<table>
+    <tbody>
+    <tr>
+        <th>#</th>
+        <th>Ф.И.О преподавателя</th>
+        <th>группа</th>
+        <th>дисциплина</th>
+        <th>ЛК</th>
+        <th>ПР</th>
+        <th>КН</th>
+        <th>ЭК</th>
+        <th>КП</th>
+        <th>ПК</th>
+        <th>итого</th>
+    </tr>
+    {% for tariff in tariffs %}
+        <tr>
+            <td align="center">{{ forloop.counter }}</td>
+            <td align="left"><a href="">{{ tariff.set_teacher }}<b></b></a></td>
+            <td align="left"><a href=""><b>{{ tariff.group_plan }}</b></a></td>
+            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour }}</b></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
