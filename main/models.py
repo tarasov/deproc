@@ -219,7 +219,7 @@ class Tariffication(models.Model):
         verbose_name_plural = u'тарификации'
 
     def __unicode__(self):
-        return u'%s - %s' % (Profile.objects.get(pk=self.teacher), self.group_plan)
+        return u'%s %s %s' % (Profile.objects.get(pk=self.teacher), self.group_plan, self.uch_plan_hour)
 
 
 

@@ -9,7 +9,7 @@ from main import forms
 from main import models
 from django.db.models import get_models
 from main.forms import DeForm
-from main.models import Tariffication
+from main.models import Tariffication, choice_typeh
 
 def wellcome(request):
     userforms = forms.UserForm()
@@ -17,9 +17,31 @@ def wellcome(request):
     appmodels = get_models()
 
     tariffs = Tariffication.objects.all()
-    teacher = Tariffication.set_teacher
-    grp = Tariffication.group_plan.group
-    disc = Tariffication.uch_plan_hour.uch_plan.disc
+    table = ()
+    aa = []
+    uch_plan_pk = 0
+    for tariff in tariffs:
+        if uch_plan_pk != tariff.uch_plan_hour.uch_plan.pk:
+            print tariff
+            if aa:
+                print aa
+#                table += aa[0]
+                aa = []
+            teacher = tariff.set_teacher.username
+            grp = tariff.group_plan.group
+            disc = tariff.uch_plan_hour.uch_plan.disc
+            smtr = tariff.uch_plan_hour.uch_plan.semestr
+            table += (teacher,grp,disc,smtr),
+            aa.append((tariff.uch_plan_hour.type, tariff.uch_plan_hour.count_hours))
+        else:
+            aa.append((tariff.uch_plan_hour.type, tariff.uch_plan_hour.count_hours))
+        uch_plan_pk = tariff.uch_plan_hour.uch_plan.pk
+    print table
+#
+#    for typeh in choice_typeh:
+#        pass
+
+#    uch_plan_pk = tariff.uch_plan_hour.uch_plan.pk
 
 
 
