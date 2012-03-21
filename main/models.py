@@ -3,13 +3,6 @@ from django.contrib.auth.models import User, Group
 from django.db import models
 
 
-#Студенты
-students = User.objects.filter(groups__name="Студенты")
-choice_students = [(student.pk, student.username) for student in students]
-#Преподаватели
-teachers = User.objects.filter(groups__name="Преподаватели")
-choice_teachers = [(teacher.pk, teacher.username) for teacher in teachers]
-
 choise_sex = (
     ('M', 'мужик',),
     ('B', 'женщина',)
@@ -19,7 +12,7 @@ choice_otch = (
     ('E', 'экзамен',),
     ('Z', 'зачет',)
 )
- 
+
 choice_typeh = (
     ('L', 'лекция',),
     ('P', 'практика',),
@@ -33,6 +26,21 @@ class Profile(User):
     b_day = models.DateField(u"День рождения", null=True, blank=True )
     phone = models.CharField(u"Телефон", max_length=100, null=True, blank=True )
     sex = models.CharField(u"Пол", max_length=100, null=True, blank=True, choices=choise_sex)
+
+    def get_students(self):
+        # Студенты
+        students = User.objects.filter(groups__name="Студенты")
+        return [(student.pk, student.username) for student in students]
+
+    def get_teachers(self):
+        # Преподаватели
+        teachers = User.objects.filter(groups__name="Преподаватели")
+        return [(teacher.pk, teacher.username) for teacher in teachers]
+
+    students = property(get_students)
+    teachers = property(get_teachers)
+
+
 
     class Meta:
             verbose_name = u'пользователь'
@@ -176,7 +184,7 @@ class Groups(models.Model):
 
 class Groups_stud(models.Model):
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
-    student = models.CharField(u"Студент", max_length=100, null=True, blank=True, choices=choice_students)
+    student = models.CharField(u"Студент", max_length=100, null=True, blank=True, choices=Profile().get_students())
 
     class Meta:
         verbose_name = u'студент группы'
@@ -196,9 +204,8 @@ class Groups_plan(models.Model):
     def __unicode__(self):
         return u'%s - %s' % (self.year.date_begin, self.group.name)
 
-
 class Tariffication(models.Model):
-    teacher = models.IntegerField(u"Учитель", max_length=100, choices=choice_teachers)
+    teacher = models.IntegerField(u"Учитель", max_length=100, choices=Profile().get_teachers())
     group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
 
