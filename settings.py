@@ -15,11 +15,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tarasov',
-        'USER': 'tarasov',
-        'PASSWORD': 'tarasov',
-        'HOST': '192.168.5.7',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'tarasov.db',
+#        'USER': 'tarasov',
+#        'PASSWORD': 'tarasov',
+#        'HOST': '192.168.5.7',
 #        'PORT': '',
     }
 }

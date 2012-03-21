@@ -15,6 +15,8 @@ def wellcome(request):
     bad_models = ['message', u'сайт', u'сессия']
     appmodels = get_models()
 
+
+
     list_models = ((appmodel.__name__.lower(), appmodel._meta.verbose_name) for appmodel in appmodels if not appmodel._meta.verbose_name in bad_models)
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 
