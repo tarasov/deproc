@@ -7,44 +7,46 @@
     <br>
     <a href="{% url tarification %}">Тарификация</a>
 
+<br/>
+    {% for tbl in table %}
+        {{ tbl }} <br/>
+    {% endfor %}
+<br/>
+
+
 <table border="1">
     <tbody>
-{#    <tr>#}
-{#        <th>#</th>#}
-{#        <th>Ф.И.О преподавателя</th>#}
-{#        <th>группа</th>#}
-{#        <th>дисциплина</th>#}
-{#        <th>ЛК</th>#}
-{#        <th>ПР</th>#}
-{#        <th>КН</th>#}
-{#        <th>ЭК</th>#}
-{#        <th>КП</th>#}
-{#        <th>ПК</th>#}
-{#        <th>итого</th>#}
-{#    </tr>#}
-{#    {% for tariff in tariffs %}#}
-{#        <tr>#}
-{#            <td align="center">{{ forloop.counter }}</td>#}
-{#            <td align="left"><a href="">{{ tariff.uch_plan_hour.uch_plan.pk }}<b></b></a></td>#}
-{#            <td align="left"><a href="">{{ tariff.set_teacher }}<b></b></a></td>#}
-{#            <td align="left"><a href=""><b>{{ tariff.group_plan.group }}</b></a></td>#}
-{#            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour.uch_plan.disc }}</b></a></td>#}
-{#            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour.type }}</b></a></td>#}
-{#            <td align="left"><a href=""><b>{{ tariff.uch_plan_hour.count_hours}}</b></a></td>#}
-
-    {% for tbl in table %}
         <tr>
-            <td align="left"><a href=""><b>{{ tbl.teacher }}</b></a></td>
-            <td align="left"><a href=""><b>{{ tbl.grp }}</b></a></td>
-            <td align="left"><a href=""><b>{{ tbl.disc }}</b></a></td>
+            <td align="left"><a href=""><b>преподаватель</b></a></td>
+            <td align="left"><a href=""><b>группа</b></a></td>
+            <td align="left"><a href=""><b>дисциплина</b></a></td>
+            <td align="left"><a href=""><b>семестр</b></a></td>
+            {% for typeh in choices %}
+                <td align="left"><a href=""><b>{{ typeh.1 }}</b></a></td>
+            {% endfor %}
         </tr>
-    {% endfor %}
+        {% for tr in table %}
+            <tr>
+                {% for td in tr %}
+                    {% if forloop.counter < 5 %}
+                        <td align="left"><a href=""><b>{{ td }}</b></a></td>
+                    {% else %}
+                        {% for typeh in choices %}
+                            {% if typeh.0 == td.0 %}
+                                <td align="left"><a href=""><b>{{ td.1 }}</b></a></td>
+{#                            {% else %}#}
+{#                                <td align="left"><a href=""><b>0</b></a></td>#}
+                            {% endif %}
+                        {% endfor %}
+{#                        <td align="left"><a href=""><b>{{ td }}</b></a></td>#}
+                    {% endif %}
+                {% endfor %}
+{#                {% for typeh in choices %}#}
+{#                    <td align="left"><a href=""><b>{{ typeh.0 }}</b></a></td>#}
+{#                {% endfor %}#}
+            </tr>
 
-
-{##}
-{#            <td align="left"><a href=""><b></b></a></td>#}
-{#        </tr>#}
-{#    {% endfor %}#}
+        {% endfor %}
     </tbody>
 </table>
 {% endblock %}

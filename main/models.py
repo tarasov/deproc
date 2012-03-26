@@ -16,7 +16,8 @@ choice_otch = (
 choice_typeh = (
     ('L', 'лекция',),
     ('P', 'практика',),
-    ('S', 'консультация',)
+    ('S', 'консультация',),
+    ('E', 'экзамен',),
 )
 #choice_students = []
 #choice_teachers = []

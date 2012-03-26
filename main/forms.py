@@ -16,7 +16,9 @@ class UserForm(ModelForm):
             errors_on_separate_row = False)
 
     class Meta:
-        model = models.User
+        model = models.Profile
+        fields = ('username', 'first_name', 'last_name', 'other_name', 'password')
+
 
 class SpecialityForm(ModelForm):
     class Meta:
@@ -37,7 +39,6 @@ class UserForm(ModelForm):
 class UserStatusForm(ModelForm):
     class Meta:
         model = models.UserStatus
-
 
 class GroupForm(ModelForm):
     class Meta:
