@@ -1,7 +1,7 @@
 from django.contrib.admin import ModelAdmin, site
 from django.contrib.auth.models import User, Group
 from django.contrib.sites.models import Site
-from main import models
+from deproc.main import models
 
 __author__ = 'tarasov'
 

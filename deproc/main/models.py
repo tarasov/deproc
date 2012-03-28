@@ -19,8 +19,6 @@ choice_typeh = (
     ('S', 'консультация',),
     ('E', 'экзамен',),
 )
-#choice_students = []
-#choice_teachers = []
 
 class Profile(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
@@ -30,17 +28,13 @@ class Profile(User):
 
     def get_students(self):
         # Студенты
-        students = User.objects.filter(groups__name="Студенты")
+        students = Profile.objects.filter(groups__name="Студенты")
         return [(student.pk, student.username) for student in students]
 
     def get_teachers(self):
         # Преподаватели
-        teachers = User.objects.filter(groups__name="Преподаватели")
+        teachers = Profile.objects.filter(groups__name="Преподаватели")
         return [(teacher.pk, teacher.username) for teacher in teachers]
-
-    students = property(get_students)
-    teachers = property(get_teachers)
-
 
 
     class Meta:
