@@ -8,6 +8,8 @@
     {% block meta %}
     {% endblock %}
 
+    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" type="type/css" rel="stylesheet" />
+
     {% block styles %}
     <!-- css -->
     {% endblock %}
@@ -16,8 +18,36 @@
 </head>
 <body>
     {% load i18n %}
-    {% block main %}
 
-    {% endblock %}
+
+    <div class="container-fluid" style="padding-bottom: 60px;">
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span3">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">Пользовательские</li>
+                        {% block sidebar %}
+                            <li class="active"><a href="/">Главная</a></li>
+                        {% endblock %}
+
+                        <li class="nav-header">Администратор</li>
+                        <li><a href="{% url tariffication %}">Тарификация</a></li>
+                    </ul>
+                </div><!--/.well -->
+            </div><!--/span-->
+            <div class="span9">
+                {% block main %}
+
+                {% endblock %}
+            </div><!--/span-->
+        </div><!--/row-->
+
+
+    </div>
+
 </body>
 </html>

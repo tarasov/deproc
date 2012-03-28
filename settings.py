@@ -34,11 +34,11 @@ USE_I18N = True
 
 USE_L10N = True
 
-MEDIA_ROOT = ''
+MEDIA_ROOT = PROJECT_ROOT + '/media/'
 
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/admin-media/'
 
 SECRET_KEY = 't@#1u58w+ct1bb120&6l6wz5ny7nr2l%x$6ify9u6ge0toj%ux'
 

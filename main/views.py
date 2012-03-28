@@ -56,26 +56,21 @@ def wellcome(request):
             table += tr
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 
-def tarification(request):
-    form = forms.TarificationForm()
-    # отрисовка таблицы
+def tariffication(request):
+#    form = forms.TarificationForm()
     tariffs = Tariffication.objects.all()
     # узнаем семестры
     semestres = []
     for tariff in tariffs:
         if tariff.uch_plan_hour.uch_plan.semestr not in semestres:
             semestres.append(tariff.uch_plan_hour.uch_plan.semestr)
-        # делаем цикл по семестрам для фильтрации тариффикации
     table = ()
+    # делаем цикл по семестрам для фильтрации тариффикации
     for semestr in semestres:
-    #        tariffs = Tariffication.objects.values('group_plan__group__name').annotate(count = Count('group_plan__group')).filter(uch_plan_hour__uch_plan__semestr = semestr)
         tariffs_values = Tariffication.objects.values('group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__semestr').annotate(count = Count('group_plan__group')).filter(uch_plan_hour__uch_plan__semestr = semestr)
         tr = tds = ()
         for value in tariffs_values:
-        #            print value
             tariffs = Tariffication.objects.filter(uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'], teacher = value['teacher'], group_plan__group = value['group_plan__group'])
-            #            print tariff
-            #            tariff = tariffs[0]
             tariff = tariffs[0]
             hours = [(t.uch_plan_hour.type, t.uch_plan_hour.count_hours) for t in tariffs]
             teacher = tariff.set_teacher.username
