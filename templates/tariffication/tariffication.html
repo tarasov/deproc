@@ -16,4 +16,35 @@
     {% endfor %}
 
 
+    <table border="1">
+        <tbody>
+        <tr>
+            <td align="left"><a href=""><b>преподаватель</b></a></td>
+            <td align="left"><a href=""><b>группа</b></a></td>
+            <td align="left"><a href=""><b>дисциплина</b></a></td>
+            <td align="left"><a href=""><b>семестр</b></a></td>
+            {% for typeh in choices %}
+                <td align="left"><a href=""><b>{{ typeh.1 }}</b></a></td>
+            {% endfor %}
+        </tr>
+        {% for tr in table %}
+            <tr>
+                {% for td in tr %}
+                    {% if forloop.counter < 5 %}
+                        <td align="left"><a href=""><b>{{ td }}</b></a></td>
+                    {% else %}
+                        {% for typeh in choices %}
+                            {% if typeh.0 == td.0 %}
+                                <td align="left"><a href=""><b>{{ td.1 }}</b></a></td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+
+
 {% endblock %}
