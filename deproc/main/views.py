@@ -11,7 +11,7 @@ from django.db.models import get_models
 from deproc.main.forms import DeForm
 from deproc.main.models import Tariffication, choice_typeh
 from django.db.models import Count
-
+#ale
 def wellcome(request):
     choices = choice_typeh
     userforms = forms.UserForm()
