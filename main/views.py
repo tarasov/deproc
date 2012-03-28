@@ -48,6 +48,11 @@ def wellcome(request):
         table += tr
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 # NEW BRANCH
+# NEW BRANCH
+# NEW BRANCH
+# NEW BRANCH# NEW BRANCH
+# NEW BRANCH
+
 def tarification(request):
     form = forms.TarificationForm()
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
