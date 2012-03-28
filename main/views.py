@@ -13,7 +13,6 @@ from main.models import Tariffication, choice_typeh
 from django.db.models import Count
 
 def wellcome(request):
-    choices = choice_typeh
     userforms = forms.UserForm()
     bad_models = ['message', u'сайт', u'сессия']
     appmodels = get_models()
@@ -58,6 +57,9 @@ def wellcome(request):
 #
 
 def tariffication(request):
+    # типы часов для шаблона
+    choices = choice_typeh
+
     tariffs = Tariffication.objects.all()
     # узнаем семестры
     semestres = []
