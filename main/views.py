@@ -47,7 +47,7 @@ def wellcome(request):
             tr = (tr[len(tr)-1] + choice_type, )
         table += tr
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
-
+# NEW BRANCH
 def tarification(request):
     form = forms.TarificationForm()
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
