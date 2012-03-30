@@ -30,12 +30,12 @@
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
                         <li class="nav-header">Пользовательские</li>
-                        {% block sidebar %}
-                            <li class="active"><a href="/">Главная</a></li>
-                        {% endblock %}
+                        <li class="active"><a href="/">Главная</a></li>
 
                         <li class="nav-header">Администратор</li>
                         <li><a href="{% url tariffication %}">Тарификация</a></li>
+                        {% block sidebar %}
+                        {% endblock %}
                     </ul>
                 </div><!--/.well -->
             </div><!--/span-->
