@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
 import re
+from django.contrib import admin
+from django.contrib.admin import widgets
+from django.contrib.admin.options import get_ul_class
+from django.db.models.loading import get_apps
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
@@ -12,12 +16,8 @@ from main.forms import DeForm
 from main.models import Tariffication, choice_typeh
 from django.db.models import Count
 
+
 def wellcome(request):
-    userforms = forms.UserForm()
-    bad_models = ['message', u'сайт', u'сессия']
-    appmodels = get_models()
-
-
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 #
 
