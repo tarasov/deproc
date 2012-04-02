@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block sidebar %}
+    {#    {{ appmodels }}#}
+{% endblock %}
+
+{% block main %}
+
+    GROUP PLAN<br/>
+    {% for group in groups %}
+        {{ group.year }}<br/>
+        {{ group.group.spec }}<br/>
+    {% endfor %}
+
+{% endblock %}

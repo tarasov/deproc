@@ -66,7 +66,7 @@ class Group(Group):
             verbose_name_plural = u'группы'
 
     def __unicode__(self):
-        return u'%s' % (self.name)
+        return u'%s' % (self.name, )
 
 class UserPost(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь")
@@ -191,7 +191,6 @@ class Groups_plan(models.Model):
     """
     year = models.ForeignKey(Year, verbose_name=u'Год')
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
-
     class Meta:
         verbose_name = u'план группы'
         verbose_name_plural = u'планы группы'
@@ -203,6 +202,8 @@ class Tariffication(models.Model):
     teacher = models.IntegerField(u"Учитель", max_length=100, choices=Profile().get_teachers())
     group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
+
+
 
     def get_teacher(self):
         return Profile.objects.get(pk=self.teacher)

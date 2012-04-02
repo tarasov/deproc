@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
+
+{% block sidebar %}
+{#    {{ appmodels }}#}
+{% endblock %}
+
 {% block main %}
     Делаем тарификацию<br>
     <a href="/">назад</a><br>
     <br><br><br>
 
+<<<<<<< HEAD:deproc/templates/tariffication/tariffication.html
     {{ form.as_p }}
 
 
@@ -47,4 +53,16 @@
     </table>
 
 
+=======
+    1) добавить 2-ух пользователей Иван, Петр и Екатерина
+    2) добавить назначить им должности 2 преподователя и 1 студент
+    <br>
+    <a href="{% url tariffication %}">Тарификация</a>
+
+    <br/><br/><br/><br/><br/><br/>
+    {{ form.as_table }}
+
+
+
+>>>>>>> master:templates/tariffication/index.html
 {% endblock %}
