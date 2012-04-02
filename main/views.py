@@ -19,12 +19,16 @@ from django.db.models import Count
 
 def wellcome(request):
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
-#
+
+
+def plan_group(request):
+    groups = models.Groups_plan.objects.all()
+    return render_to_response('tariffication/group_plan.html', locals(), context_instance=RequestContext(request))
+
 
 def tariffication(request):
     # типы часов для шаблона
     choices = choice_typeh
-
     tariffs = Tariffication.objects.all()
     # узнаем семестры
     semestres = []
@@ -58,6 +62,7 @@ def tariffication(request):
                 tr = (tr[len(tr)-1] + choice_type, )
             table += tr
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
+
 
 def action(request, app):
 

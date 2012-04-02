@@ -191,7 +191,6 @@ class Groups_plan(models.Model):
     """
     year = models.ForeignKey(Year, verbose_name=u'Год')
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
-    choices = []
     class Meta:
         verbose_name = u'план группы'
         verbose_name_plural = u'планы группы'

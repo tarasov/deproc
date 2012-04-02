@@ -34,6 +34,7 @@
 
                         <li class="nav-header">Администратор</li>
                         <li><a href="{% url tariffication %}">Тарификация</a></li>
+                        <li><a href="{% url plan_group %}">Группы учебного года</a></li>
                         {% block sidebar %}
                         {% endblock %}
                     </ul>
@@ -41,7 +42,6 @@
             </div><!--/span-->
             <div class="span9">
                 {% block main %}
-
                 {% endblock %}
             </div><!--/span-->
         </div><!--/row-->
