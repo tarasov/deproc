@@ -35,7 +35,7 @@ site.register(models.Disc_type)
 site.register(models.Groups)
 site.register(models.Groups_stud)
 site.register(models.Groups_plan)
-
 site.register(models.Tariffication)
+
 
 

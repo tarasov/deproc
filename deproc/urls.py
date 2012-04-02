@@ -10,6 +10,11 @@ urlpatterns = patterns('deproc.main.views',
     url(r'^tariffication/', 'tariffication', name='tariffication')
 )
 
+urlpatterns += patterns('deproc.schedule.views',
+    url(r'^schedule/', 'schedule', name='schedule'),
+)
+
+
 urlpatterns += patterns('',
     (r'^admin/', include(admin.site.urls)),
 )

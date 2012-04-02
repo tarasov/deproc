@@ -217,18 +217,9 @@ class Tariffication(models.Model):
         return u'%s %s %s' % (Profile.objects.get(pk=self.teacher), self.group_plan, self.uch_plan_hour)
 
 
-
-
-
-
-
-#class Absences(models.Model):
-#class Schedule(models.Model):
-#class Schedule_day(models.Model):
-#class Classroom(models.Model):
 #class Mark(models.Model):
 #class Column(models.Model):
 #class Type_column(models.Model):
-#
+
 
 

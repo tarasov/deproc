@@ -79,8 +79,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'deproc.main',
     'south',
+    'deproc.main',
+    'deproc.schedule',
 )
 
 LOGGING = {
