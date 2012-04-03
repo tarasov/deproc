@@ -34,7 +34,7 @@ class Schedule(models.Model):
         verbose_name_plural = u'расписания'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.plan, self.day)
+        return u'%s, %s, %s, %s, %s' % (self.plan.set_teacher, self.plan.uch_plan_hour.uch_plan.disc, self.plan.group_plan.group, self.day, self.num_less)
 
 class Absences(models.Model):
     schedule = models.ForeignKey(Schedule)

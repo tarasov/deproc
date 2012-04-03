@@ -8,27 +8,23 @@
 <table border="1">
     <tbody>
     <tr>
-        <td align="left"><a href=""><b>преподаватель</b></a></td>
-        <td align="left"><a href=""><b>группа</b></a></td>
-        <td align="left"><a href=""><b>дисциплина</b></a></td>
-        <td align="left"><a href=""><b>семестр</b></a></td>
-        {% for typeh in choices %}
-        <td align="left"><a href=""><b>{{ typeh.1 }}</b></a></td>
-        {% endfor %}
+        <td align="left"><a href=""><b> # </b></a></td>
+        <td align="left"><a href=""><b> группа </b></a></td>
+        <td align="left"><a href=""><b> 1 пара </b></a></td>
+        <td align="left"><a href=""><b> 2 пара </b></a></td>
+        <td align="left"><a href=""><b> 3 пара </b></a></td>
+        <td align="left"><a href=""><b> 4 пара </b></a></td>
+        <td align="left"><a href=""><b> 5 пара </b></a></td>
     </tr>
-    {% for tr in table %}
+    {% for grp in groups %}
     <tr>
-        {% for td in tr %}
-        {% if forloop.counter < 5 %}
-        <td align="left"><a href=""><b>{{ td }}</b></a></td>
-        {% else %}
-        {% for typeh in choices %}
-        {% if typeh.0 == td.0 %}
-        <td align="left"><a href=""><b>{{ td.1 }}</b></a></td>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        {% endfor %}
+        <td align="left"><a href=""><b> {{ forloop.counter }} </b></a></td>
+        <td align="left"><a href=""><b> {{ grp }} </b></a></td>
+        <!--{% if grp == schdl.plan.group_plan.group %}-->
+            <!--&lt;!&ndash;{% for pr in pars %}&ndash;&gt;-->
+                <!--&lt;!&ndash;<td align="left"><a href=""><b> {{ pr }} </b></a></td>&ndash;&gt;-->
+            <!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
+        <!--{% endif %}-->
     </tr>
 
     {% endfor %}
