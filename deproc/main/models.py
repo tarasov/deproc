@@ -169,7 +169,7 @@ class Year(models.Model):
 class Groups(models.Model):
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100) # 808
-    semest = models.IntegerField(u'семестр', default=1)
+    semestr = models.IntegerField(u'семестр', default=1)
 
     class Meta:
         verbose_name = u'группу студентов'
