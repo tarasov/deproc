@@ -7,7 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('deproc.main.views',
     url(r'^$', 'wellcome'),
     url(r'^add/(.*)/$', 'action'),
-    url(r'^tariffication/', 'tariffication', name='tariffication')
+    url(r'^tariffication/$', 'tariffication', name='tariffication'),
+    url(r'^plan_group/$', 'plan_group', name='plan_group'),
 )
 
 urlpatterns += patterns('deproc.schedule.views',

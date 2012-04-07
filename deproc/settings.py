@@ -12,6 +12,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -23,20 +24,20 @@ DATABASES = {
     }
 }
 
-TIME_ZONE = 'America/Chicago'
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Europe/Moscow'
+LANGUAGE_CODE = 'Ru-ru'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-supports_timezone = True
 USE_TZ = False
+support_timezone = True
 MEDIA_ROOT = PROJECT_ROOT + '/media/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-
+    #
 )
 
 STATICFILES_FINDERS = (

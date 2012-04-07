@@ -2,15 +2,30 @@
 
 
 {% block sidebar %}
-    {#    {{ appmodels }}#}
 {% endblock %}
 
 {% block main %}
+    <a href="{% url tariffication %}">Тариффикация</a><br>
+    <br><br><br>
+    {% for tr in table %}
+        {% for td in tr %}
+        <div class="row-fluid">
+        <table class="span7" style="font-size: medium;">
+            {% if forloop.counter == 1 %}
+            <tr style="text-align: center; border: 1px solid #969af3; background: #969af3;">
+                <td>{{ td }}</td>
+            </tr>
+            {% else %}
+                <tr style="border: 1px solid #969af3; text-align: center;">
+                    <td>{{ td }}</td>
+                    <td>{{ forloop.counter }} курс</td>
+                    <td>{{ forloop.counter0 }},{{ forloop.counter }} семестр</td>
+                </tr>
+            {% endif %}
 
-    GROUP PLAN<br/>
-    {% for group in groups %}
-        {{ group.year }}<br/>
-        {{ group.group.spec }}<br/>
+        </table>
+        </div>
+        {% endfor %}
     {% endfor %}
 
 {% endblock %}

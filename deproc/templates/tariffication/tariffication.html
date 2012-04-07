@@ -6,16 +6,9 @@
 {% endblock %}
 
 {% block main %}
-    Делаем тарификацию<br>
-    <a href="/">назад</a><br>
+    Список групп учебного плана
+    <a href="{% url plan_group %}">Группы</a>
     <br><br><br>
-
-<<<<<<< HEAD:deproc/templates/tariffication/tariffication.html
-    {{ form.as_p }}
-
-
-
-
 
     {% for model in list_models %}
         <a href="/add/{{ model.0 }}/">{{ model.1 }}</a><br/>
@@ -39,11 +32,7 @@
                     {% if forloop.counter < 5 %}
                         <td align="left"><a href=""><b>{{ td }}</b></a></td>
                     {% else %}
-                        {% for typeh in choices %}
-                            {% if typeh.0 == td.0 %}
-                                <td align="left"><a href=""><b>{{ td.1 }}</b></a></td>
-                            {% endif %}
-                        {% endfor %}
+                        <td align="left"><a href=""><b>{{ td.1 }}</b></a></td>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -53,16 +42,4 @@
     </table>
 
 
-=======
-    1) добавить 2-ух пользователей Иван, Петр и Екатерина
-    2) добавить назначить им должности 2 преподователя и 1 студент
-    <br>
-    <a href="{% url tariffication %}">Тарификация</a>
-
-    <br/><br/><br/><br/><br/><br/>
-    {{ form.as_table }}
-
-
-
->>>>>>> master:templates/tariffication/index.html
 {% endblock %}
