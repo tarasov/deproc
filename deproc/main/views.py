@@ -20,14 +20,18 @@ def wellcome(request):
 def plan_group(request):
     table = ()
     specialty = models.Speciality.objects.all()
-    groups = models.Groups.objects.filter(spec=specialty[0])[0]
+    year = models.Year.objects.all().order_by('-date_begin')[0]
+    groups_plan = models.Groups_plan.objects.filter(year=year).order_by('-group__spec')
+    print groups_plan
 
-    for spec in specialty:
-        tr = ((spec.name, ), )
-        groups = models.Groups.objects.filter(spec=spec).order_by('-name')
-        for group in groups:
-            tr = (tr[0] + (group.name, ), )
+    for i, group_plan in enumerate(groups_plan):
+        if i and groups_plan[i-1].group.spec == group_plan.group.spec:
+            tr = (('', group_plan.group.name, group_plan.course, group_plan.group.semestr.split(', '), ), )
+        else:
+            tr = ((group_plan.group.spec.name, group_plan.group.name, group_plan.course, group_plan.group.semestr.split(', '),  ), )
         table += tr
+
+    print table
 
     return render_to_response('tariffication/group_plan.html', locals(), context_instance=RequestContext(request))
 

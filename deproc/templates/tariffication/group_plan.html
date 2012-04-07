@@ -8,24 +8,20 @@
     <a href="{% url tariffication %}">Тариффикация</a><br>
     <br><br><br>
     {% for tr in table %}
-        {% for td in tr %}
         <div class="row-fluid">
-        <table class="span7" style="font-size: medium;">
-            {% if forloop.counter == 1 %}
-            <tr style="text-align: center; border: 1px solid #969af3; background: #969af3;">
-                <td>{{ td }}</td>
-            </tr>
-            {% else %}
-                <tr style="border: 1px solid #969af3; text-align: center;">
-                    <td>{{ td }}</td>
-                    <td>{{ forloop.counter }} курс</td>
-                    <td>{{ forloop.counter0 }},{{ forloop.counter }} семестр</td>
+        <table class="group-plan span10">
+            {% ifnotequal tr.0 '' %}
+                <tr>
+                    <th colspan="3">{{ tr.0 }}</th>
                 </tr>
-            {% endif %}
-
+            {% endifnotequal %}
+            <tr>
+                <td>{{ tr.1 }} группа</td>
+                <td>{{ tr.2 }} курс</td>
+                <td>{{ tr.3.0 }}, {{ tr.3.1}} семестр</td>
+            </tr>
         </table>
         </div>
-        {% endfor %}
     {% endfor %}
 
 {% endblock %}

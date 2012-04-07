@@ -14,32 +14,33 @@
         <a href="/add/{{ model.0 }}/">{{ model.1 }}</a><br/>
     {% endfor %}
 
-
-    <table border="1">
-        <tbody>
-        <tr>
-            <td align="left"><a href=""><b>преподаватель</b></a></td>
-            <td align="left"><a href=""><b>группа</b></a></td>
-            <td align="left"><a href=""><b>дисциплина</b></a></td>
-            <td align="left"><a href=""><b>семестр</b></a></td>
-            {% for typeh in choices %}
-                <td align="left"><a href=""><b>{{ typeh.1 }}</b></a></td>
-            {% endfor %}
-        </tr>
-        {% for tr in table %}
+    <div class="row-fluid">
+        <table class="tariffication span11">
+            <tbody>
             <tr>
-                {% for td in tr %}
-                    {% if forloop.counter < 5 %}
-                        <td align="left"><a href=""><b>{{ td }}</b></a></td>
-                    {% else %}
-                        <td align="left"><a href=""><b>{{ td.1 }}</b></a></td>
-                    {% endif %}
+                <th align="left"><b>преподаватель</b></th>
+                <th align="left"><b>группа</b></th>
+                <th align="left"><b>дисциплина</b></th>
+                <th align="left"><b>семестр</b></th>
+                {% for typeh in choices %}
+                    <th align="left"><b>{{ typeh.1 }}</b></th>
                 {% endfor %}
             </tr>
+            {% for tr in table %}
+                <tr style="height: 30px;">
+                    {% for td in tr %}
+                        {% if forloop.counter < 5 %}
+                            <td align="left"><b>{{ td }}</b></td>
+                        {% else %}
+                            <td align="left"><b>{{ td.1 }}</b></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
 
-        {% endfor %}
-        </tbody>
-    </table>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
 {% endblock %}

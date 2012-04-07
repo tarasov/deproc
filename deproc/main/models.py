@@ -20,6 +20,14 @@ choice_typeh = (
     ('E', 'экзамен',),
 )
 
+choice_semesters = (
+    ('1, 2', '1, 2',),
+    ('3, 4', '3, 4',),
+    ('5, 6', '5, 6',),
+    ('7, 8', '7, 8',),
+    ('9, 10', '9, 10',),
+    )
+
 class Profile(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
     b_day = models.DateField(u"День рождения", null=True, blank=True)
@@ -169,7 +177,7 @@ class Year(models.Model):
 class Groups(models.Model):
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100) # 808
-    semestr = models.IntegerField(u'семестр', default=1)
+    semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default='1, 2')
 
     class Meta:
         verbose_name = u'группу студентов'
@@ -192,15 +200,18 @@ class Groups_plan(models.Model):
     """
     year = models.ForeignKey(Year, verbose_name=u'Год')
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
+    course = models.IntegerField(u"Курс", default=1)
+
     class Meta:
         verbose_name = u'план группы'
         verbose_name_plural = u'планы группы'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.year.date_begin, self.group.name)
+        return u'%s - %s - %s курс' % (self.year.date_begin, self.group.name, self.course, )
+
 
 class Tariffication(models.Model):
-    teacher = models.IntegerField(u"Учитель", max_length=100, choices=Profile().get_teachers())
+    teacher = models.IntegerField(u"Преподаватель", max_length=100, choices=Profile().get_teachers())
     group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
 
