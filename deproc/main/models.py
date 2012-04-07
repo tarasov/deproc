@@ -22,7 +22,7 @@ choice_typeh = (
 
 class Profile(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
-    b_day = models.DateField(u"День рождения", null=True, blank=True )
+    b_day = models.DateField(u"День рождения", null=True, blank=True)
     phone = models.CharField(u"Телефон", max_length=100, null=True, blank=True )
     sex = models.CharField(u"Пол", max_length=100, null=True, blank=True, choices=choise_sex)
 
@@ -169,6 +169,7 @@ class Year(models.Model):
 class Groups(models.Model):
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100) # 808
+    semest = models.IntegerField(u'семестр', default=1)
 
     class Meta:
         verbose_name = u'группу студентов'
