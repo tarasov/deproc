@@ -1,23 +1,27 @@
 
 table.tariffication {
-    background-color: rgba(237, 237, 255, 0.26)
+    background-color: rgba(237, 237, 255, 0.26);
 }
-table.tariffication tr, table.group-plan tr {
+
+table.schedule {
+    background-color: rgba(237, 237, 255, 0.26);
+}
+
+table.tariffication tr, table.group-plan tr, table.schedule tr {
     height: 25px;
     border: 2px solid #ffebcd;
-
 }
 
-table.tariffication th, table.group-plan th {
+table.tariffication th, table.group-plan th, table.schedule th {
     text-align: center;
     color: #35a119;
     font-size: medium;
 }
 
-table.tariffication td {
+table.tariffication td, table.schedule td {
     text-align: center;
 }
 
-table.group-plan tr {
+table.group-plan table.schedule tr {
     border: 1px solid #ffebcd;
 }

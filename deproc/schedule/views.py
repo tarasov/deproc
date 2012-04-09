@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-
 from deproc.main import models as main_models
 from deproc.schedule import models as sch_models
+from deproc.schedule import forms
 
 def schedule(request):
+#    cal = forms.CalendarForm()
+#    call = forms.EventForm()
     schdl = sch_models.Schedule.objects.all()
     schdl_day = sch_models.Schedule_day.objects.all()
     absnc = sch_models.Absences.objects.all()

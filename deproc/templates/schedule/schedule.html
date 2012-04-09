@@ -1,35 +1,44 @@
 {% extends 'base.html' %}
 
+{% block headcal %}
+
+{% load adminmedia %}
+
+<script type="text/javascript">
+    window.__admin_media_prefix__ = "{% filter escapejs %}{% admin_media_prefix %}{% endfilter %}";
+</script>
+
+{{ cal.media }}
+
+{% endblock %}
+
 {% block main %}
-Делаем расписание<br>
 <a href="/">назад</a><br>
 <br><br><br>
 
-<table border="1">
-    <tbody>
-    <tr>
-        <td align="left"><a href=""><b> # </b></a></td>
-        <td align="left"><a href=""><b> группа </b></a></td>
-        <td align="left"><a href=""><b> 1 пара </b></a></td>
-        <td align="left"><a href=""><b> 2 пара </b></a></td>
-        <td align="left"><a href=""><b> 3 пара </b></a></td>
-        <td align="left"><a href=""><b> 4 пара </b></a></td>
-        <td align="left"><a href=""><b> 5 пара </b></a></td>
-    </tr>
-    {% for grp in groups %}
-    <tr>
-        <td align="left"><a href=""><b> {{ forloop.counter }} </b></a></td>
-        <td align="left"><a href=""><b> {{ grp }} </b></a></td>
-        <!--{% if grp == schdl.plan.group_plan.group %}-->
-            <!--&lt;!&ndash;{% for pr in pars %}&ndash;&gt;-->
-                <!--&lt;!&ndash;<td align="left"><a href=""><b> {{ pr }} </b></a></td>&ndash;&gt;-->
-            <!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
-        <!--{% endif %}-->
-    </tr>
 
-    {% endfor %}
-    </tbody>
-</table>
+<div class="row-fluid">
+    <table class="schedule span11">
+        <tbody>
+        <tr>
+            <th align="left"><b> # </b></th>
+            <th align="left"><b> группа </b></th>
+            <th align="left"><b> 1 пара </b></th>
+            <th align="left"><b> 2 пара </b></th>
+            <th align="left"><b> 3 пара </b></th>
+            <th align="left"><b> 4 пара </b></th>
+            <th align="left"><b> 5 пара </b></th>
+        </tr>
+        {% for grp in groups %}
+        <tr>
+            <th align="left"><b> {{ forloop.counter }} </b></th>
+            <th align="left"><b> {{ grp }} </b></th>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 
 {% endblock %}
