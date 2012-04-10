@@ -10,12 +10,14 @@
 
     {{ cal.media }}
 
+
 {% endblock %}
 
 {% block main %}
     <a href="/">назад</a><br>
     <br><br><br>
 
+    {{ cal.as_p }}
 
     <div class="row-fluid">
         <table class="schedule span11">
@@ -37,7 +39,7 @@
                     {% for i in forloop %}
                         {% if forloop.counter > 5 %}
                         {% else %}
-                            <td align="left"><b> {{ forloop.counter }} </b></td>
+                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
                         {% endif %}
                     {% endfor %}
 
@@ -62,7 +64,7 @@
                     {% for i in forloop %}
                         {% if forloop.counter > 5 %}
                         {% else %}
-                            <td align="left"><b> {{ forloop.counter }} </b></td>
+                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
                         {% endif %}
                     {% endfor %}
                 </tr>

@@ -4,11 +4,11 @@ from django.template.context import RequestContext
 from itertools import chain
 from deproc.main import models as main_models
 from deproc.schedule import models as sch_models
+from deproc.schedule import forms
 
 def schedule(request):
 
-#    cal = forms.CalendarForm()
-#    call = forms.EventForm()
+    cal = forms.MyCalendarForm()
 
     result_list = []
     disc_list = main_models.Discipline.objects.all()
