@@ -2,43 +2,74 @@
 
 {% block headcal %}
 
-{% load adminmedia %}
+    {% load adminmedia %}
 
-<script type="text/javascript">
-    window.__admin_media_prefix__ = "{% filter escapejs %}{% admin_media_prefix %}{% endfilter %}";
-</script>
+    <script type="text/javascript">
+        window.__admin_media_prefix__ = "{% filter escapejs %}{% admin_media_prefix %}{% endfilter %}";
+    </script>
 
-{{ cal.media }}
+    {{ cal.media }}
 
 {% endblock %}
 
 {% block main %}
-<a href="/">назад</a><br>
-<br><br><br>
+    <a href="/">назад</a><br>
+    <br><br><br>
 
 
-<div class="row-fluid">
-    <table class="schedule span11">
-        <tbody>
-        <tr>
-            <th align="left"><b> # </b></th>
-            <th align="left"><b> группа </b></th>
-            <th align="left"><b> 1 пара </b></th>
-            <th align="left"><b> 2 пара </b></th>
-            <th align="left"><b> 3 пара </b></th>
-            <th align="left"><b> 4 пара </b></th>
-            <th align="left"><b> 5 пара </b></th>
-        </tr>
-        {% for grp in groups %}
-        <tr>
-            <th align="left"><b> {{ forloop.counter }} </b></th>
-            <th align="left"><b> {{ grp }} </b></th>
+    <div class="row-fluid">
+        <table class="schedule span11">
+            <tbody>
+            <tr>
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> группа </b></th>
+                <th align="left"><b> 1 пара </b></th>
+                <th align="left"><b> 2 пара </b></th>
+                <th align="left"><b> 3 пара </b></th>
+                <th align="left"><b> 4 пара </b></th>
+                <th align="left"><b> 5 пара </b></th>
+            </tr>
+            {% for grp in groups %}
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td align="left"><b> {{ grp }} </b></td>
 
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+                    {% for i in forloop %}
+                        {% if forloop.counter > 5 %}
+                        {% else %}
+                            <td align="left"><b> {{ forloop.counter }} </b></td>
+                        {% endif %}
+                    {% endfor %}
+
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> преподаватель </b></th>
+                <th align="left"><b> 1 пара </b></th>
+                <th align="left"><b> 2 пара </b></th>
+                <th align="left"><b> 3 пара </b></th>
+                <th align="left"><b> 4 пара </b></th>
+                <th align="left"><b> 5 пара </b></th>
+            </tr>
+
+            {% for tch in teacher_list %}
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td align="left"><b> {{ tch.last_name }} {{ tch.first_name.upper.0 }}. {{ tch.other_name.upper.0 }}. </b></td>
+
+                    {% for i in forloop %}
+                        {% if forloop.counter > 5 %}
+                        {% else %}
+                            <td align="left"><b> {{ forloop.counter }} </b></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
 {% endblock %}

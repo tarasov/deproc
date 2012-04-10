@@ -1,13 +1,23 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from itertools import chain
 from deproc.main import models as main_models
 from deproc.schedule import models as sch_models
-from deproc.schedule import forms
 
 def schedule(request):
+
 #    cal = forms.CalendarForm()
 #    call = forms.EventForm()
+
+    result_list = []
+    disc_list = main_models.Discipline.objects.all()
+    group_list = main_models.Groups.objects.all()
+    teacher_list = main_models.Profile.objects.filter(groups__name="Преподаватели")
+    print teacher_list
+
+    result_list = list(chain(disc_list, group_list, teacher_list))
+    print result_list
     schdl = sch_models.Schedule.objects.all()
     schdl_day = sch_models.Schedule_day.objects.all()
     absnc = sch_models.Absences.objects.all()
@@ -23,3 +33,4 @@ def schedule(request):
 # при логине - показывать только относящиеся к юзеру объекты
 # аккуратный вывод
 # всё остальное так же
+#http://stackoverflow.com/questions/431628/how-to-combine-2-or-more-querysets-in-a-django-view
