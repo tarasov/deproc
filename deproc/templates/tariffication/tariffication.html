@@ -1,22 +1,12 @@
 {% extends 'base.html' %}
 
-
-{% block sidebar %}
-{#    {{ appmodels }}#}
-{% endblock %}
-
 {% block main %}
     Список групп учебного плана
     <a href="{% url plan_group %}">Группы</a>
     <br><br><br>
 
-    {% for model in list_models %}
-        <a href="/add/{{ model.0 }}/">{{ model.1 }}</a><br/>
-    {% endfor %}
-
     <div class="row-fluid">
         <table class="tariffication span11">
-            <tbody>
             <tr>
                 <th align="left"><b>преподаватель</b></th>
                 <th align="left"><b>группа</b></th>
@@ -36,11 +26,9 @@
                         {% endif %}
                     {% endfor %}
                 </tr>
-
             {% endfor %}
-            </tbody>
         </table>
     </div>
-
+    <p><a href="{% url add_tariffication %}">Добавить тариффикацию</a></p>
 
 {% endblock %}

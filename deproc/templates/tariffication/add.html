@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+    Список групп учебного плана
+    <a href="{% url plan_group %}">Вернуться</a>
+    <br><br><br>
+    <div class="row-fluid">
+        <form action="" method="POST">{% csrf_token %}
+            <table class="tariffication span9">
+                <tr>
+                    <th colspan="2">Нагрузка</th>
+                </tr>
+                {{ form_tariffication.as_table }}
+                {{ form_uchplanhour.as_table }}
+                {{ dynamic_form.as_table }}
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Добавить"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    {#                {% for typeh in choices %}#}
+    {#                    <th align="left"><b>{{ typeh.1 }}</b></th>#}
+    {#                {% endfor %}#}
+
+{% endblock %}
