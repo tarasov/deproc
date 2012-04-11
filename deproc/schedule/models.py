@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import date
 from django.db import models
-from django.forms.widgets import DateInput
 from deproc.main.models import Profile, Tariffication
 
 class Classroom(models.Model):
@@ -15,7 +13,7 @@ class Classroom(models.Model):
         return u'%s' % self.number
 
 class Schedule_day(models.Model):
-    day = models.DateField(max_length=100, null=True, blank=True)
+    day = models.DateField(max_length=100, null=True, blank=True,)
     real = models.BooleanField()
 
     class Meta:

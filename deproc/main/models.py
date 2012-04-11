@@ -14,19 +14,20 @@ choice_otch = (
 )
 
 choice_typeh = (
-    ('L', 'лекция',),
-    ('P', 'практика',),
-    ('S', 'консультация',),
-    ('E', 'экзамен',),
+    ('L', 'Лекция',),
+    ('P', 'Практика',),
+    ('S', 'Консультация',),
+    ('E', 'Экзамен',),
 )
 
+# TODO сделать генератор
 choice_semesters = (
     ('1, 2', '1, 2',),
     ('3, 4', '3, 4',),
     ('5, 6', '5, 6',),
     ('7, 8', '7, 8',),
     ('9, 10', '9, 10',),
-    )
+)
 
 class Profile(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
@@ -42,12 +43,15 @@ class Profile(User):
     def get_teachers(self):
         # Преподаватели
         teachers = Profile.objects.filter(groups__name="Преподаватели")
-        return [(teacher.pk, teacher.username) for teacher in teachers]
+        return [(teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers]
 
+    def __unicode__(self):
+        return u'%s %s %s' % (self.first_name, self.last_name, self.other_name)
 
     class Meta:
             verbose_name = u'пользователь'
             verbose_name_plural = u'пользователи'
+
 
 class UserStatus(models.Model):
     name = models.CharField(u"Статус", max_length=100, null=False, blank=False )
@@ -145,7 +149,7 @@ class UchPlan(models.Model):
     otch = models.CharField(u"Отчетность", max_length=100, null=True, blank=True, choices=choice_otch)
 
     def __unicode__(self):
-        return u'%s / %s / %s семестр' % (self.disc, self.spec, self.semestr)
+        return u'%s / %s / %s семестр' % (self.disc, self.spec.name, self.semestr)
 
     class Meta:
         verbose_name = u'учебный план'
@@ -177,7 +181,8 @@ class Year(models.Model):
 class Groups(models.Model):
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100) # 808
-    semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default='1, 2')
+    # проверить choice_semesters[0]
+    semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
     class Meta:
         verbose_name = u'группу студентов'
@@ -207,15 +212,13 @@ class Groups_plan(models.Model):
         verbose_name_plural = u'планы группы'
 
     def __unicode__(self):
-        return u'%s - %s - %s курс' % (self.year.date_begin, self.group.name, self.course, )
+        return u'%s / %s курc' % (self.group.name, self.course, )
 
 
 class Tariffication(models.Model):
     teacher = models.IntegerField(u"Преподаватель", max_length=100, choices=Profile().get_teachers())
     group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
-
-
 
     def get_teacher(self):
         return Profile.objects.get(pk=self.teacher)

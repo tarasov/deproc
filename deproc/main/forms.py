@@ -1,71 +1,57 @@
-from django.forms import ModelForm
+# -*- coding: utf-8 -*-
+
 from django import forms
+from django.core.exceptions import ValidationError
+from django.forms import ModelForm
 from deproc.main import models
 
-class DeForm(ModelForm):
-    pass
-
-
-class UserForm(ModelForm):
-    def as_table(self):
-        return self._html_output(
-            normal_row = u'<tr%(html_class_attr)s><td>%(label)s</td><td>%(errors)s%(field)s%(help_text)s</td></tr>',
-            error_row = u'<tr><td colspan="2">%s</td></tr>',
-            row_ender = u'</td></tr>',
-            help_text_html = u'<br /><span class="helptext">%s</span>',
-            errors_on_separate_row = False)
-
-    class Meta:
-        model = models.Profile
-        fields = ('username', 'first_name', 'last_name', 'other_name', 'password')
-
-
-class SpecialityForm(ModelForm):
-    class Meta:
-        model = models.Speciality
-
-class POForm(ModelForm):
-    class Meta:
-        model = models.PO
-
-class GroupsForm(ModelForm):
-    class Meta:
-        model = models.Groups
-
-class UserForm(ModelForm):
-    class Meta:
-        model = models.User
-
-class UserStatusForm(ModelForm):
-    class Meta:
-        model = models.UserStatus
-
-class GroupForm(ModelForm):
-    class Meta:
-        model = models.Group
-
-class UserPostForm(ModelForm):
-    class Meta:
-        model = models.UserPost
-
-class SpecialitypForm(ModelForm):
-    class Meta:
-        model = models.Speciality
-
-class Disc_typeForm(ModelForm):
-    class Meta:
-        model = models.Disc_type
-
-class TarificationForm(ModelForm):
-    def as_p(self):
-        "Returns this form rendered as HTML <p>s."
-        return self._html_output(
-            normal_row = u'<p%(html_class_attr)s>%(label)s %(field)s<a href="">+</a>%(help_text)s</p>',
-            error_row = u'%s',
-            row_ender = '</p>',
-            help_text_html = u' <span class="helptext">%s</span>',
-            errors_on_separate_row = False)
-
+class TarifficationModel(ModelForm):
     class Meta:
         model = models.Tariffication
+        exclude = ('uch_plan_hour', )
 
+class UchPlanHourModel(ModelForm):
+    class Meta:
+        model = models.UchPlanHour
+        fields = ('uch_plan', )
+
+
+class DynamicForm(forms.Form):
+    def __init__(self, choices, *args, **kwargs):
+        super(DynamicForm, self).__init__(*args, **kwargs)
+        for i, choice in enumerate(choices):
+            label = choice[1]
+            self.fields['%s' % choice[0]] = forms.IntegerField(label=label,  widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
+
+
+#class DynForm(forms.Form):
+#    """
+#    Dynamic form that allows the user to change and then verify the data that was parsed
+#    """
+#    def setFields(self, kwds):
+#        """
+#        Set the fields in the form
+#        """
+#        keys = kwds.keys()
+#        keys.sort()
+#        for k in keys:
+#            self.fields[k] = forms.IntegerField(label=kwds[k],  widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
+#
+#    def setData(self, kwds):
+#        """
+#        Set the data to include in the form
+#        """
+#        keys = kwds.keys()
+#        keys.sort()
+#        for k in keys:
+#            self.data[k] = kwds[k]
+#
+#    def validate(self, post):
+#        """
+#        Validate the contents of the form
+#        """
+#        for name,field in self.fields.items():
+#            try:
+#                field.clean(post[name])
+#            except ValidationError, e:
+#                self.errors[name] = e.messages

@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
 import re
+from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.template.defaulttags import csrf_token
 from deproc.main import forms
 from deproc.main import models
+from deproc.main import forms
 from django.db.models import get_models
-from deproc.main.forms import DeForm
 from deproc.main.models import Tariffication, choice_typeh
 from django.db.models import Count
-
+from django.views.decorators.csrf import csrf_protect
 
 def wellcome(request):
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
@@ -22,7 +24,6 @@ def plan_group(request):
     specialty = models.Speciality.objects.all()
     year = models.Year.objects.all().order_by('-date_begin')[0]
     groups_plan = models.Groups_plan.objects.filter(year=year).order_by('-group__spec')
-    print groups_plan
 
     for i, group_plan in enumerate(groups_plan):
         if i and groups_plan[i-1].group.spec == group_plan.group.spec:
@@ -34,7 +35,6 @@ def plan_group(request):
     print table
 
     return render_to_response('tariffication/group_plan.html', locals(), context_instance=RequestContext(request))
-
 
 def tariffication(request):
     choices = choice_typeh
@@ -53,7 +53,7 @@ def tariffication(request):
             tariffs = Tariffication.objects.filter(uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'], teacher = value['teacher'], group_plan__group = value['group_plan__group'])
             tariff = tariffs[0]
             hours = [(t.uch_plan_hour.type, t.uch_plan_hour.count_hours) for t in tariffs]
-            teacher = tariff.set_teacher.username
+            teacher = '%s %s %s' % (tariff.set_teacher.last_name, tariff.set_teacher.first_name, tariff.set_teacher.other_name, )
             grp = tariff.group_plan.group
             disc = tariff.uch_plan_hour.uch_plan.disc
             smtr = tariff.uch_plan_hour.uch_plan.semestr
@@ -70,26 +70,11 @@ def tariffication(request):
                             choice_type = (typeh[0], 0),
                 tr = (tr[len(tr)-1] + choice_type, )
             table += tr
-
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 
+
+
+
 def action(request, app):
-
-    appmodels = get_models()
-
-    for appmodel in appmodels:
-        if appmodel.__name__.lower() == app:
-            app = appmodel._meta.verbose_name
-            app1 = appmodel.__name__
-            model_app = appmodel
-#    print model_app
-    class Meta:
-        model = model_app
-
-    DeForm.Meta = Meta()
-    print DeForm.Meta.model
-    form = DeForm()
-    print form
-#    form = getattr(forms, '%sForm' % app1)
 
     return render_to_response('tariffication/action.html', locals(), context_instance=RequestContext(request))
