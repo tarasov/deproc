@@ -23,7 +23,7 @@ def index(request):
             date = date.split('.')
             new_date = ('%s-%s-%s' % tuple(date[::-1]))
             print new_date
-#            print date[0:2], date[3:5], date[6:10]
+            print date[0:2], date[3:5], date[6:10]
 
             day_schedule = sch_models.Schedule.objects.filter(day = new_date)
             print day_schedule
