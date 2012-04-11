@@ -12,7 +12,8 @@ urlpatterns = patterns('deproc.main.views',
 )
 
 urlpatterns += patterns('deproc.schedule.views',
-    url(r'^schedule/', 'schedule', name='schedule'),
+    url(r'^schedule/$', 'schedule', name='schedule'),
+    url(r'^schedule/index/', 'index', name='schedule_index'),
 )
 
 

@@ -10,68 +10,18 @@
 
     {{ cal.media }}
 
-
 {% endblock %}
 
 {% block main %}
     <a href="/">назад</a><br>
     <br><br><br>
 
-    {{ cal.as_p }}
+    <form action="{% url schedule_index %}">
+        {{ cal.as_p }}
+        <button class="btn btn-success"> Показать расписание </button>
+    </form>
 
-    <div class="row-fluid">
-        <table class="schedule span11">
-            <tbody>
-            <tr>
-                <th align="left"><b> # </b></th>
-                <th align="left"><b> группа </b></th>
-                <th align="left"><b> 1 пара </b></th>
-                <th align="left"><b> 2 пара </b></th>
-                <th align="left"><b> 3 пара </b></th>
-                <th align="left"><b> 4 пара </b></th>
-                <th align="left"><b> 5 пара </b></th>
-            </tr>
-            {% for grp in groups %}
-                <tr>
-                    <td align="left"><b> {{ forloop.counter }} </b></td>
-                    <td align="left"><b> {{ grp }} </b></td>
 
-                    {% for i in forloop %}
-                        {% if forloop.counter > 5 %}
-                        {% else %}
-                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
-                        {% endif %}
-                    {% endfor %}
-
-                </tr>
-            {% endfor %}
-
-            <tr>
-                <th align="left"><b> # </b></th>
-                <th align="left"><b> преподаватель </b></th>
-                <th align="left"><b> 1 пара </b></th>
-                <th align="left"><b> 2 пара </b></th>
-                <th align="left"><b> 3 пара </b></th>
-                <th align="left"><b> 4 пара </b></th>
-                <th align="left"><b> 5 пара </b></th>
-            </tr>
-
-            {% for tch in teacher_list %}
-                <tr>
-                    <td align="left"><b> {{ forloop.counter }} </b></td>
-                    <td align="left"><b> {{ tch.last_name }} {{ tch.first_name.upper.0 }}. {{ tch.other_name.upper.0 }}. </b></td>
-
-                    {% for i in forloop %}
-                        {% if forloop.counter > 5 %}
-                        {% else %}
-                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
 
 {% endblock %}

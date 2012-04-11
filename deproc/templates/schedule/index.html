@@ -1,11 +1,61 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends 'base.html' %}
 
+{% block main %}
+    <a href="/">назад</a><br>
+    <br><br><br>
 
-</body>
-</html>
+    <div class="row-fluid">
+        <table class="schedule span11">
+            <tbody>
+            <tr>
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> группа </b></th>
+                <th align="left"><b> 1 пара </b></th>
+                <th align="left"><b> 2 пара </b></th>
+                <th align="left"><b> 3 пара </b></th>
+                <th align="left"><b> 4 пара </b></th>
+                <th align="left"><b> 5 пара </b></th>
+            </tr>
+            {% for grp in groups %}
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td align="left"><b> {{ grp }} </b></td>
+
+                    {% for i in forloop %}
+                        {% if forloop.counter > 5 %}
+                        {% else %}
+                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
+                        {% endif %}
+                    {% endfor %}
+
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> преподаватель </b></th>
+                <th align="left"><b> 1 пара </b></th>
+                <th align="left"><b> 2 пара </b></th>
+                <th align="left"><b> 3 пара </b></th>
+                <th align="left"><b> 4 пара </b></th>
+                <th align="left"><b> 5 пара </b></th>
+            </tr>
+
+            {% for tch in teacher_list %}
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td align="left"><b> {{ tch.last_name }} {{ tch.first_name.upper.0 }}. {{ tch.other_name.upper.0 }}. </b></td>
+
+                    {% for i in forloop %}
+                        {% if forloop.counter > 5 %}
+                        {% else %}
+                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
