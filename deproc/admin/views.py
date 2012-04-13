@@ -37,9 +37,9 @@ def add_tariffication(request):
                 # создаем часы учебного плана
                 uch_plan_hour = models.UchPlanHour(uch_plan=uch_plan, type = choice[0], count_hours = hour)
                 uch_plan_hour.save()
-            teacher = request.POST['teacher']
-            group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
-            models.Tariffication(teacher = teacher, group_plan = group_plan, uch_plan_hour = uch_plan_hour).save()
+                teacher = request.POST['teacher']
+                group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
+                models.Tariffication(teacher = teacher, group_plan = group_plan, uch_plan_hour = uch_plan_hour).save()
 
         form_tariffication = forms.TarifficationModel(request.POST)
         form_uchplanhour = forms.UchPlanHourModel(request.POST)
