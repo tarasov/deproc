@@ -156,7 +156,11 @@ class UchPlan(models.Model):
         verbose_name_plural = u'учебные планы'
 
 class UchPlanHour(models.Model):
-    uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100) # учебный план
+    """
+    Учебный план часа, тут указаны типы часов и их количество у определенного учебного плана
+    """
+    uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100)
+    # TODO rename to typeh
     type = models.CharField(u"Тип часа", max_length=100, null=True, blank=True, choices=choice_typeh) # лекция, практика, консультация
     count_hours = models.IntegerField(u"Количество часов", max_length=100)
 

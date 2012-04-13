@@ -21,7 +21,7 @@ class DynamicForm(forms.Form):
         super(DynamicForm, self).__init__(*args, **kwargs)
         for i, choice in enumerate(choices):
             label = choice[1]
-            self.fields['%s' % choice[0]] = forms.IntegerField(label=label,  widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
+            self.fields['%s' % choice[0]] = forms.CharField(label=label, required=False, widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
 
 
 #class DynForm(forms.Form):
