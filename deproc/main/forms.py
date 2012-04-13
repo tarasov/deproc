@@ -2,13 +2,21 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
+from django.forms import ModelForm, widgets
 from deproc.main import models
+from deproc.main.models import Profile
 
+attrs_dict = { 'class': 'required' }
 class TarifficationModel(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TarifficationModel, self).__init__(*args, **kwargs)
+        self.fields['teacher'].choices = [('', '----------')] + Profile().get_teachers()
+
+    teacher = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict), label = 'Преподователь')
+
     class Meta:
         model = models.Tariffication
-        exclude = ('uch_plan_hour', )
+        fields = ('teacher', 'group_plan', )
 
 class UchPlanHourModel(ModelForm):
     class Meta:

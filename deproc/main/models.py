@@ -220,7 +220,7 @@ class Groups_plan(models.Model):
 
 
 class Tariffication(models.Model):
-    teacher = models.IntegerField(u"Преподаватель", max_length=100, choices=Profile().get_teachers())
+    teacher = models.IntegerField(u"Преподаватель", max_length=100)
     group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
 
