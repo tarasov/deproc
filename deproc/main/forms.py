@@ -31,35 +31,6 @@ class DynamicForm(forms.Form):
             label = choice[1]
             self.fields['%s' % choice[0]] = forms.CharField(label=label, required=False, widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
 
-
-#class DynForm(forms.Form):
-#    """
-#    Dynamic form that allows the user to change and then verify the data that was parsed
-#    """
-#    def setFields(self, kwds):
-#        """
-#        Set the fields in the form
-#        """
-#        keys = kwds.keys()
-#        keys.sort()
-#        for k in keys:
-#            self.fields[k] = forms.IntegerField(label=kwds[k],  widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
-#
-#    def setData(self, kwds):
-#        """
-#        Set the data to include in the form
-#        """
-#        keys = kwds.keys()
-#        keys.sort()
-#        for k in keys:
-#            self.data[k] = kwds[k]
-#
-#    def validate(self, post):
-#        """
-#        Validate the contents of the form
-#        """
-#        for name,field in self.fields.items():
-#            try:
-#                field.clean(post[name])
-#            except ValidationError, e:
-#                self.errors[name] = e.messages
+class PlanGroupForm(ModelForm):
+    class Meta:
+        model = models.Groups_plan

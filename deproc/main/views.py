@@ -15,6 +15,11 @@ from deproc.main.models import Tariffication, choice_typeh
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 
+# страницы, из которых будет генерироваться urlpatterns
+# вид - {адресс ссылки: (Модель, Название)}
+pages_list = {'groups': ('Groups', 'Группы'), 'discipline': ('Discipline', 'Дисциплины'), 'speciality': ('Speciality', 'Специальности')}
+
+
 def wellcome(request):
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 
@@ -32,7 +37,7 @@ def plan_group(request):
             tr = ((group_plan.group.spec.name, group_plan.group.name, group_plan.course, group_plan.group.semestr.split(', '),  ), )
         table += tr
 
-    print table
+#    print table
 
     return render_to_response('tariffication/group_plan.html', locals(), context_instance=RequestContext(request))
 
@@ -73,8 +78,46 @@ def tariffication(request):
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 
 
+def get_urls():
 
+    from django.conf.urls import patterns, url
+    urls_list = patterns('',
+        # в цикле добавим пути (urls)
+    )
 
-def action(request, app):
+    for page_list in pages_list.keys():
+        urls_list.append(url(r'^%s/$' % page_list, 'deproc.main.views.pages', name='%s' % page_list))
 
-    return render_to_response('tariffication/action.html', locals(), context_instance=RequestContext(request))
+    return urls_list
+
+def pages(request):
+    # TODO сделать для всех простых страниц
+    # специальности, группы, дисциплины, пользователи,
+    # студенты, преподователи, [учебный год?]
+    # потому что предоставление информации происходит однотипно (показ таблицы)
+
+    page = request.META['PATH_INFO'][1:-1]
+
+    model_name = pages_list[page][0]
+    model = getattr(models, model_name)
+
+    values = model.objects.all()
+
+    # создание списка заголовков <th></th>
+    fields = values[0]._meta.fields
+    ths = []
+    for field in fields:
+        if field.verbose_name == 'ID':
+            verbose_name = '#'
+        else:
+            verbose_name = field.verbose_name
+        ths.append((field.name, verbose_name))
+
+    table = ()
+    for value in values:
+        tr = ()
+        for th in ths:
+            tr += (getattr(value, th[0]), )
+        table += (tr, )
+    print table
+    return render_to_response('tariffication/pages.html', locals(), context_instance=RequestContext(request))

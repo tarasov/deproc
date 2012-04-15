@@ -44,6 +44,9 @@
                         <li class="nav-header">Администратор</li>
                         <li><a href="{% url tariffication %}">Тарификация</a></li>
                         <li><a href="{% url schedule %}">Расписание</a></li>
+                        {% for page in pages %}
+                            <li><a href="/{{ page.0 }}/">{{ page.1 }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div><!--/.well -->
             </div><!--/span-->

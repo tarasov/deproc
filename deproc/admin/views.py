@@ -40,11 +40,15 @@ def add_tariffication(request):
                 teacher = request.POST['teacher']
                 group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
                 models.Tariffication(teacher = teacher, group_plan = group_plan, uch_plan_hour = uch_plan_hour).save()
-
         form_tariffication = forms.TarifficationModel(request.POST)
         form_uchplanhour = forms.UchPlanHourModel(request.POST)
     else:
         form_tariffication = forms.TarifficationModel()
         form_uchplanhour = forms.UchPlanHourModel()
 
-    return render_to_response('tariffication/add.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('admin/add_tariffication.html', locals(), context_instance=RequestContext(request))
+
+
+def add_plan_group(request):
+    form_plan_group = forms.PlanGroupForm()
+    return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))

@@ -110,7 +110,7 @@ class PO(models.Model):
 
 class Speciality(models.Model):
     name = models.CharField(u"Специальность", max_length=150, null=False, blank=False)
-    num_spec = models.FloatField(u"Норер специальности",  max_length=100)
+    num_spec = models.FloatField(u"Номер специальности",  max_length=100)
 
     class Meta:
         verbose_name = u'специальность'
