@@ -17,7 +17,11 @@ from django.views.decorators.csrf import csrf_protect
 
 # страницы, из которых будет генерироваться urlpatterns
 # вид - {адресс ссылки: (Модель, Название)}
-pages_list = {'groups': ('Groups', 'Группы'), 'discipline': ('Discipline', 'Дисциплины'), 'speciality': ('Speciality', 'Специальности')}
+pages_list = {
+    'groups': ('Groups', 'Группы'),
+    'discipline': ('Discipline', 'Дисциплины'),
+    'speciality': ('Speciality', 'Специальности'),
+}
 
 
 def wellcome(request):
