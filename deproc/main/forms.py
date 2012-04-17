@@ -20,7 +20,7 @@ class TarifficationModel(ModelForm):
         model = models.Tariffication
         fields = ('teacher', 'group_plan', )
         widgets = {
-            'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site)
+            'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site, can_add_related=True)
         }
 
 class UchPlanHourModel(ModelForm):

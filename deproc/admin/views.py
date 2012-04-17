@@ -6,8 +6,6 @@ from django.http import HttpResponseRedirect, HttpResponseServerError, HttpRespo
 from django.template import RequestContext
 from deproc.main import forms
 from deproc.main import models
-from deproc.main import forms
-from deproc.main import models
 
 
 def add_tariffication(request):
@@ -52,3 +50,33 @@ def add_tariffication(request):
 def add_plan_group(request):
     form_plan_group = forms.PlanGroupForm()
     return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))
+
+# действия для страниц
+def info_page(request, pk):
+    path_info = request.META['PATH_INFO'].split('/')[1]
+    model_name = path_info[0].upper() + path_info[1:]
+    Model = getattr(models, model_name)
+    value = Model.objects.get(pk=pk)
+    # названия полей выбранной модели
+    fields = value._meta.fields
+
+    table = ()
+    for field in fields:
+        if field.name == 'id': continue
+        tr = (field.verbose_name, getattr(value, field.name))
+        table += (tr, )
+    print table
+    return render_to_response('admin/info_page.html', locals(), context_instance=RequestContext(request))
+
+
+def edit_page(request, pk):
+    """
+    Делаем редактирование выбранных данных
+    """
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+def delete_page(request, pk):
+    """
+    Делаем удаление выбранных данных
+    """
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])

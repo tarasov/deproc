@@ -23,7 +23,12 @@ pages_list = {
     'groups': ('Groups', 'Группы'),
     'discipline': ('Discipline', 'Дисциплины'),
     'speciality': ('Speciality', 'Специальности'),
-}
+    }
+
+actions = (
+    'info', 'edit', 'delete'
+)
+
 
 
 def wellcome(request):
@@ -86,34 +91,20 @@ def tariffication(request):
             table += tr
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 
-
-def get_urls():
-
-    from django.conf.urls import patterns, url
-    urls_list = patterns('',
-        # в цикле добавим пути (urls)
-    )
-
-    for page_list in pages_list.keys():
-        urls_list.append(url(r'^%s/$' % page_list, 'deproc.main.views.pages', name='%s' % page_list))
-
-    return urls_list
-
-def pages(request):
+def pages(request, actions=actions):
     # TODO сделать для всех простых страниц
     # специальности, группы, дисциплины, пользователи,
     # студенты, преподователи, [учебный год?]
     # потому что предоставление информации происходит однотипно (показ таблицы)
-
     page = request.META['PATH_INFO'][1:-1]
-
     model_name = pages_list[page][0]
-    model = getattr(models, model_name)
-
-    values = model.objects.all()
+    Model = getattr(models, model_name)
+    values = Model.objects.all()
 
     # создание списка заголовков <th></th>
     fields = values[0]._meta.fields
+    # действия
+    # TODO отделить !
     ths = []
     for field in fields:
         if field.verbose_name == 'ID':
@@ -121,12 +112,15 @@ def pages(request):
         else:
             verbose_name = field.verbose_name
         ths.append((field.name, verbose_name))
+    ths = ths + ['' for i in actions]
 
     table = ()
     for value in values:
         tr = ()
+        tr = tr + (value.get_absolute_url(), )
         for th in ths:
-            tr += (getattr(value, th[0]), )
-        table += (tr, )
-    print table
+            if th:
+                tr += (getattr(value, th[0]), )
+        table += (tr + actions, )
+
     return render_to_response('tariffication/pages.html', locals(), context_instance=RequestContext(request))

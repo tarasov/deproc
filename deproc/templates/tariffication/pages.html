@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main %}
+    {% load extras %}
     Страницы
     <br><br><br>
 
@@ -14,7 +15,13 @@
             {% for tr in table %}
                 <tr style="height: 30px;">
                     {% for td in tr %}
-                        <td align="left"><b>{{ td}}</b></td>
+                        {% if forloop.counter0 %}
+                            {% if td not in actions %}
+                                <td align="left"><b>{{ td }}</b></td>
+                            {% else %}
+                                <td align="left"><b>{{ td|add_icon:tr.0 }}</b></td>
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}

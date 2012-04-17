@@ -112,6 +112,9 @@ class Speciality(models.Model):
     name = models.CharField(u"Специальность", max_length=150, null=False, blank=False)
     num_spec = models.FloatField(u"Номер специальности",  max_length=100)
 
+    def get_absolute_url(self):
+        return 'speciality/%s' % str(self.id)
+
     class Meta:
         verbose_name = u'специальность'
         verbose_name_plural = u'специальности'
@@ -133,6 +136,9 @@ class Discipline(models.Model):
     name = models.CharField(u"Дисциплина", max_length=150, null=False, blank=False) # Программное обеспечени компьютерных сетей
     short_name = models.CharField(u"Короткое название", max_length=100, null=False, blank=False) # ПОКС
     type = models.ForeignKey(Disc_type, verbose_name=u"Тип дисциплины") # лекция, практика, консультация
+
+    def get_absolute_url(self):
+        return 'discipline/%s' % str(self.id)
 
     class Meta:
         verbose_name = u'дисциплина'
@@ -188,12 +194,16 @@ class Groups(models.Model):
     # проверить choice_semesters[0]
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
+    def get_absolute_url(self):
+        return 'groups/%s' % str(self.id)
+
     class Meta:
         verbose_name = u'группу студентов'
         verbose_name_plural = u'группа студентов'
 
     def __unicode__(self):
         return u'%s' % (self.name, )
+
 
 class Groups_stud(models.Model):
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
@@ -226,6 +236,9 @@ class Tariffication(models.Model):
 
     def get_teacher(self):
         return Profile.objects.get(pk=self.teacher)
+
+    def get_absolute_url(self):
+        return '%s/%s' % (___Classobj, str(self.id), )
 
     set_teacher = property(get_teacher)
 

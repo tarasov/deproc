@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from deproc.main.views import get_urls
+from deproc.main.views import actions
 import settings
 
 admin.autodiscover()
@@ -23,8 +24,6 @@ urlpatterns += patterns('deproc.admin.views',
 )
 
 # pages
-urlpatterns += get_urls()
-
 urlpatterns += patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^admin/jsi18n/', 'django.views.i18n.javascript_catalog'),
@@ -34,3 +33,22 @@ urlpatterns += patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
          { 'document_root': settings.PROJECT_ROOT +'/media/' }),
 )
+
+
+
+def get_urls():
+    from django.conf.urls import patterns, url
+    from deproc.main.views import pages_list
+
+    urls_list = patterns('',
+        # в цикле добавим пути (urls)
+    )
+
+    for page_list in pages_list.keys():
+        urls_list.append(url(r'^%s/$' % page_list, 'deproc.main.views.pages', name='%s' % page_list))
+        # TODO сделать проверку на существование функции
+        for action in actions:
+            urls_list.append(url(r'^%s/(\d+)/%s/$' % (page_list, action, ), 'deproc.admin.views.%s_page' % action, name='%s_%s' % (action, page_list, )))
+    return urls_list
+
+urlpatterns += get_urls()
