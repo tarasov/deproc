@@ -15,6 +15,8 @@ from deproc.main.models import Tariffication, choice_typeh
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 
+# This class is a wrapper to a given widget to add the add icon for the admin interface
+
 # страницы, из которых будет генерироваться urlpatterns
 # вид - {адресс ссылки: (Модель, Название)}
 pages_list = {
@@ -56,7 +58,10 @@ def tariffication(request):
         # делаем цикл по семестрам для фильтрации тариффикации
     table = ()
     for semestr in semestres:
-        tariffs_values = Tariffication.objects.values('group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__semestr').annotate(count = Count('group_plan__group')).filter(uch_plan_hour__uch_plan__semestr = semestr)
+        tariffs_values = Tariffication.objects.values(
+            'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__semestr').annotate(
+            count = Count('group_plan__group')).filter(
+            uch_plan_hour__uch_plan__semestr = semestr)
         tr = tds = ()
         for value in tariffs_values:
             tariffs = Tariffication.objects.filter(uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'], teacher = value['teacher'], group_plan__group = value['group_plan__group'])

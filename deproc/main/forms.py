@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.contrib.admin.sites import site
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, widgets
+from django.forms import ModelForm
+from django.forms.widgets import Select
+from django.contrib.admin import widgets as admin_widgets
 from deproc.main import models
 from deproc.main.models import Profile
 
@@ -13,10 +16,12 @@ class TarifficationModel(ModelForm):
         self.fields['teacher'].choices = [('', '----------')] + Profile().get_teachers()
 
     teacher = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict), label = 'Преподователь')
-
     class Meta:
         model = models.Tariffication
         fields = ('teacher', 'group_plan', )
+        widgets = {
+            'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site)
+        }
 
 class UchPlanHourModel(ModelForm):
     class Meta:
