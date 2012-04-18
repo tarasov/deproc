@@ -46,6 +46,7 @@ def get_urls():
 
     for page_list in pages_list.keys():
         urls_list.append(url(r'^%s/$' % page_list, 'deproc.main.views.pages', name='%s' % page_list))
+        urls_list.append(url(r'^%s/add/$' % page_list, 'deproc.admin.views.add_page', name='%s_add' % page_list))
         # TODO сделать проверку на существование функции
         for action in actions:
             urls_list.append(url(r'^%s/(\d+)/%s/$' % (page_list, action, ), 'deproc.admin.views.%s_page' % action, name='%s_%s' % (action, page_list, )))

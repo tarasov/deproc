@@ -96,15 +96,13 @@ def pages(request, actions=actions):
     # специальности, группы, дисциплины, пользователи,
     # студенты, преподователи, [учебный год?]
     # потому что предоставление информации происходит однотипно (показ таблицы)
-    page = request.META['PATH_INFO'][1:-1]
-    model_name = pages_list[page][0]
+    path_info = request.META['PATH_INFO'].split('/')[1]
+    model_name = pages_list[path_info][0]
     Model = getattr(models, model_name)
     values = Model.objects.all()
 
     # создание списка заголовков <th></th>
     fields = values[0]._meta.fields
-    # действия
-    # TODO отделить !
     ths = []
     for field in fields:
         if field.verbose_name == 'ID':

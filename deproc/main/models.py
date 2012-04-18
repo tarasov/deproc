@@ -190,7 +190,7 @@ class Year(models.Model):
 
 class Groups(models.Model):
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
-    name = models.IntegerField(u'Группа', max_length=100) # 808
+    name = models.IntegerField(u'Группа', max_length=100, unique=True) # 808
     # проверить choice_semesters[0]
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
@@ -238,7 +238,7 @@ class Tariffication(models.Model):
         return Profile.objects.get(pk=self.teacher)
 
     def get_absolute_url(self):
-        return '%s/%s' % (___Classobj, str(self.id), )
+        return 'tariffication/%s' % str(self.id),
 
     set_teacher = property(get_teacher)
 

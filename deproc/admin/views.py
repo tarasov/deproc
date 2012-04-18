@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import re
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
+from deproc.admin.forms import dynamic_form_page
 from deproc.main import forms
 from deproc.main import models
+from deproc.main import views
 
 
 def add_tariffication(request):
@@ -51,6 +54,27 @@ def add_plan_group(request):
     form_plan_group = forms.PlanGroupForm()
     return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))
 
+def add_page(request):
+    """
+    Делаем добавления данных
+    """
+    path_info = request.META['PATH_INFO'].split('/')[1]
+    model_name = path_info[0].upper() + path_info[1:]
+    Model = getattr(models, model_name)
+    # создается ModelForm
+    form_inst = dynamic_form_page(Model)
+
+    if request.POST:
+        form = form_inst(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('%s' % path_info))
+    else:
+        form = form_inst()
+
+    url = reverse('%s' % model_name.lower())
+    return render_to_response('admin/add_page.html', locals(), context_instance=RequestContext(request))
+
 # действия для страниц
 def info_page(request, pk):
     path_info = request.META['PATH_INFO'].split('/')[1]
@@ -65,7 +89,7 @@ def info_page(request, pk):
         if field.name == 'id': continue
         tr = (field.verbose_name, getattr(value, field.name))
         table += (tr, )
-    print table
+#    print table
     return render_to_response('admin/info_page.html', locals(), context_instance=RequestContext(request))
 
 
@@ -73,10 +97,28 @@ def edit_page(request, pk):
     """
     Делаем редактирование выбранных данных
     """
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    path_info = request.META['PATH_INFO'].split('/')[1]
+    model_name = path_info[0].upper() + path_info[1:]
+    Model = getattr(models, model_name)
+    # создается ModelForm
+    form_inst = dynamic_form_page(Model)
 
-def delete_page(request, pk):
+    if request.POST:
+        form = form_inst(request.POST, instance = Model.objects.get(pk=pk))
+        if form.is_valid():
+            form.save()
+    else:
+        form = form_inst(instance = Model.objects.get(pk=pk))
+
+    url = reverse('%s' % model_name.lower())
+    return render_to_response('admin/edit_page.html', locals(), context_instance=RequestContext(request))
+
+def delete_page(request, pk, confirm = False):
     """
-    Делаем удаление выбранных данных
+    Удаляем выбранные данные
     """
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    path_info = request.META['PATH_INFO'].split('/')[1]
+    model_name = path_info[0].upper() + path_info[1:]
+    Model = getattr(models, model_name)
+    Model.objects.get(pk=pk).delete()
+    return HttpResponseRedirect(reverse('%s' % path_info))

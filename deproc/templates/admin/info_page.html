@@ -2,7 +2,7 @@
 
 
 {% block main %}
-    Страница информации
+    Страница информации<br/>
     <a href="{% url plan_group %}">Вернуться</a>
     <br><br><br>
     <div class="row-fluid">
@@ -14,7 +14,7 @@
                 {% for tr in table %}
                     <tr style="height: 30px;">
                         <td style="text-align: left">
-                            <b>{{ tr.0 }}</b>
+                            <b>{{ tr.0|capfirst }}</b>
                         </td>
                         <td style="text-align: left">
                             {{ tr.1 }}

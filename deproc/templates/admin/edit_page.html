@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    Страница редактирования
+    <a href="{{ url }}">Вернуться</a>
+    <br><br><br>
+    <div class="row-fluid">
+        <form action="" method="POST">{% csrf_token %}
+            <table class="tariffication span6">
+                <tr>
+                    <th colspan="2">Редактирование таблицы {{ Model.Meta.verbose_name }}</th>
+                </tr>
+                {{ form.as_table }}
+                <tr>
+                    <th colspan="2">
+                        <input type="submit" value="Изменить">
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+{% endblock %}
