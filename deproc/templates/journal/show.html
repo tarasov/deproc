@@ -1,0 +1,96 @@
+{% extends "journal/index.html" %}
+
+{% block styles %}
+    <link href="{{ MEDIA_URL }}css/journal.css" type="type/css" rel="stylesheet" />
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/journal.js"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div id="selMark">
+        <div class="close">
+            <a href="#"><img src="{{ MEDIA_URL }}img/close.png" align="absmiddle"></a>
+        </div>
+        <a class="mark_2" mark="2" href="#">2 (не о чем)</a>
+        <a class="mark_3" mark="3" href="#">3 (так се)</a>
+        <a class="mark_4" mark="4" href="#">4 (нормально)</a>
+        <a class="mark_5" mark="5" href="#">5 (круто)</a>
+        <a class="mark_0" mark="0" href="#">clear <img src="{{ MEDIA_URL }}img/clear.png" align="absmiddle"></a>
+    </div>
+
+
+    <table id = "mark">
+        <tr>
+            <th>
+                ФИО
+            </th>
+            {% for theme in themes %}
+                <th class="mark" l="{{ theme.id }}">{{ theme.id }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for tr in table %}
+            <tr>
+                {% for td in tr %}
+                    {% if not forloop.counter0 %}
+                        {# Студент #}
+                        <td class="name" id="stud_{{ td.0 }}">{{ td.1 }}</td>
+                    {% else %}
+                        {# Оценки студента #}
+                        {% if td.1 %}
+                            <td class="mark theme_{{ td.0 }}" id="{{ tr.0.0 }}_{{ td.0 }}" s="{{ tr.0.0 }}" l="{{ td.0 }}">{{ td.1 }}</td>
+                        {% else %}
+                            <td class="mark theme_{{ td.0 }}" id="{{ tr.0.0 }}_{{ td.0 }}" s="{{ tr.0.0 }}" l="{{ td.0 }}"></td>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+
+{#        {% for student in students %}#}
+{#            <tr id = "st_{{ student.0 }}">#}
+{#                <td class="name notHide" id="stud_{{ student.0 }}">{{ student.1 }}</td>#}
+{#                    {% for lab in labs %}#}
+{#                        <td class="mark lab_{{ lab.id }}" id="{{ student.0 }}_{{ lab.id }}" s="{{ student.0 }}" l="{{ lab.id }}">#}
+{#                        {% for mark in lab.assessments.all %}#}
+{#                            {% if lab.id == mark.lab_id and student.0 == mark.student_id %}#}
+{#                                {{ mark.mark }}#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+{#                        </td>#}
+{#                    {% endfor %}#}
+{#            </tr>#}
+{#        {% endfor %}#}
+    </table>
+
+
+    <table id="themes">
+    <tr>
+        <th>#</th>
+        <th class="name">
+            Лабораторная работа
+            <a id="add" href="#"><img src="{{ MEDIA_URL }}img/add.png" style="padding-left: 25px;"/></a>
+            <div>
+                <div class="close">
+                    <a href="#"><img src="{{ MEDIA_URL }}img/close.png" align="absmiddle"></a>
+                </div>
+                {{ form_theme.as_p }}
+                <a class="add_theme" href="#">
+                    <img src="{{ MEDIA_URL }}img/add.png" align="absmiddle">
+                </a>
+            </div>
+        </th>
+    </tr>
+    {% for theme in themes %}
+        <tr id="{{ theme.id }}">
+            <td>{{ theme.id }}</td>
+            <td class="theme" l="{{ theme.id }}">{{ theme.name }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+    <LINK REL="STYLESHEET" TYPE="text/css" HREF="{{ MEDIA_URL }}css/journal.css" />
+    <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/jquery.js"></SCRIPT>
+    <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/journal.js"></SCRIPT>
+</HEAD>
+<BODY>
+    <DIV ID="hat">
+    {% block title %}
+        <H2>Электронный журнал, БД [809]</H2>
+    {% endblock %}
+    </DIV>
+    {% block menu %}
+        <div id="menu">
+            <a href='#' id="aa">Оценки</a>
+            <a href='#' class='labs'>Лабы</a>
+        </div>
+    {% endblock %}
+
+    <HR>
+    <div id="main">
+    {% block content %}
+    {% endblock %}
+    </div>
+    <br/>
+    <div class="push" style="clear: both;"></div>
+    <div id="footer">Дмитровский профессиональный колледж</div>
+</BODY>
+</HTML>

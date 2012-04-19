@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'south',
     'deproc.main',
     'deproc.schedule',
+    'deproc.journal',
 )
 
 LOGGING = {
@@ -121,3 +122,7 @@ LOGGING = {
         },
     }
 }
+
+
+if DEBUG:
+    from run.development import *

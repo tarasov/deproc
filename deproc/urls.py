@@ -12,9 +12,15 @@ urlpatterns = patterns('deproc.main.views',
     url(r'^plan_group/$', 'plan_group', name='plan_group'),
 )
 
+# Расписание
 urlpatterns += patterns('deproc.schedule.views',
     url(r'^schedule/$', 'schedule', name='schedule'),
     url(r'^schedule/index/', 'index', name='schedule_index'),
+)
+
+# Электронный журнал
+urlpatterns += patterns('deproc.schedule.views',
+    url(r'^journal/', include('deproc.journal.urls')),
 )
 
 # admin
