@@ -9,9 +9,9 @@ from django.utils import simplejson
 from django.utils.encoding import force_unicode, smart_str
 from django.utils.hashcompat import sha_constructor
 
-from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
+from lib.debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
-from debug_toolbar.utils.compat.db import connections
+from lib.debug_toolbar.utils.compat.db import connections
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \

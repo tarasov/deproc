@@ -75,16 +75,16 @@ def load_panel_classes():
 
     # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
     panels = getattr(settings, 'DEBUG_TOOLBAR_PANELS', (
-        'debug_toolbar.panels.version.VersionDebugPanel',
-        'debug_toolbar.panels.timer.TimerDebugPanel',
-        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-        'debug_toolbar.panels.headers.HeaderDebugPanel',
-        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-        'debug_toolbar.panels.sql.SQLDebugPanel',
-        'debug_toolbar.panels.template.TemplateDebugPanel',
-        'debug_toolbar.panels.cache.CacheDebugPanel',
-        'debug_toolbar.panels.signals.SignalDebugPanel',
-        'debug_toolbar.panels.logger.LoggingPanel',
+        'lib.debug_toolbar.panels.version.VersionDebugPanel',
+        'lib.debug_toolbar.panels.timer.TimerDebugPanel',
+        'lib.debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+        'lib.debug_toolbar.panels.headers.HeaderDebugPanel',
+        'lib.debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+        'lib.debug_toolbar.panels.sql.SQLDebugPanel',
+        'lib.debug_toolbar.panels.template.TemplateDebugPanel',
+        'lib.debug_toolbar.panels.cache.CacheDebugPanel',
+        'lib.debug_toolbar.panels.signals.SignalDebugPanel',
+        'lib.debug_toolbar.panels.logger.LoggingPanel',
     ))
     for panel_path in panels:
         try:

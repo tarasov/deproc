@@ -1,4 +1,4 @@
-from debug_toolbar.utils.sqlparse import tokens
+from lib.debug_toolbar.utils.sqlparse import tokens
 
 KEYWORDS = {
     'ABORT': tokens.Keyword,

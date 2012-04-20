@@ -4,7 +4,7 @@
 
 import re
 
-from debug_toolbar.utils.sqlparse import tokens as T
+from lib.debug_toolbar.utils.sqlparse import tokens as T
 
 
 class Token(object):

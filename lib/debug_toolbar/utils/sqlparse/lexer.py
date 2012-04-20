@@ -14,8 +14,8 @@
 
 import re
 
-from debug_toolbar.utils.sqlparse import tokens
-from debug_toolbar.utils.sqlparse.keywords import KEYWORDS, KEYWORDS_COMMON
+from lib.debug_toolbar.utils.sqlparse import tokens
+from lib.debug_toolbar.utils.sqlparse.keywords import KEYWORDS, KEYWORDS_COMMON
 
 
 class include(str):
@@ -208,7 +208,7 @@ class Lexer(object):
         self.filters = []
 
     def add_filter(self, filter_, **options):
-        from debug_toolbar.utils.sqlparse.filters import Filter
+        from lib.debug_toolbar.utils.sqlparse.filters import Filter
         if not isinstance(filter_, Filter):
             filter_ = filter_(**options)
         self.filters.append(filter_)

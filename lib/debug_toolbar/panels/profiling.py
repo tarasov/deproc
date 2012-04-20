@@ -2,7 +2,7 @@ from __future__ import division
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
-from debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.panels import DebugPanel
 
 try:
     from line_profiler import LineProfiler, show_func

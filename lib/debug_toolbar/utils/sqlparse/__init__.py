@@ -14,9 +14,9 @@ class SQLParseError(Exception):
 
 
 # Setup namespace
-from debug_toolbar.utils.sqlparse import engine
-from debug_toolbar.utils.sqlparse import filters
-from debug_toolbar.utils.sqlparse import formatter
+from lib.debug_toolbar.utils.sqlparse import engine
+from lib.debug_toolbar.utils.sqlparse import filters
+from lib.debug_toolbar.utils.sqlparse import formatter
 
 
 def parse(sql):

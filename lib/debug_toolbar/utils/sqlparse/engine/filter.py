@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from debug_toolbar.utils.sqlparse.sql import Statement, Token
-from debug_toolbar.utils.sqlparse import tokens as T
+from lib.debug_toolbar.utils.sqlparse.sql import Statement, Token
+from lib.debug_toolbar.utils.sqlparse import tokens as T
 
 
 class TokenFilter(object):

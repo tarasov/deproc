@@ -13,7 +13,7 @@ try:
 except ImportError:
     connection_created = None  # noqa
 
-from debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.panels import DebugPanel
 
 
 class SignalDebugPanel(DebugPanel):

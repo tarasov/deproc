@@ -10,8 +10,8 @@ from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
 from django.utils.importlib import import_module
 
-import debug_toolbar.urls
-from debug_toolbar.toolbar.loader import DebugToolbar
+import lib.debug_toolbar.urls
+from lib.debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
@@ -81,7 +81,7 @@ class DebugToolbarMiddleware(object):
 
             if urlconf not in self._urlconfs:
                 new_urlconf = imp.new_module('urlconf')
-                new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
+                new_urlconf.urlpatterns = lib.debug_toolbar.urls.urlpatterns + \
                         list(urlconf.urlpatterns)
 
                 if hasattr(urlconf, 'handler404'):

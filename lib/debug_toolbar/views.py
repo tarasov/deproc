@@ -12,7 +12,7 @@ from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
 
-from debug_toolbar.utils.compat.db import connections
+from lib.debug_toolbar.utils.compat.db import connections
 
 
 class InvalidSQLError(Exception):
@@ -41,7 +41,7 @@ def sql_select(request):
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
-    from debug_toolbar.panels.sql import reformat_sql
+    from lib.debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
@@ -76,7 +76,7 @@ def sql_explain(request):
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
-    from debug_toolbar.panels.sql import reformat_sql
+    from lib.debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
@@ -122,7 +122,7 @@ def sql_profile(request):
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
-    from debug_toolbar.panels.sql import reformat_sql
+    from lib.debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')

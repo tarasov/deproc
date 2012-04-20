@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db.backends import util
 from django.core.management.commands.shell import Command
 
-from debug_toolbar.utils import ms_from_timedelta, sqlparse
+from lib.debug_toolbar.utils import ms_from_timedelta, sqlparse
 
 
 class PrintQueryWrapper(util.CursorDebugWrapper):

@@ -5,7 +5,7 @@ except ImportError:
 import time
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
-from debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.panels import DebugPanel
 
 
 class TimerDebugPanel(DebugPanel):

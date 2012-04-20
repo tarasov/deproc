@@ -7,8 +7,8 @@ from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet
-from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
+from lib.debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/

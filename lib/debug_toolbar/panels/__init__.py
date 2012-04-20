@@ -1,6 +1,6 @@
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from debug_toolbar.middleware import DebugToolbarMiddleware
+from lib.debug_toolbar.middleware import DebugToolbarMiddleware
 
 
 class DebugPanel(object):

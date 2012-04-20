@@ -11,8 +11,8 @@ from django.template import Node
 from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _, ungettext
 
-from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
+from lib.debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
                                  get_template_info, get_stack)
 
 

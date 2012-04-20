@@ -5,7 +5,7 @@ try:
 except ImportError:
     threading = None
 from django.utils.translation import ungettext, ugettext_lazy as _
-from debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.panels import DebugPanel
 
 
 class LogCollector(object):

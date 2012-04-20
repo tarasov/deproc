@@ -5,8 +5,8 @@
 
 """SQL formatter"""
 
-from debug_toolbar.utils.sqlparse import SQLParseError
-from debug_toolbar.utils.sqlparse import filters
+from lib.debug_toolbar.utils.sqlparse import SQLParseError
+from lib.debug_toolbar.utils.sqlparse import filters
 
 
 def validate_options(options):

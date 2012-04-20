@@ -5,9 +5,9 @@
 
 """filter"""
 
-from debug_toolbar.utils.sqlparse import lexer
-from debug_toolbar.utils.sqlparse.engine import grouping
-from debug_toolbar.utils.sqlparse.engine.filter import StatementFilter
+from lib.debug_toolbar.utils.sqlparse import lexer
+from lib.debug_toolbar.utils.sqlparse.engine import grouping
+from lib.debug_toolbar.utils.sqlparse.engine.filter import StatementFilter
 
 # XXX remove this when cleanup is complete
 Filter = object

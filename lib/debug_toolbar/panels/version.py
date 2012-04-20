@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.datastructures import SortedDict
 
-from debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.panels import DebugPanel
 
 
 class VersionDebugPanel(DebugPanel):

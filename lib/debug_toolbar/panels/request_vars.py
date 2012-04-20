@@ -2,8 +2,8 @@ from django.core.urlresolvers import resolve
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import get_name_from_obj
+from lib.debug_toolbar.panels import DebugPanel
+from lib.debug_toolbar.utils import get_name_from_obj
 
 
 class RequestVarsDebugPanel(DebugPanel):
