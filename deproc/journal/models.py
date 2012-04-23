@@ -1,24 +1,38 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from deproc.main.models import Profile
+from deproc.main import models as main_models
 
-class Themes(models.Model):
-    name    = models.CharField("Название", max_length=255, null = False, blank = False)
+
+class Types_themes(models.Model):
+    name = models.CharField(u"Название", max_length=150, null=False, blank=False)
 
     class Meta:
-        db_table = u'labs'
-        verbose_name = ('тему')
-        verbose_name_plural = ('темы')
+        verbose_name = ('тип темы')
+        verbose_name_plural = ('типы тем')
 
     def __unicode__(self):
         return u'%s' % self.name
 
 
-class Assessment(models.Model):
-    student  = models.IntegerField(choices=Profile().get_students())
-    theme    = models.ForeignKey(Themes, related_name='assessments')
-    mark     = models.IntegerField("Оценка", null=False, blank=False)
+class Themes(models.Model):
+    describe    = models.CharField("Название", max_length=255, null = False, blank = False)
+    tariffication = models.ForeignKey(main_models.Tariffication, verbose_name='Тариффикация')
+    type = models.ForeignKey(Types_themes, verbose_name='Тип темы')
     date_pub = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = ('тему')
+        verbose_name_plural = ('темы')
+
+    def __unicode__(self):
+        return u'%s' % self.describe
+
+# оценки
+class Assessment(models.Model):
+    mark       = models.IntegerField("Оценка", null=False, blank=False)
+    student    = models.IntegerField(choices=main_models.Profile().get_students())
+    theme      = models.ForeignKey(Themes, verbose_name='Тема занятия')
+    date_pub   = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = ('оценку')

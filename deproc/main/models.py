@@ -197,6 +197,9 @@ class Groups(models.Model):
     def get_absolute_url(self):
         return 'groups/%s' % str(self.id)
 
+    def get_journal_url(self):
+        return './groups/%s' % str(self.id)
+
     class Meta:
         verbose_name = u'группу студентов'
         verbose_name_plural = u'группа студентов'

@@ -1,22 +1,23 @@
 <HTML>
 <HEAD>
-    <LINK REL="STYLESHEET" TYPE="text/css" HREF="{{ MEDIA_URL }}css/journal.css" />
+    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" type="type/css" rel="stylesheet" />
+    <link href="{{ MEDIA_URL }}css/journal.css" type="type/css" rel="stylesheet" />
     <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/jquery.js"></SCRIPT>
     <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/journal.js"></SCRIPT>
 </HEAD>
 <BODY>
     <DIV ID="hat">
     {% block title %}
-        <H2>Электронный журнал, БД [809]</H2>
+        <H2>Электронный журнал, БД [80*]</H2>
     {% endblock %}
     </DIV>
     {% block menu %}
         <div id="menu">
+            <a href='{% url journal_groups %}'>Группы</a>
             <a href='#' id="aa">Оценки</a>
             <a href='#' class='labs'>Лабы</a>
         </div>
     {% endblock %}
-
     <HR>
     <div id="main">
     {% block content %}

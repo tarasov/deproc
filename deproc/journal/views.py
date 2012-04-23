@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from deproc.journal.models import Assessment, Themes
 from deproc.journal.forms import ThemeForm
-from deproc.main.models import Profile
+from deproc.main import models
 
 def show(request):
     """
@@ -12,13 +12,13 @@ def show(request):
     """
     
     form_lab = ThemeForm(label_suffix='')
-    students = Profile().get_students()
+    students = models.Profile().get_students()
     themes = Themes.objects.all()
 
     table = ()
     for student in students:
         marks = Assessment.objects.filter(student=student[0]).order_by('theme')
-        tr = ((Profile.objects.get(pk=student[0]).pk, Profile.objects.get(pk=student[0]).__unicode__(), ), )
+        tr = ((models.Profile.objects.get(pk=student[0]).pk, models.Profile.objects.get(pk=student[0]).__unicode__(), ), )
         marks_themes = [(mark.theme.pk, mark.mark) for mark in marks]
         # оценок нету у студента
         if not marks_themes:
@@ -44,9 +44,9 @@ def mark_add(request, student, theme, mark):
         theme = Themes.objects.get(pk=theme_pk)
         Assessment.objects.filter(student=student, theme=theme).delete()
         if mark != "0":
-            mark = Assessment(mark=mark, student=student, theme=theme)
-            mark.save()
-            return HttpResponse(mark.mark)
+            assessments = Assessment(mark=mark, student=student, theme=theme)
+            assessments.save()
+            return HttpResponse(mark)
         else:
             Assessment.objects.filter(student=student, theme=theme).delete()
             return HttpResponse("")
@@ -54,5 +54,16 @@ def mark_add(request, student, theme, mark):
         return HttpResponse("")
 
 
+def groups(request):
+    """
+    Список групп
+    """
+    groups = models.Groups.objects.all()
+    return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
 
-
+def group(request, pk):
+    """
+    Электронный журнал группы
+    """
+    group = models.Groups.objects.get(pk=pk)
+    return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
