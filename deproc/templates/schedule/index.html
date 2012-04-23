@@ -20,14 +20,10 @@
                 <tr>
                     <td align="left"><b> {{ forloop.counter }} </b></td>
                     <td align="left"><b> {{ grp }} </b></td>
-
-                    {% for i in forloop %}
-                        {% if forloop.counter > 5 %}
-                        {% else %}
-                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
-                        {% endif %}
-                    {% endfor %}
-
+                    {% if grp == schdd.plan.group_plan.group %}
+{#                        {% for  %}#}
+                    <td align="left"><b> {{ schdd.plan.uch_plan_hour.uch_plan.disc }} </b></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
 

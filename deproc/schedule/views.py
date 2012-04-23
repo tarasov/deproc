@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from itertools import chain
@@ -22,29 +23,32 @@ def index(request):
             date = request.GET['day']
             date = date.split('.')
             new_date = ('%s-%s-%s' % tuple(date[::-1]))
-            print new_date
-            print date[0:2], date[3:5], date[6:10]
+            schdl_day = sch_models.Schedule_day.objects.all()
+            new_date = datetime.datetime.strptime(new_date, '%Y-%m-%d')
+            if not sch_models.Schedule_day.objects.filter(day = str(new_date.date())):
+                sch_models.Schedule_day.objects.create(day = new_date.date())
 
-            day_schedule = sch_models.Schedule.objects.filter(day = new_date)
-            print day_schedule
+            for schh in schdl_day:
+                if schh.day == new_date.date():
+                    groups = main_models.Groups.objects.all()
+                    teacher_list = main_models.Profile.objects.filter(groups__name="Преподаватели")
+                    schdd = sch_models.Schedule.objects.get(day = sch_models.Schedule_day.objects.get(day = str(new_date.date())))
+                    print schdd
 
-    disc_filter = main_models.Tariffication.objects.filter()
 
-    result_list = []
-    disc_list = main_models.Discipline.objects.all()
-    group_list = main_models.Groups.objects.all()
-    teacher_list = main_models.Profile.objects.filter(groups__name="Преподаватели")
-#    print teacher_list
+#            day_schedule = sch_models.Schedule.objects.filter(day = new_date)
+#            print day_schedule
 
-    result_list = list(chain(disc_list, group_list, teacher_list))
-#    print result_list
-    schdl = sch_models.Schedule.objects.all()
-    schdl_day = sch_models.Schedule_day.objects.all()
-    for schh in schdl_day:
-        print schh
-    absnc = sch_models.Absences.objects.all()
-    clsrm = sch_models.Classroom.objects.all()
-    groups = main_models.Groups.objects.all()
+#    disc_filter = main_models.Tariffication.objects.filter()
+#
+#    result_list = []
+#    disc_list = main_models.Discipline.objects.all()
+#    group_list = main_models.Groups.objects.all()
+#    teacher_list = main_models.Profile.objects.filter(groups__name="Преподаватели")
+#    result_list = list(chain(disc_list, group_list, teacher_list))
+#    absnc = sch_models.Absences.objects.all()
+#    clsrm = sch_models.Classroom.objects.all()
+#    groups = main_models.Groups.objects.all()
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
 
 # разделить на курсы
