@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block styles %}
+
+{% endblock %}
+
 {% block main %}
     <a href="/">назад</a><br>
     <br><br><br>
@@ -7,7 +11,7 @@
     <div class="row-fluid">
         <table class="schedule span11">
             <tbody>
-            <tr>
+            <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> группа </b></th>
                 <th align="left"><b> 1 пара </b></th>
@@ -16,18 +20,56 @@
                 <th align="left"><b> 4 пара </b></th>
                 <th align="left"><b> 5 пара </b></th>
             </tr>
+
             {% for grp in groups %}
+
                 <tr>
                     <td align="left"><b> {{ forloop.counter }} </b></td>
-                    <td align="left"><b> {{ grp }} </b></td>
-                    {% if grp == schdd.plan.group_plan.group %}
-{#                        {% for  %}#}
-                    <td align="left"><b> {{ schdd.plan.uch_plan_hour.uch_plan.disc }} </b></td>
-                    {% endif %}
+                    <td class="osn" align="left"><b> {{ grp }} </b></td>
+                    {% for schd in schdd %}
+                        {% if grp == schd.group %}
+
+                            <td align="left"><b> {{ schd.group }} {{ schd.num_less }} </b></td>
+
+                        {% endif %}
+                    {% endfor %}
                 </tr>
+
             {% endfor %}
 
-            <tr>
+{#            {% for grp in groups %}#}
+{##}
+{#                <tr>#}
+{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
+{#                    <td class="osn" align="left"><b> {{ grp }} </b></td>#}
+{#                    {% for schd in schdd %}#}
+{#                        {% if grp == schd.plan.group_plan.group %}#}
+{##}
+{#                                    <td align="left"><b> {{ schd.plan.uch_plan_hour.uch_plan.disc }} {{ schd.num_less }} </b></td>#}
+{##}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{#                </tr>#}
+{##}
+{#            {% endfor %}#}
+
+
+{#            {% for grp in groups %}#}
+{#                <tr>#}
+{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
+{#                    <td align="left"><b> {{ grp }} </b></td>#}
+{#                    {% if grp == discs.plan.group_plan.group %}#}
+{#                        {% for disc in discs %}#}
+{#                                                        {% if disc.num_less == '1' %}#}
+{#                            <td align="left"><b> {{ disc.plan.name }} </b></td>#}
+{#                                                            <td align="left"><b> {{ discs.plan.uch_plan_hour.uch_plan.disc }} </b></td>#}
+{#                                                        {% endif %}#}
+{#                        {% endfor %}#}
+{#                    {% endif %}#}
+{#                </tr>#}
+{#            {% endfor %}#}
+
+            <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> преподаватель </b></th>
                 <th align="left"><b> 1 пара </b></th>
@@ -40,16 +82,35 @@
             {% for tch in teacher_list %}
                 <tr>
                     <td align="left"><b> {{ forloop.counter }} </b></td>
-                    <td align="left"><b> {{ tch.last_name }} {{ tch.first_name.upper.0 }}. {{ tch.other_name.upper.0 }}. </b></td>
+                    <td class="osn" align="left"><b> {{ tch.last_name }} {{ tch.first_name.upper.0 }}. {{ tch.other_name.upper.0 }}. </b></td>
 
-                    {% for i in forloop %}
-                        {% if forloop.counter > 5 %}
-                        {% else %}
-                            <td align="left"><b> [{{ forloop.counter }}] </b></td>
+
+                    {% for sch in schfld %}
+                        {% if tch == sch.plan.set_teacher %}
+
+                            <td align="left"><b> {{ sch.plan.uch_plan_hour.uch_plan.disc }} {{ sch.classroom }} {{ sch.lesson.num_less }} </b></td>
+
                         {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
+{##}
+{#                    {% for schd in schdd %}#}
+{#                        {% if tch == schd.plan.set_teacher %}#}
+{##}
+{#                            <td align="left"><b> {{ schd.plan.uch_plan_hour.uch_plan.disc }} {{ schd.num_less }} </b></td>#}
+{##}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+
+
+{#                    {% for i in forloop %}#}
+{#                        {% if forloop.counter > 5 %}#}
+{#                        {% else %}#}
+{#                            <td align="left"><b> [{{ forloop.counter }}] </b></td>#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+
             </tbody>
         </table>
     </div>

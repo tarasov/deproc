@@ -6,6 +6,9 @@ site.register(models.Absences)
 site.register(models.Classroom)
 site.register(models.Schedule)
 site.register(models.Schedule_day)
+site.register(models.Schedule_empty)
+site.register(models.Schedule_filled)
+
 
 
 

@@ -1,13 +1,13 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
         # Adding model 'Classroom'
         db.create_table('schedule_classroom', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -17,34 +17,50 @@ class Migration(SchemaMigration):
 
         # Adding model 'Schedule_day'
         db.create_table('schedule_schedule_day', (
-            ('real', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('day', self.gf('django.db.models.fields.DateField')(max_length=100, null=True, blank=True)),
+            ('real', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('schedule', ['Schedule_day'])
 
         # Adding model 'Schedule'
         db.create_table('schedule_schedule', (
-            ('classroom', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Classroom'])),
-            ('num_less', self.gf('django.db.models.fields.IntegerField')()),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Tariffication'], null=True, blank=True)),
             ('day', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day'])),
-            ('plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Tariffication'])),
+            ('classroom', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Classroom'], null=True, blank=True)),
+            ('num_less', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('schedule', ['Schedule'])
 
+        # Adding model 'Schedule_empty'
+        db.create_table('schedule_schedule_empty', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Groups'])),
+            ('day', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day'])),
+            ('num_less', self.gf('django.db.models.fields.IntegerField')()),
+        ))
+        db.send_create_signal('schedule', ['Schedule_empty'])
+
+        # Adding model 'Schedule_filled'
+        db.create_table('schedule_schedule_filled', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('lesson', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_empty'])),
+            ('plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Tariffication'], null=True, blank=True)),
+            ('classroom', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Classroom'], null=True, blank=True)),
+        ))
+        db.send_create_signal('schedule', ['Schedule_filled'])
+
         # Adding model 'Absences'
         db.create_table('schedule_absences', (
-            ('absence', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('student', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('schedule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule'])),
+            ('student', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('absence', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
         ))
         db.send_create_signal('schedule', ['Absences'])
-    
-    
+
     def backwards(self, orm):
-        
         # Deleting model 'Classroom'
         db.delete_table('schedule_classroom')
 
@@ -54,10 +70,15 @@ class Migration(SchemaMigration):
         # Deleting model 'Schedule'
         db.delete_table('schedule_schedule')
 
+        # Deleting model 'Schedule_empty'
+        db.delete_table('schedule_schedule_empty')
+
+        # Deleting model 'Schedule_filled'
+        db.delete_table('schedule_schedule_filled')
+
         # Deleting model 'Absences'
         db.delete_table('schedule_absences')
-    
-    
+
     models = {
         'main.disc_type': {
             'Meta': {'object_name': 'Disc_type'},
@@ -74,11 +95,13 @@ class Migration(SchemaMigration):
         'main.groups': {
             'Meta': {'object_name': 'Groups'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.IntegerField', [], {'max_length': '100'}),
+            'name': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'max_length': '100'}),
+            'semestr': ('django.db.models.fields.CharField', [], {'default': "('1, 2', '1, 2')", 'max_length': '6'}),
             'spec': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Speciality']"})
         },
         'main.groups_plan': {
             'Meta': {'object_name': 'Groups_plan'},
+            'course': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Groups']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'year': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Year']"})
@@ -131,18 +154,32 @@ class Migration(SchemaMigration):
         },
         'schedule.schedule': {
             'Meta': {'object_name': 'Schedule'},
-            'classroom': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Classroom']"}),
+            'classroom': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Classroom']", 'null': 'True', 'blank': 'True'}),
             'day': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Schedule_day']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'num_less': ('django.db.models.fields.IntegerField', [], {}),
-            'plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Tariffication']"})
+            'plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Tariffication']", 'null': 'True', 'blank': 'True'})
         },
         'schedule.schedule_day': {
             'Meta': {'object_name': 'Schedule_day'},
             'day': ('django.db.models.fields.DateField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'real': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'})
+            'real': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        'schedule.schedule_empty': {
+            'Meta': {'object_name': 'Schedule_empty'},
+            'day': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Schedule_day']"}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Groups']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'num_less': ('django.db.models.fields.IntegerField', [], {})
+        },
+        'schedule.schedule_filled': {
+            'Meta': {'object_name': 'Schedule_filled'},
+            'classroom': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Classroom']", 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lesson': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Schedule_empty']"}),
+            'plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['main.Tariffication']", 'null': 'True', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['schedule']

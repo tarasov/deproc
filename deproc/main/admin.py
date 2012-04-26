@@ -17,8 +17,8 @@ class AdminUserStatus(ModelAdmin):
 class AdminPost(ModelAdmin):
     list_display = ('user', 'get_user_status')
 
-site.unregister(User)
-site.unregister(Group)
+#site.unregister(User)
+#site.unregister(Group)
 site.unregister(Site)
 
 site.register(models.Year)
