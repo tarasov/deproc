@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+
         # Adding model 'Profile'
         db.create_table('main_profile', (
             ('user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
@@ -15,21 +15,21 @@ class Migration(SchemaMigration):
             ('b_day', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('phone', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('sex', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-        ))
+            ))
         db.send_create_signal('main', ['Profile'])
 
         # Adding model 'UserStatus'
         db.create_table('main_userstatus', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-        ))
+            ))
         db.send_create_signal('main', ['UserStatus'])
 
         # Adding model 'Group'
         db.create_table('main_group', (
             ('group_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.Group'], unique=True, primary_key=True)),
             ('describe', self.gf('django.db.models.fields.CharField')(max_length=150)),
-        ))
+            ))
         db.send_create_signal('main', ['Group'])
 
         # Adding M2M table for field status on 'Group'
@@ -37,7 +37,7 @@ class Migration(SchemaMigration):
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('group', models.ForeignKey(orm['main.group'], null=False)),
             ('userstatus', models.ForeignKey(orm['main.userstatus'], null=False))
-        ))
+            ))
         db.create_unique('main_group_status', ['group_id', 'userstatus_id'])
 
         # Adding model 'UserPost'
@@ -46,7 +46,7 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('date_begin', self.gf('django.db.models.fields.DateField')()),
             ('date_end', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-        ))
+            ))
         db.send_create_signal('main', ['UserPost'])
 
         # Adding M2M table for field status on 'UserPost'
@@ -54,14 +54,14 @@ class Migration(SchemaMigration):
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('userpost', models.ForeignKey(orm['main.userpost'], null=False)),
             ('userstatus', models.ForeignKey(orm['main.userstatus'], null=False))
-        ))
+            ))
         db.create_unique('main_userpost_status', ['userpost_id', 'userstatus_id'])
 
         # Adding model 'PO'
         db.create_table('main_po', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-        ))
+            ))
         db.send_create_signal('main', ['PO'])
 
         # Adding model 'Speciality'
@@ -69,14 +69,14 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
             ('num_spec', self.gf('django.db.models.fields.FloatField')(max_length=100)),
-        ))
+            ))
         db.send_create_signal('main', ['Speciality'])
 
         # Adding model 'Disc_type'
         db.create_table('main_disc_type', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-        ))
+            ))
         db.send_create_signal('main', ['Disc_type'])
 
         # Adding model 'Discipline'
@@ -85,7 +85,7 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
             ('short_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Disc_type'])),
-        ))
+            ))
         db.send_create_signal('main', ['Discipline'])
 
         # Adding model 'UchPlan'
@@ -95,7 +95,7 @@ class Migration(SchemaMigration):
             ('spec', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Speciality'])),
             ('semestr', self.gf('django.db.models.fields.IntegerField')(max_length=100)),
             ('otch', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-        ))
+            ))
         db.send_create_signal('main', ['UchPlan'])
 
         # Adding model 'UchPlanHour'
@@ -104,7 +104,7 @@ class Migration(SchemaMigration):
             ('uch_plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.UchPlan'], max_length=100)),
             ('type', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('count_hours', self.gf('django.db.models.fields.IntegerField')(max_length=100)),
-        ))
+            ))
         db.send_create_signal('main', ['UchPlanHour'])
 
         # Adding model 'Year'
@@ -112,7 +112,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date_begin', self.gf('django.db.models.fields.DateField')()),
             ('date_end', self.gf('django.db.models.fields.DateField')()),
-        ))
+            ))
         db.send_create_signal('main', ['Year'])
 
         # Adding model 'Groups'
@@ -121,7 +121,7 @@ class Migration(SchemaMigration):
             ('spec', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Speciality'])),
             ('name', self.gf('django.db.models.fields.IntegerField')(unique=True, max_length=100)),
             ('semestr', self.gf('django.db.models.fields.CharField')(default=('1, 2', '1, 2'), max_length=6)),
-        ))
+            ))
         db.send_create_signal('main', ['Groups'])
 
         # Adding model 'Groups_stud'
@@ -129,7 +129,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Groups'])),
             ('student', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-        ))
+            ))
         db.send_create_signal('main', ['Groups_stud'])
 
         # Adding model 'Groups_plan'
@@ -138,7 +138,7 @@ class Migration(SchemaMigration):
             ('year', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Year'])),
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Groups'])),
             ('course', self.gf('django.db.models.fields.IntegerField')(default=1)),
-        ))
+            ))
         db.send_create_signal('main', ['Groups_plan'])
 
         # Adding model 'Tariffication'
@@ -147,10 +147,12 @@ class Migration(SchemaMigration):
             ('teacher', self.gf('django.db.models.fields.IntegerField')(max_length=100)),
             ('group_plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.Groups_plan'])),
             ('uch_plan_hour', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['main.UchPlanHour'])),
-        ))
+            ))
         db.send_create_signal('main', ['Tariffication'])
 
+
     def backwards(self, orm):
+
         # Deleting model 'Profile'
         db.delete_table('main_profile')
 
@@ -202,6 +204,7 @@ class Migration(SchemaMigration):
         # Deleting model 'Tariffication'
         db.delete_table('main_tariffication')
 
+
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -218,7 +221,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 4, 27, 22, 53, 20, 666534)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -226,7 +229,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 4, 27, 22, 53, 20, 666422)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),

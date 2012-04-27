@@ -4,21 +4,25 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from deproc.journal.models import Assessment, Themes
 from deproc.journal.forms import ThemeForm
-from deproc.main import models
+from deproc.main.models import Groups, Profile, Groups_stud, Discipline
 
-def show(request):
+def group(request, pk):
     """
-    Список студентов с оценками
+    журнал для группы
     """
     
     form_lab = ThemeForm(label_suffix='')
-    students = models.Profile().get_students()
+
+    current_group = Groups.objects.get(pk=pk)
+
+
+    students_group = Groups_stud.objects.filter(group=current_group)
     themes = Themes.objects.all()
 
     table = ()
-    for student in students:
-        marks = Assessment.objects.filter(student=student[0]).order_by('theme')
-        tr = ((models.Profile.objects.get(pk=student[0]).pk, models.Profile.objects.get(pk=student[0]).__unicode__(), ), )
+    for student_group in students_group:
+        marks = Assessment.objects.filter(student=student_group.student).order_by('theme')
+        tr = ((Profile.objects.get(pk=student_group.student).pk, Profile.objects.get(pk=student_group.student).__unicode__(), ), )
         marks_themes = [(mark.theme.pk, mark.mark) for mark in marks]
         # оценок нету у студента
         if not marks_themes:
@@ -33,7 +37,7 @@ def show(request):
                 tr += ((theme.pk, 0), )
 
         table += (tr, )
-    return render_to_response('journal/show.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('journal/group.html', locals(), context_instance=RequestContext(request))
 
 def mark_add(request, student, theme, mark):
     """
@@ -58,12 +62,23 @@ def groups(request):
     """
     Список групп
     """
-    groups = models.Groups.objects.all()
+    groups = Groups.objects.all()
     return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
 
-def group(request, pk):
+def disciplines(request, pk_group):
     """
-    Электронный журнал группы
+    Список предметов пропедавателя выбранной группы
     """
-    group = models.Groups.objects.get(pk=pk)
-    return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
+
+    disciplines = Discipline.objects.all()
+    return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
+
+def select_discipline(request):
+    """
+    Журнал по выбранной предмету
+
+    ###
+    брать дисциплины указанной группы из тариффикации?
+    """
+    discipline = Discipline.objects.all()[0]
+    return render_to_response('journal/select_discipline.html', locals(), context_instance=RequestContext(request))

@@ -8,8 +8,8 @@
     <div class="container-fluid">
         <div class="row-fluid">
 
-            {% for group in groups %}
-                <p style="text-align: center; font-size: 20px;"><a href="{% url disciplines group.pk %}">{{ group }}</a></p>
+            {% for discipline in disciplines %}
+                <p style="text-align: center; font-size: 20px;"><a href="{{ discipline.pk }}">{{ discipline }}</a></p>
             {% endfor %}
 
         </div>

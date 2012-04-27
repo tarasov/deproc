@@ -27,7 +27,7 @@ class Themes(models.Model):
     def __unicode__(self):
         return u'%s' % self.describe
 
-# оценки
+# Оценки
 class Assessment(models.Model):
     mark       = models.IntegerField("Оценка", null=False, blank=False)
     student    = models.IntegerField(choices=main_models.Profile().get_students())

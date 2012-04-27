@@ -38,7 +38,7 @@ class Profile(User):
     def get_students(self):
         # Студенты
         students = Profile.objects.filter(groups__name="Студенты")
-        return [(student.pk, student.username) for student in students]
+        return ((student.pk, student.username) for student in students)
 
     def get_teachers(self):
         # Преподаватели
@@ -198,7 +198,7 @@ class Groups(models.Model):
         return 'groups/%s' % str(self.id)
 
     def get_journal_url(self):
-        return './groups/%s' % str(self.id)
+        return '../group/%s' % str(self.id)
 
     class Meta:
         verbose_name = u'группу студентов'
@@ -210,11 +210,16 @@ class Groups(models.Model):
 
 class Groups_stud(models.Model):
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
-    student = models.CharField(u"Студент", max_length=100, null=True, blank=True, choices=Profile().get_students())
+    student = models.IntegerField(u"Студент", choices=Profile().get_students())
 
     class Meta:
         verbose_name = u'студент группы'
         verbose_name_plural = u'студенты группы'
+
+    def __unicode__(self):
+        return u'%s' % (self.group.name, )
+
+
 
 class Groups_plan(models.Model):
     """

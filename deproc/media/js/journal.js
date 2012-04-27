@@ -84,7 +84,7 @@ $(function() {
     $('#selMark a').click(function() {
         var id = '#' + s + '_' + l;
         $.get(
-            "./mark/add/"+s+"/"+l+"/"+$(this).attr('mark')+"/",
+            "../../mark/add/"+s+"/"+l+"/"+$(this).attr('mark')+"/",
             {},
             function(data) {
                 $(id).html(data);
