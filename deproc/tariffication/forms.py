@@ -13,15 +13,17 @@ attrs_dict = { 'class': 'required' }
 class TarifficationModel(ModelForm):
     def __init__(self, *args, **kwargs):
         super(TarifficationModel, self).__init__(*args, **kwargs)
-        self.fields['teacher'].choices = [('', '----------')] + Teachers().get_teachers()
+        self.fields['teacher'].choices = [('', '----------')] + list(Teachers().get_teachers())
 
     teacher = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict), label = 'Преподователь')
+
     class Meta:
         model = models.Tariffication
         fields = ('teacher', 'group_plan', )
         widgets = {
             'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site, can_add_related=False)
         }
+
 
 class UchPlanHourModel(ModelForm):
     class Meta:
@@ -35,6 +37,7 @@ class DynamicForm(forms.Form):
         for i, choice in enumerate(choices):
             label = choice[1]
             self.fields['%s' % choice[0]] = forms.CharField(label=label, required=False, widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
+
 
 class PlanGroupForm(ModelForm):
     class Meta:

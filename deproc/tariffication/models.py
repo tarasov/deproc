@@ -48,12 +48,11 @@ class Students(Profile):
     cart = models.IntegerField("Номер студенческого")
 
     class Meta:
-        verbose_name = u'студент'
+        verbose_name = u'студента'
         verbose_name_plural = u'студенты'
         db_table = 'students'
 
     def get_students(self):
-        # Студенты
         students = Students.objects.all()
         return ((student.pk, student.username) for student in students)
 
@@ -65,14 +64,13 @@ class Teachers(Profile):
     cabinet = models.IntegerField("Кабинет")
 
     class Meta:
-        verbose_name = u'преподователь'
+        verbose_name = u'преподователя'
         verbose_name_plural = u'преподователи'
         db_table = 'teachers'
 
     def get_teachers(self):
-        # Преподаватели
         teachers = Teachers.objects.all()
-        return [(teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers]
+        return ((teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers)
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
@@ -117,7 +115,7 @@ class UserPost(models.Model):
     def get_user_status(self):
         post = []
         for p in self.status.filter(): post.append(p.name)
-        return post
+        return ', '.join(post)
 
     def __unicode__(self):
         return u'%s' % self.user
@@ -234,7 +232,7 @@ class Groups(models.Model):
 
     class Meta:
         verbose_name = u'группу студентов'
-        verbose_name_plural = u'группа студентов'
+        verbose_name_plural = u'группы студентов'
         db_table = 'groups'
 
     def get_absolute_url(self):

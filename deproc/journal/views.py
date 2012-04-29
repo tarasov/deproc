@@ -17,7 +17,7 @@ def group(request, id_group, id_discipline):
     current_discipline = get_object_or_404(Discipline, pk=id_discipline)
 
     students_group = Groups_stud.objects.filter(group=current_group)
-    # сделать сильный фильтр, типа
+    # сделать фильтр, типа
     # .filter(
     #   'tariffication__uch_plan_hour__uch_plan__disc = current_discipline,
 

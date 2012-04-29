@@ -8,9 +8,6 @@ __author__ = 'tarasov'
 class AdminUser(ModelAdmin):
     fields = ('username', 'first_name', 'last_name', 'other_name', 'email', 'password', 'phone', 'b_day', 'sex', 'groups',)
 
-class AdminGroup(ModelAdmin):
-    pass
-
 class AdminUserStatus(ModelAdmin):
     pass
 
@@ -21,10 +18,11 @@ class AdminPost(ModelAdmin):
 #site.unregister(Group)
 site.unregister(Site)
 
-site.register(models.Year)
 site.register(models.Profile, AdminUser)
-site.register(models.Group, AdminGroup)
-site.register(models.UserStatus, AdminUserStatus)
+site.register(models.Students)
+site.register(models.Teachers)
+site.register(models.Group)
+site.register(models.UserStatus)
 site.register(models.UserPost, AdminPost)
 site.register(models.PO)
 site.register(models.Speciality)
@@ -36,6 +34,4 @@ site.register(models.Groups)
 site.register(models.Groups_stud)
 site.register(models.Groups_plan)
 site.register(models.Tariffication)
-
-
-
+site.register(models.Year)
