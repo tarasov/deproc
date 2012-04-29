@@ -6,17 +6,22 @@ from deproc.journal.models import Assessment, Themes
 from deproc.journal.forms import ThemeForm
 from deproc.main.models import Groups, Profile, Groups_stud, Discipline
 
-def group(request, pk):
+def group(request, id_group, id_discipline):
     """
     журнал для группы
     """
     
     form_lab = ThemeForm(label_suffix='')
 
-    current_group = Groups.objects.get(pk=pk)
-
+    current_group = Groups.objects.get(pk=id_group)
+    current_discipline = Discipline.objects.get(pk=id_discipline)
 
     students_group = Groups_stud.objects.filter(group=current_group)
+    # сделать сильный фильтр, типа
+    # .filter(
+    #   'tariffication__uch_plan_hour__uch_plan__disc = current_discipline,
+
+    # )
     themes = Themes.objects.all()
 
     table = ()
@@ -73,12 +78,11 @@ def disciplines(request, pk_group):
     disciplines = Discipline.objects.all()
     return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
 
-def select_discipline(request):
+def select_discipline(request, id_group, id_discpiline):
     """
     Журнал по выбранной предмету
-
     ###
     брать дисциплины указанной группы из тариффикации?
     """
     discipline = Discipline.objects.all()[0]
-    return render_to_response('journal/select_discipline.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('journal/group.html', locals(), context_instance=RequestContext(request))

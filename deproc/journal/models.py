@@ -9,6 +9,7 @@ class Types_themes(models.Model):
     class Meta:
         verbose_name = ('тип темы')
         verbose_name_plural = ('типы тем')
+        db_table = 'types_themes'
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -23,6 +24,7 @@ class Themes(models.Model):
     class Meta:
         verbose_name = ('тему')
         verbose_name_plural = ('темы')
+        db_table = 'themes'
 
     def __unicode__(self):
         return u'%s' % self.describe
@@ -37,6 +39,7 @@ class Assessment(models.Model):
     class Meta:
         verbose_name = ('оценку')
         verbose_name_plural = ('оценки')
+        db_table = 'assessment'
 
     def __unicode__(self):
         return u'%s' % self.mark
