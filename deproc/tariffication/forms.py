@@ -11,18 +11,9 @@ from deproc.tariffication.models import Teachers
 
 attrs_dict = { 'class': 'required' }
 class TarifficationModel(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(TarifficationModel, self).__init__(*args, **kwargs)
-        self.fields['teacher'].choices = [('', '----------')] + list(Teachers().get_teachers())
-
-    teacher = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict), label = 'Преподователь')
-
     class Meta:
         model = models.Tariffication
         fields = ('teacher', 'group_plan', )
-        widgets = {
-            'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site, can_add_related=False)
-        }
 
 
 class UchPlanHourModel(ModelForm):

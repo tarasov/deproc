@@ -18,7 +18,7 @@ def add_tariffication(request):
     else:
         dynamic_form = forms.DynamicForm(choices)
 
-    if request.POST:
+    if request.POST: # сохраняем
         for choice in choices:
             # для каждого типа часа сохраняем свой учебный план
             if request.POST[choice[0]]:
@@ -30,8 +30,8 @@ def add_tariffication(request):
             if models.UchPlanHour.objects.filter(uch_plan=uch_plan, type = choice[0]):
                 # уже создан, тогда обновляем часы
                 # TODO пересмотреть обновление данных
-                uch_plan_pk = models.UchPlanHour.objects.get(uch_plan=uch_plan, type = choice[0]).pk
-                uch_plan_hour = models.UchPlanHour(pk = uch_plan_pk, uch_plan = uch_plan, type = choice[0], count_hours = hour)
+                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, type = choice[0]).pk
+                uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type = choice[0], count_hours = hour)
                 uch_plan_hour.count_hour = hour
                 uch_plan_hour.save()
             else:
@@ -41,9 +41,8 @@ def add_tariffication(request):
                 teacher = models.Teachers(pk=request.POST['teacher'])
                 group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
                 models.Tariffication(teacher = teacher, group_plan = group_plan, uch_plan_hour = uch_plan_hour).save()
-        form_tariffication = forms.TarifficationModel(request.POST)
-        form_uchplanhour = forms.UchPlanHourModel(request.POST)
-    else:
+        return HttpResponseRedirect(reverse('tariffication'))
+    else: # показываем пустые формы
         form_tariffication = forms.TarifficationModel()
         form_uchplanhour = forms.UchPlanHourModel()
 

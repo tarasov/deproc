@@ -40,6 +40,10 @@ class Profile(User):
         verbose_name_plural = u'пользователи'
         db_table = 'profile'
 
+    def get_full_name(self):
+        full_name = u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
+        return full_name.strip()
+
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
 
