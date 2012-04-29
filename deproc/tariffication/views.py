@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_protect
 # страницы, из которых будет генерироваться urlpatterns
 # вид - {адресс ссылки: (Модель, Название)}
 pages_list = {
+    # page: (Class, Name)
     'groups': ('Groups', 'Группы'),
     'discipline': ('Discipline', 'Дисциплины'),
     'speciality': ('Speciality', 'Специальности'),
@@ -33,7 +34,6 @@ actions = (
 
 def wellcome(request):
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
-
 
 def plan_group(request):
     table = ()
@@ -60,8 +60,9 @@ def tariffication(request):
     for tariff in tariffs:
         if tariff.uch_plan_hour.uch_plan.semestr not in semestres:
             semestres.append(tariff.uch_plan_hour.uch_plan.semestr)
-        # делаем цикл по семестрам для фильтрации тариффикации
+    # делаем цикл по семестрам для фильтрации тариффикации
     table = ()
+    # TODO ПЕРЕДЕЛАТЬ ВСЮ ТАБЛИЦУ
     for semestr in semestres:
         tariffs_values = Tariffication.objects.values(
             'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__semestr').annotate(
@@ -69,26 +70,41 @@ def tariffication(request):
             uch_plan_hour__uch_plan__semestr = semestr)
         tr = tds = ()
         for value in tariffs_values:
-            tariffs = Tariffication.objects.filter(uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'], teacher = value['teacher'], group_plan__group = value['group_plan__group'])
-            tariff = tariffs[0]
-            hours = [(t.uch_plan_hour.type, t.uch_plan_hour.count_hours) for t in tariffs]
-            teacher = '%s %s %s' % (tariff.teacher.last_name, tariff.teacher.first_name, tariff.teacher.other_name, )
-            grp = tariff.group_plan.group
-            disc = tariff.uch_plan_hour.uch_plan.disc
-            smtr = tariff.uch_plan_hour.uch_plan.semestr
-            tr += (teacher,grp,disc,smtr),
-            for typeh in choice_typeh:
-                for i, hour in enumerate(hours):
-                    # записываем часы
-                    if typeh[0] == hour[0][0]:
-                        choice_type = (typeh[0], hour[1]),
-                        break
-                    else:
-                        # тут записываем 0
-                        if i == len(hours)-1:
-                            choice_type = (typeh[0], 0),
-                tr = (tr[len(tr)-1] + choice_type, )
-            table += tr
+            disciplines = Tariffication.objects.values(
+                'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__disc').annotate(
+                count = Count('uch_plan_hour__uch_plan__disc')
+            ).filter(
+                teacher = value['teacher'],
+            )
+            for discipline in disciplines:
+                tariffs = Tariffication.objects.filter(
+                    uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'],
+                    teacher = value['teacher'],
+                    group_plan__group = value['group_plan__group'],
+                    uch_plan_hour__uch_plan__disc = discipline['uch_plan_hour__uch_plan__disc']
+                )
+                try:
+                    tariff = tariffs[0]
+                except IndexError:
+                    continue
+                hours = [(t.uch_plan_hour.type, t.uch_plan_hour.count_hours) for t in tariffs]
+                teacher = '%s %s %s' % (tariff.teacher.last_name, tariff.teacher.first_name, tariff.teacher.other_name, )
+                grp = tariff.group_plan.group
+                disc = tariff.uch_plan_hour.uch_plan.disc
+                smtr = tariff.uch_plan_hour.uch_plan.semestr
+                tr += (teacher,grp,disc,smtr),
+                for typeh in choice_typeh:
+                    for i, hour in enumerate(hours):
+                        # записываем часы
+                        if typeh[0] == hour[0][0]:
+                            choice_type = (typeh[0], hour[1]),
+                            break
+                        else:
+                            # тут записываем 0
+                            if i == len(hours)-1:
+                                choice_type = (typeh[0], 0),
+                    tr = (tr[len(tr)-1] + choice_type, )
+                table += tr
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 
 def pages(request, actions=actions):
