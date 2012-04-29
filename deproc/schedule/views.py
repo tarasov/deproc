@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from itertools import chain
-from deproc.main import models as main_models
+from deproc.tariffication import models as main_models
 from deproc.schedule import models as sch_models
 from deproc.schedule import forms
 

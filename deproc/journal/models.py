@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from deproc.main import models as main_models
+from deproc.tariffication import models as main_models
 
 
 class Types_themes(models.Model):
@@ -32,7 +32,7 @@ class Themes(models.Model):
 # Оценки
 class Assessment(models.Model):
     mark       = models.IntegerField("Оценка", null=False, blank=False)
-    student    = models.IntegerField(choices=main_models.Profile().get_students())
+    student    = models.ForeignKey(main_models.Students, verbose_name='Студент')
     theme      = models.ForeignKey(Themes, verbose_name='Тема занятия')
     date_pub   = models.DateTimeField(auto_now_add=True)
 

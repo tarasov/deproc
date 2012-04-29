@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from deproc.journal.models import Assessment, Themes
 from deproc.journal.forms import ThemeForm
-from deproc.main.models import Groups, Profile, Groups_stud, Discipline
+from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline
 
 def group(request, id_group, id_discipline):
     """

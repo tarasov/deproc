@@ -5,7 +5,7 @@ TEMPLATE_DEBUG = DEBUG
 
 import os.path
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
-
+root = os.path.split(PROJECT_ROOT)[0]
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -15,13 +15,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'tarasov.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': root + '/run/db.conf',
+            'init_command': 'SET storage_engine=INNODB',
+            },
+        }
 }
 
 TIME_ZONE = 'Europe/Moscow'
@@ -94,7 +93,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
-    'deproc.main',
+    'deproc.deproc.tariffication',
     'deproc.schedule',
     'deproc.journal',
 )

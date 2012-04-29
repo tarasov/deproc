@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
-from deproc.main import models
+from deproc.tariffication import models
 
 
 # dynamic form for PageForm

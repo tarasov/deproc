@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from deproc.main.models import Profile, Tariffication, Groups
+from deproc.tariffication.models import Profile, Tariffication, Groups, Students
 
 class Classroom(models.Model):
     number = models.IntegerField(max_length=100, null=False, blank=False)
@@ -8,9 +8,11 @@ class Classroom(models.Model):
     class Meta:
         verbose_name = u'кабинет'
         verbose_name_plural = u'кабинеты'
+        db_table = 'classroom'
 
     def __unicode__(self):
         return u'%s' % self.number
+
 
 class Schedule_day(models.Model):
     day = models.DateField(max_length=100, null=True, blank=True,)
@@ -19,9 +21,11 @@ class Schedule_day(models.Model):
     class Meta:
         verbose_name = u'день расписания'
         verbose_name_plural = u'дни расписания'
+        db_table = 'schedule_day'
 
     def __unicode__(self):
         return u'%s (%s)' % (self.day, self.real)
+
 
 class Schedule(models.Model):
     plan = models.ForeignKey(Tariffication, verbose_name=u"тарификация", null=True, blank=True)
@@ -32,9 +36,11 @@ class Schedule(models.Model):
     class Meta:
         verbose_name = u'расписание'
         verbose_name_plural = u'расписания'
+        db_table = 'schedule'
 
     def __unicode__(self):
-        return u'%s, %s, %s, %s, %s' % (self.plan.set_teacher, self.plan.uch_plan_hour.uch_plan.disc, self.plan.group_plan.group, self.day, self.num_less)
+        return u'%s, %s, %s, %s, %s' % (self.plan.teacher, self.plan.uch_plan_hour.uch_plan.disc, self.plan.group_plan.group, self.day, self.num_less)
+
 
 class Schedule_empty(models.Model):
     group = models.ForeignKey(Groups, verbose_name=u"группа")
@@ -44,9 +50,11 @@ class Schedule_empty(models.Model):
     class Meta:
         verbose_name = u'расписание на каждый день'
         verbose_name_plural = u'расписания на каждый день'
+        db_table = 'schedule_empty'
 
     def __unicode__(self):
         return u'%s, %s, %s' % (self.group, self.day, self.num_less)
+
 
 class Schedule_filled(models.Model):
     lesson = models.ForeignKey(Schedule_empty, verbose_name=u"пара")
@@ -56,18 +64,21 @@ class Schedule_filled(models.Model):
     class Meta:
         verbose_name = u'расписание для преподавателя'
         verbose_name_plural = u'расписания для преподавателя'
+        db_table = 'schedule_filled'
 
     def __unicode__(self):
-        return u'%s, %s, classroom - %s, day - %s, group - %s, lesson - %s' % (self.plan.set_teacher, self.plan.uch_plan_hour.uch_plan.disc, self.classroom, self.lesson.day.day, self.lesson.group, self.lesson.num_less)
+        return u'%s, %s, classroom - %s, day - %s, group - %s, lesson - %s' % (self.plan.teacher, self.plan.uch_plan_hour.uch_plan.disc, self.classroom, self.lesson.day.day, self.lesson.group, self.lesson.num_less)
+
 
 class Absences(models.Model):
     schedule = models.ForeignKey(Schedule)
-    student = models.CharField(u"Студент", max_length=100, null=True, blank=True, choices=Profile().get_students())
+    student = models.ForeignKey(Students, verbose_name='Студент')
     absence = models.CharField(max_length=10, null=True, blank=True)
 
     class Meta:
         verbose_name = u'пропуск'
         verbose_name_plural = u'пропуски'
+        db_table = 'absences'
 
     def __unicode__(self):
         return u'%s, %s' % (self.schedule, self.student)

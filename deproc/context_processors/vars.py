@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from deproc.main.views import pages_list
+from deproc.tariffication.views import pages_list
 
 __author__ = 'tarasov'
 

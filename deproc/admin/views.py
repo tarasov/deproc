@@ -6,9 +6,9 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
 from deproc.admin.forms import dynamic_form_page
-from deproc.main import forms
-from deproc.main import models
-from deproc.main import views
+from deproc.tariffication import forms
+from deproc.tariffication import models
+from deproc.tariffication import views
 
 
 def add_tariffication(request):
@@ -38,7 +38,7 @@ def add_tariffication(request):
                 # создаем часы учебного плана
                 uch_plan_hour = models.UchPlanHour(uch_plan=uch_plan, type = choice[0], count_hours = hour)
                 uch_plan_hour.save()
-                teacher = request.POST['teacher']
+                teacher = models.Teachers(pk=request.POST['teacher'])
                 group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
                 models.Tariffication(teacher = teacher, group_plan = group_plan, uch_plan_hour = uch_plan_hour).save()
         form_tariffication = forms.TarifficationModel(request.POST)

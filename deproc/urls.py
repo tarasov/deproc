@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from deproc.main.views import actions
+from deproc.tariffication.views import actions
 import settings
 
 admin.autodiscover()
 
-urlpatterns = patterns('deproc.main.views',
+urlpatterns = patterns('deproc.deproc.tariffication.views',
     url(r'^$', 'wellcome', name='wellcome'),
     url(r'^tariffication/$', 'tariffication', name='tariffication'),
     url(r'^plan_group/$', 'plan_group', name='plan_group'),
@@ -44,14 +44,14 @@ urlpatterns += patterns('',
 
 def get_urls():
     from django.conf.urls import patterns, url
-    from deproc.main.views import pages_list
+    from deproc.tariffication.views import pages_list
 
     urls_list = patterns('',
         # в цикле добавим пути (urls)
     )
 
     for page_list in pages_list.keys():
-        urls_list.append(url(r'^%s/$' % page_list, 'deproc.main.views.pages', name='%s' % page_list))
+        urls_list.append(url(r'^%s/$' % page_list, 'deproc.deproc.tariffication.views.pages', name='%s' % page_list))
         urls_list.append(url(r'^%s/add/$' % page_list, 'deproc.admin.views.add_page', name='%s_add' % page_list))
         # TODO сделать проверку на существование функции
         for action in actions:
