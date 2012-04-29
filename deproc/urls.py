@@ -6,7 +6,7 @@ import settings
 
 admin.autodiscover()
 
-urlpatterns = patterns('deproc.deproc.tariffication.views',
+urlpatterns = patterns('deproc.tariffication.views',
     url(r'^$', 'wellcome', name='wellcome'),
     url(r'^tariffication/$', 'tariffication', name='tariffication'),
     url(r'^plan_group/$', 'plan_group', name='plan_group'),
@@ -51,7 +51,7 @@ def get_urls():
     )
 
     for page_list in pages_list.keys():
-        urls_list.append(url(r'^%s/$' % page_list, 'deproc.deproc.tariffication.views.pages', name='%s' % page_list))
+        urls_list.append(url(r'^%s/$' % page_list, 'deproc.tariffication.views.pages', name='%s' % page_list))
         urls_list.append(url(r'^%s/add/$' % page_list, 'deproc.admin.views.add_page', name='%s_add' % page_list))
         # TODO сделать проверку на существование функции
         for action in actions:

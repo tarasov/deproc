@@ -7,20 +7,20 @@ from django.forms import ModelForm
 from django.forms.widgets import Select
 from django.contrib.admin import widgets as admin_widgets
 from deproc.tariffication import models
-from deproc.tariffication.models import Profile
+from deproc.tariffication.models import Teachers
 
 attrs_dict = { 'class': 'required' }
 class TarifficationModel(ModelForm):
     def __init__(self, *args, **kwargs):
         super(TarifficationModel, self).__init__(*args, **kwargs)
-        self.fields['teacher'].choices = [('', '----------')] + Profile().get_teachers()
+        self.fields['teacher'].choices = [('', '----------')] + Teachers().get_teachers()
 
     teacher = forms.ChoiceField(choices=(), widget=forms.Select(attrs=attrs_dict), label = 'Преподователь')
     class Meta:
         model = models.Tariffication
         fields = ('teacher', 'group_plan', )
         widgets = {
-            'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site, can_add_related=True)
+            'group_plan' : admin_widgets.RelatedFieldWidgetWrapper(Select(), model.group_plan.field.rel, site, can_add_related=False)
         }
 
 class UchPlanHourModel(ModelForm):

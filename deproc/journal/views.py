@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from deproc.journal.models import Assessment, Themes
@@ -13,8 +13,8 @@ def group(request, id_group, id_discipline):
     
     form_lab = ThemeForm(label_suffix='')
 
-    current_group = Groups.objects.get(pk=id_group)
-    current_discipline = Discipline.objects.get(pk=id_discipline)
+    current_group = get_object_or_404(Groups, pk=id_group)
+    current_discipline = get_object_or_404(Discipline, pk=id_discipline)
 
     students_group = Groups_stud.objects.filter(group=current_group)
     # сделать сильный фильтр, типа

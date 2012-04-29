@@ -40,16 +40,6 @@ class Profile(User):
         verbose_name_plural = u'пользователи'
         db_table = 'profile'
 
-#    def get_students(self):
-#        # Студенты
-#        students = Profile.objects.filter(groups__name="Студенты")
-#        return ((student.pk, student.username) for student in students)
-#
-#    def get_teachers(self):
-#        # Преподаватели
-#        teachers = Profile.objects.filter(groups__name="Преподаватели")
-#        return [(teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers]
-
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
 
@@ -62,6 +52,11 @@ class Students(Profile):
         verbose_name_plural = u'студенты'
         db_table = 'students'
 
+    def get_students(self):
+        # Студенты
+        students = Students.objects.all()
+        return ((student.pk, student.username) for student in students)
+
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
 
@@ -73,6 +68,11 @@ class Teachers(Profile):
         verbose_name = u'преподователь'
         verbose_name_plural = u'преподователи'
         db_table = 'teachers'
+
+    def get_teachers(self):
+        # Преподаватели
+        teachers = Teachers.objects.all()
+        return [(teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers]
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
