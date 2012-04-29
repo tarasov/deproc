@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Django settings for deproc project.
 
 DEBUG = True
@@ -17,10 +18,18 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': root + '/run/db.conf',
+            'read_default_file': root + '/run/db_tarasov.conf',
             'init_command': 'SET storage_engine=INNODB',
             },
-        }
+        },
+    # НАСТРОЙ СВОЮ БД в файле db_gavrilov.conf, закоменть выше и раскоменть ниже
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'OPTIONS': {
+#            'read_default_file': root + '/run/db_gavrilov.conf',
+#            'init_command': 'SET storage_engine=INNODB',
+#            },
+#        },
 }
 
 TIME_ZONE = 'Europe/Moscow'
