@@ -28,18 +28,33 @@ class Schedule_day(models.Model):
 
 
 class Schedule(models.Model):
+
+    LESSON_CHOICES = (
+        (1, u'1 пара'),
+        (2, u'2 пара'),
+        (3, u'3 пара'),
+        (4, u'4 пара'),
+        (5, u'5 пара'),
+    )
+
     plan = models.ForeignKey(Tariffication, verbose_name=u"тарификация", null=True, blank=True)
     day = models.ForeignKey(Schedule_day, verbose_name=u"день")
     classroom = models.ForeignKey(Classroom, verbose_name=u"кабинет", null=True, blank=True)
-    num_less = models.IntegerField(verbose_name=u"номер")
+    num_less = models.IntegerField(verbose_name=u"номер", choices=LESSON_CHOICES)
 
     class Meta:
         verbose_name = u'расписание'
         verbose_name_plural = u'расписания'
         db_table = 'schedule'
 
+    def get_group(self):
+        return self.plan.group_plan.group
+
+    def get_disc(self):
+        return self.plan.uch_plan_hour.uch_plan.disc
+
     def __unicode__(self):
-        return u'%s, %s, %s, %s, %s' % (self.plan.teacher, self.plan.uch_plan_hour.uch_plan.disc, self.plan.group_plan.group, self.day, self.num_less)
+        return u'%s, %s, %s, %s, %s' % (self.plan.teacher, self.plan.uch_plan_hour.uch_plan.disc, self.plan.group_plan.group, self.day.day, self.num_less)
 
 
 class Schedule_empty(models.Model):

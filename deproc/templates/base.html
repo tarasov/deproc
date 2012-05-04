@@ -8,7 +8,7 @@
     {% block meta %}
     {% endblock %}
 
-{#    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" type="type/css" rel="stylesheet" />#} <!-- default bootstrap -->
+{#    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" type="type/css" rel="stylesheet" /> <!-- default bootstrap -->#}
     <link href="{{ MEDIA_URL }}css/bootstrap.css" type="text/css" rel="stylesheet"> <!-- edited: topmenu -->
     <link href="{{ MEDIA_URL }}css/style.css" type="type/css" rel="stylesheet" />
 
@@ -81,12 +81,12 @@
                     <ul class="nav nav-list">
                         <li class="nav-header">Пользовательские</li>
                         <li class="active"><a href="/">Главная</a></li>
+                        <li><a href="{% url schedule %}">Расписание</a></li>
                         {% block sidebar %}
                         {% endblock %}
 
                         <li class="nav-header">Администратор</li>
                         <li><a href="{% url tariffication %}">Тарификация</a></li>
-                        <li><a href="{% url schedule %}">Расписание</a></li>
                         {% for page in pages %}
                             <li><a href="/{{ page.0 }}/">{{ page.1 }}</a></li>
                         {% endfor %}

@@ -1809,7 +1809,7 @@ table .span24 {
   padding: 4px 0;
   margin: 0;
   list-style: none;
-  background-color: #FFFF99;
+  background-color: #F5F5F5;
   border-color: #ccc;
   border-color: rgba(0, 0, 0, 0.2);
   border-style: solid;
@@ -1845,7 +1845,7 @@ table .span24 {
   clear: both;
   font-weight: normal;
   line-height: 18px;
-  color: #333333;
+  color: #0088cc;
   white-space: nowrap;
 }
 .dropdown-menu li > a:hover,
@@ -2782,7 +2782,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-inner {
   padding-left: 20px;
   padding-right: 20px;
-  background-color: #62c462;
+  background-color: #0088cc;
   /*background-image: -moz-linear-gradient(top, #333333, #222222);*/
   /*background-image: -ms-linear-gradient(top, #333333, #222222);*/
   /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#333333), to(#222222));*/
@@ -2807,7 +2807,7 @@ input[type="submit"].btn.btn-mini {
   padding: 7px 10px;
   margin-left: 5px;
   margin-right: 5px;
-  background-color: #57a957;
+  background-color: #0088cc;
   /*background-image: -moz-linear-gradient(top, #333333, #222222);*/
   /*background-image: -ms-linear-gradient(top, #333333, #222222);*/
   /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#333333), to(#222222));*/
@@ -2832,7 +2832,7 @@ input[type="submit"].btn.btn-mini {
 }
 .btn-navbar:active,
 .btn-navbar.active {
-  background-color: #008800;
+  background-color: #0055cc;
 }
 .btn-navbar .icon-bar {
   display: block;
@@ -2853,7 +2853,7 @@ input[type="submit"].btn.btn-mini {
   height: auto;
 }
 .navbar {
-  color: #62c462;
+  color: #0088cc;
 }
 .navbar .brand:hover {
   text-decoration: none;
@@ -3008,27 +3008,27 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar .nav > li > a:hover {
   background-color: transparent;
-  color: #FF0000;
+  color: #0055cc;
   text-decoration: none;
 }
 .navbar .nav .active > a {
     color: #ffff99;
     text-decoration: none;
-    background-color: #62c462;
+    background-color: #0088cc;
 }
 
 .navbar .nav .active > a:hover {
   color: #ffff99;
   text-decoration: none;
-  background-color: #46a546;
+  background-color: #0055cc;
 }
 .navbar .divider-vertical {
   height: 40px;
   width: 1px;
   margin: 0 9px;
   overflow: hidden;
-  background-color: #008800;
-  border-right: 1px solid #57a957;
+  background-color: #0088cc;
+  border-right: 1px solid #0088cc;
 }
 .navbar .nav.pull-right {
   margin-left: 10px;
