@@ -20,26 +20,19 @@
                 {% endfor %}
             </tr>
 
-            {% for schedule in schedule_group %}
-                {{ schedule }}
+            {% for key, values in schedule_group.items %}
+
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td class="osn" align="left"><b> {{ key }} </b></td>
+                    {% for n, lesson in values.items %}
+
+                            <td align="left"><b> {{ lesson }} </b></td>
+
+                    {% endfor %}
+                </tr>
 
             {% endfor %}
-
-{#            {% for grp in groups %}#}
-{##}
-{#                <tr>#}
-{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
-{#                    <td class="osn" align="left"><b> {{ grp }} </b></td>#}
-{#                    {% for schd in schdd %}#}
-{#                        {% if grp == schd.group %}#}
-{##}
-{#                            <td align="left"><b> {{ schd.group }} {{ schd.num_less }} </b></td>#}
-{##}
-{#                        {% endif %}#}
-{#                    {% endfor %}#}
-{#                </tr>#}
-{##}
-{#            {% endfor %}#}
 
             <tr class="nso">
                 <th align="left"><b> # </b></th>
@@ -49,22 +42,20 @@
                 {% endfor %}
             </tr>
 
-{#            {% for tch in teacher_list %}#}
-{#                <tr>#}
-{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
-{#                    <td class="osn" align="left"><b> {{ tch.last_name }} {{ tch.first_name.upper.0 }}. {{ tch.other_name.upper.0 }}. </b></td>#}
-{##}
-{##}
-{#                    {% for sch in schfld %}#}
-{#                        {% if tch == sch.plan.teacher %}#}
-{##}
-{#                            <td align="left"><b> {{ sch.plan.uch_plan_hour.uch_plan.disc }} {{ sch.classroom }} {{ sch.lesson.num_less }} </b></td>#}
-{##}
-{#                        {% endif %}#}
-{#                    {% endfor %}#}
-{#                </tr>#}
-{#            {% endfor %}#}
+            {% for key, values in schedule_teacher.items %}
 
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td class="osn" align="left"><b> {{ key }} </b></td>
+                    {#                    {% if key == %}#}
+                    {% for n, lesson in values.items %}
+
+                        <td align="left"><b> {{ lesson }} </b></td>
+
+                    {% endfor %}
+                </tr>
+
+            {% endfor %}
 
             </tbody>
         </table>

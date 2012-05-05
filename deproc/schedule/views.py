@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.template.context import RequestContext
 from itertools import chain
 from deproc.tariffication import models as main_models
@@ -14,6 +14,7 @@ def schedule(request):
 def index(request):
     groups = main_models.Groups.objects.all().order_by('name')
     teacher_list = main_models.Teachers.objects.all()
+    schedule_queryset = sch_models.Schedule.objects.all()
 
     if request.method == 'GET':
         if 'day' in request.GET and request.GET['day']:
@@ -32,75 +33,55 @@ def index(request):
 
             rng = range(1,6)
 
-            schedule_group = ()
-            schedule_teacher = ()
+            schedule_group = {}
+            schedule_teacher = {}
+
+#            обратная связь
+#            a = sch_models.Schedule_day.objects.get(day = this_day.day)
+#            print a.schedule_set.all(), "da?"
+
+#            a = get_object_or_404(sch_models.Schedule, pk = 30)
+#            print a
+
+#            a = get_list_or_404(sch_models.Schedule, day = this_day)
+#            print a
 
             for group in groups:
-                sch = sch_models.Schedule.objects.filter(plan__group_plan__group = group).filter(day = this_day)
+                lessons = {}
+                sch = schedule_queryset.filter(
+                                                        plan__group_plan__group = group,
+                                                        day = this_day
+                )
                 if sch:
                     for i in range(1,6):
                         if (sch.filter(num_less = i)):
-                            schedule_group += tuple(sch.filter(num_less = i)),
+                            lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc
                         else:
-                            schedule_group += (group, i),
+                            lessons[i] = ''
                 else:
                     for i in range(1,6):
-                        schedule_group += (group, i),
+                        lessons[i] = ''
 
-            print schedule_group
+                schedule_group[group.name] = lessons
 
-
-
-            print "----------------------------------------------------------------"
             for teacher in teacher_list:
-                tch = sch_models.Schedule.objects.filter(plan__teacher = teacher).filter(day = this_day)
+                lessons = {}
+                tch = schedule_queryset.filter(
+                                            plan__teacher = teacher,
+                                            day = this_day
+                )
                 if tch:
-                    print "true"
                     for i in range(1,6):
                         if (tch.filter(num_less = i)):
-                            print tch.filter(num_less = i)
+                            lessons[i] = tch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc
                         else:
-                            print teacher, this_day.day, i
+                            lessons[i] = ''
                 else:
-                    print "false"
                     for i in range(1,6):
-                        print teacher, this_day.day, i
+                        lessons[i] = ''
 
-#shedule_group = (
-#    {'group': 808, 'predmet': POKS, 'para': 2},
-#    {'group': 808, 'predmet': IZO, 'para': 4}
-#    )
-#а потом for group, predmet, para in shedule_group: # распаковка словаря
-## что бы потом писать {{ group }} {{ para }},
-#           а не for td in tds:
-#                {{ td.0 }}
-
-#            themes = Themes.objects.all()
-#
-#            table = ()
-#            for student_group in students_group:
-#                marks = Assessment.objects.filter(student=student_group.student).order_by('theme')
-#                tr = ((Profile.objects.get(pk=student_group.student).pk, Profile.objects.get(pk=student_group.student).__unicode__(), ), )
-#                marks_themes = [(mark.theme.pk, mark.mark) for mark in marks]
-#                # оценок нету у студента
-#                if not marks_themes:
-#                    tr += tuple(((i+1, 0) for i in xrange(len(themes))))
-#                    table += (tr, )
-#                    break
-#
-#                for theme in themes:
-#                    if theme.pk in dict(marks_themes).keys():
-#                        tr += ((theme.pk, dict(marks_themes)[theme.pk]), )
-#                    else:
-#                        tr += ((theme.pk, 0), )
-#
-#                table += (tr, )
+                schedule_teacher[teacher.username] = lessons
+            print schedule_teacher
 
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
-
-# разделить на курсы
-# при логине - показывать только относящиеся к юзеру объекты
-# аккуратный вывод
-# всё остальное так же
-#http://stackoverflow.com/questions/431628/how-to-combine-2-or-more-querysets-in-a-django-view
