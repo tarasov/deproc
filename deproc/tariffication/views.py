@@ -55,56 +55,100 @@ def plan_group(request):
 def tariffication(request):
     choices = choice_typeh
     tariffs = Tariffication.objects.all()
-    # узнаем семестры
-    semestres = []
-    for tariff in tariffs:
-        if tariff.uch_plan_hour.uch_plan.semestr not in semestres:
-            semestres.append(tariff.uch_plan_hour.uch_plan.semestr)
+
+    # список семестров
+    semestres_list = models.Groups.choice_semesters
+    semestres = ', '.join([semestr[0] for semestr in semestres_list]).split(', ')
+
+#    semestres = []
+#    for tariff in tariffs:
+#        if tariff.uch_plan_hour.uch_plan.semestr not in semestres:
+#            semestres.append(tariff.uch_plan_hour.uch_plan.semestr)
     # делаем цикл по семестрам для фильтрации тариффикации
     table = ()
-    # TODO ПЕРЕДЕЛАТЬ ВСЮ ТАБЛИЦУ
-    for semestr in semestres:
-        tariffs_values = Tariffication.objects.values(
-            'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__semestr').annotate(
-            count = Count('group_plan__group')).filter(
-            uch_plan_hour__uch_plan__semestr = semestr)
-        tr = tds = ()
-        for value in tariffs_values:
-            disciplines = Tariffication.objects.values(
-                'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__disc').annotate(
-                count = Count('uch_plan_hour__uch_plan__disc')
-            ).filter(
-                teacher = value['teacher'],
-            )
-            for discipline in disciplines:
-                tariffs = Tariffication.objects.filter(
-                    uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'],
-                    teacher = value['teacher'],
-                    group_plan__group = value['group_plan__group'],
-                    uch_plan_hour__uch_plan__disc = discipline['uch_plan_hour__uch_plan__disc']
-                )
-                try:
-                    tariff = tariffs[0]
-                except IndexError:
-                    continue
-                hours = [(t.uch_plan_hour.type, t.uch_plan_hour.count_hours) for t in tariffs]
-                teacher = '%s %s %s' % (tariff.teacher.last_name, tariff.teacher.first_name, tariff.teacher.other_name, )
-                grp = tariff.group_plan.group
-                disc = tariff.uch_plan_hour.uch_plan.disc
-                smtr = tariff.uch_plan_hour.uch_plan.semestr
-                tr += (teacher,grp,disc,smtr),
-                for typeh in choice_typeh:
-                    for i, hour in enumerate(hours):
-                        # записываем часы
-                        if typeh[0] == hour[0][0]:
-                            choice_type = (typeh[0], hour[1]),
-                            break
-                        else:
-                            # тут записываем 0
-                            if i == len(hours)-1:
-                                choice_type = (typeh[0], 0),
-                    tr = (tr[len(tr)-1] + choice_type, )
-                table += tr
+
+
+    from django.db import connection
+
+    sql_query = """
+    SELECT
+        `auth_user`.`last_name`,
+        `groups`.`name`,
+        `discipline`.`short_name`,
+        `uch_plan`.`semestr`,
+        `uch_plan_hour`.`count_hours`,
+        `uch_plan_hour`.`type`
+    FROM `tariffication`
+        LEFT JOIN `auth_user`
+            ON `tariffication`.`teacher_id` = `auth_user`.`id`
+        LEFT JOIN `groups_plan`
+            ON `tariffication`.`group_plan_id` = `groups_plan`.`id`
+        LEFT JOIN `groups`
+            ON `groups_plan`.`group_id` = `groups`.`id`
+        LEFT JOIN `uch_plan_hour`
+            ON `tariffication`.`uch_plan_hour_id` = `uch_plan_hour`.`id`
+        LEFT JOIN `uch_plan`
+            ON `uch_plan_hour`.`uch_plan_id` = `uch_plan`.`id`
+        Left JOIN `discipline`
+            ON `uch_plan`.`disc_id` = `discipline`.`id`
+    WHERE
+        `groups`.`name` = {0}
+    AND
+        `uch_plan`.`semestr` = {1}
+    AND
+        `discipline`.`short_name` = {2};
+    """
+
+    cursor = connection.cursor()
+    cursor.execute(sql_query)
+
+    for teacher, group, short_name, semestr, count_hours, type in cursor.fetchall():
+        print teacher, short_name
+
+#
+#    # TODO ПЕРЕДЕЛАТЬ ВСЮ ТАБЛИЦУ
+#    for semestr in semestres:
+#        tariffs_values = Tariffication.objects.values(
+#            'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__semestr').annotate(
+#            count = Count('group_plan__group')).filter(
+#            uch_plan_hour__uch_plan__semestr = semestr)
+#        tr = tds = ()
+#        for value in tariffs_values:
+#            disciplines = Tariffication.objects.values(
+#                'group_plan__group', 'teacher', 'uch_plan_hour__uch_plan__disc').annotate(
+#                count = Count('uch_plan_hour__uch_plan__disc')
+#            ).filter(
+#                teacher = value['teacher'],
+#            )
+#            for discipline in disciplines:
+#                tariffs = Tariffication.objects.filter(
+#                    uch_plan_hour__uch_plan__semestr = value['uch_plan_hour__uch_plan__semestr'],
+#                    teacher = value['teacher'],
+#                    group_plan__group = value['group_plan__group'],
+#                    uch_plan_hour__uch_plan__disc = discipline['uch_plan_hour__uch_plan__disc']
+#                )
+#                try:
+#                    tariff = tariffs[0]
+#                except IndexError:
+#                    continue
+#                hours = [(t.uch_plan_hour.type, t.uch_plan_hour.count_hours) for t in tariffs]
+#                teacher = '%s %s %s' % (tariff.teacher.last_name, tariff.teacher.first_name, tariff.teacher.other_name, )
+#                grp = tariff.group_plan.group
+#                disc = tariff.uch_plan_hour.uch_plan.disc
+#                smtr = tariff.uch_plan_hour.uch_plan.semestr
+#                tr += (teacher,grp,disc,smtr),
+#                for typeh in choice_typeh:
+#                    for i, hour in enumerate(hours):
+#                        # записываем часы
+#                        if typeh[0] == hour[0][0]:
+#                            choice_type = (typeh[0], hour[1]),
+#                            break
+#                        else:
+#                            # тут записываем 0
+#                            if i == len(hours)-1:
+#                                choice_type = (typeh[0], 0),
+#                    tr = (tr[len(tr)-1] + choice_type, )
+#                table += tr
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 
 def pages(request, actions=actions):

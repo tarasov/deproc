@@ -20,14 +20,6 @@ choice_typeh = (
     ('E', 'Экзамен',),
 )
 
-# TODO сделать генератор
-choice_semesters = (
-    ('1, 2', '1, 2',),
-    ('3, 4', '3, 4',),
-    ('5, 6', '5, 6',),
-    ('7, 8', '7, 8',),
-    ('9, 10', '9, 10',),
-)
 
 class Profile(User):
     other_name = models.CharField(u"Отчество", max_length=100, null=True, blank=True )
@@ -229,10 +221,21 @@ class Year(models.Model):
 
 
 class Groups(models.Model):
+
+    choice_semesters = (
+        ('1, 2', '1, 2',),
+        ('3, 4', '3, 4',),
+        ('5, 6', '5, 6',),
+        ('7, 8', '7, 8',),
+        ('9, 10', '9, 10',),
+        )
+
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100, unique=True) # 808
     # проверить choice_semesters[0]
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
+
+
 
     class Meta:
         verbose_name = u'группу студентов'
