@@ -39,7 +39,7 @@ def index(request):
 #            обратная связь
 #            a = sch_models.Schedule_day.objects.get(day = this_day.day)
 #            print a.schedule_set.all(), "da?"
-
+#
 #            a = get_object_or_404(sch_models.Schedule, pk = 30)
 #            print a
 
