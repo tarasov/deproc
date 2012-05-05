@@ -81,7 +81,7 @@ def index(request):
                         lessons[i] = ''
 
                 schedule_teacher[teacher.username] = lessons
-            print schedule_teacher
+#            print schedule_teacher
 
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
