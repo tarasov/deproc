@@ -235,6 +235,7 @@ class Groups(models.Model):
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
     class Meta:
+        ordering = ['name']
         verbose_name = u'группу студентов'
         verbose_name_plural = u'группы студентов'
         db_table = 'groups'

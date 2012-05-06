@@ -79,9 +79,7 @@ def index(request):
                 else:
                     for i in range(1,6):
                         lessons[i] = ''
-
-                schedule_teacher[teacher.username] = lessons
-#            print schedule_teacher
-
+                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0])
+                schedule_teacher[t] = lessons
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
