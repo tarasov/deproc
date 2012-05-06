@@ -15,7 +15,6 @@ from deproc.tariffication.models import Tariffication, choice_typeh
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 
-# This class is a wrapper to a given widget to add the add icon for the admin interface
 
 # страницы, из которых будет генерироваться urlpatterns
 # вид - {адресс ссылки: (Модель, Название)}

@@ -2,6 +2,8 @@
 from django.contrib.auth.models import User, Group
 from django.db import models
 from django.db import connection
+from django.db.models.aggregates import Count
+from django.shortcuts import get_object_or_404
 
 
 choise_sex = (
@@ -97,6 +99,22 @@ class Teachers(Profile):
         cursor = connection.cursor()
         cursor.execute(sql_teacher.format(self.pk))
         return cursor.fetchall()
+
+    # TODO переназвать в нормльный вид функции
+    def groups_lessons_are_taught(self):
+        """
+        Группы в которых преподает преподователь
+        """
+        groups = Tariffication.objects.filter(teacher = self).values('group_plan__group').annotate(count=Count('group_plan__group'))
+        return [get_object_or_404(Groups, pk = int(group['group_plan__group'])) for group in groups]
+
+    def disciplines_lessons_are_taught(self, id_group):
+        """
+        Дисциплины в которых преподает преподователь, выбранной группы
+        """
+        group = get_object_or_404(Groups, pk=id_group)
+        groups = Tariffication.objects.filter(teacher = self, group_plan__group=group).values('uch_plan_hour__uch_plan__disc').annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
+        return [get_object_or_404(Discipline, pk = int(group['uch_plan_hour__uch_plan__disc'])) for group in groups]
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)

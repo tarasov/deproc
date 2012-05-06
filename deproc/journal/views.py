@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from deproc.journal.models import Assessment, Themes
 from deproc.journal.forms import ThemeForm
-from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline, Tariffication, Groups_plan
+from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline, Tariffication, Groups_plan, User, Teachers
 
 def group(request, id_group, id_discipline):
     """
@@ -70,21 +70,19 @@ def groups(request):
     """
     Список групп
     """
-    teacher_group = Tariffication.objects.filter(teacher = request.user)
-
-    print teacher_group
-    for grp in teacher_group:
-        print grp.teacher, grp.group_plan.group, grp.uch_plan_hour.uch_plan.disc, grp.uch_plan_hour.uch_plan.semestr, grp.uch_plan_hour.uch_plan.semestr,
-
-    groups = Groups.objects.all()
+    user = get_object_or_404(Teachers, pk=request.user.pk)
+    groups = user.groups_lessons_are_taught()
     return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
 
-def disciplines(request, pk_group):
+def disciplines(request, id_group):
     """
     Список предметов пропедавателя выбранной группы
     """
-
+#    id_group = id_group
     disciplines = Discipline.objects.all()
+    user = get_object_or_404(Teachers, pk=request.user.pk)
+    disciplines = user.disciplines_lessons_are_taught(id_group)
+    print disciplines
     return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
 
 def select_discipline(request, id_group, id_discpiline):
