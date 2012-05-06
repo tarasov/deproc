@@ -82,4 +82,5 @@ def index(request):
                 t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0])
                 schedule_teacher[t] = lessons
 
+#                TODO отчет по провёденным парам, (на группу нажимаешь, там все тарификации, этой группы, с подсчетом часов, на них нажимаешь
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
