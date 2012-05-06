@@ -285,7 +285,7 @@ class Groups_plan(models.Model):
 
 class Tariffication(models.Model):
     teacher = models.ForeignKey(Teachers, verbose_name='Преподаватель')
-    group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы")
+    group_plan = models.ForeignKey(Groups_plan, verbose_name=u"План группы", related_name="gpset")
     uch_plan_hour = models.ForeignKey(UchPlanHour, verbose_name=u"Час учебного плана")
 
     class Meta:

@@ -71,6 +71,37 @@ def tariffication(request):
     from django.db import connection
 
     sql_query = """
+#    SELECT
+#        `auth_user`.`last_name`,
+#        `groups`.`name`,
+#        `discipline`.`short_name`,
+#        `uch_plan`.`semestr`,
+#        `uch_plan_hour`.`count_hours`,
+#        `uch_plan_hour`.`type`
+#    FROM `tariffication`
+#        LEFT JOIN `auth_user`
+#            ON `tariffication`.`teacher_id` = `auth_user`.`id`
+#        LEFT JOIN `groups_plan`
+#            ON `tariffication`.`group_plan_id` = `groups_plan`.`id`
+#        LEFT JOIN `groups`
+#            ON `groups_plan`.`group_id` = `groups`.`id`
+#        LEFT JOIN `uch_plan_hour`
+#            ON `tariffication`.`uch_plan_hour_id` = `uch_plan_hour`.`id`
+#        LEFT JOIN `uch_plan`
+#            ON `uch_plan_hour`.`uch_plan_id` = `uch_plan`.`id`
+#        Left JOIN `discipline`
+#            ON `uch_plan`.`disc_id` = `discipline`.`id`
+#    WHERE
+#        `auth_user`.`last_name` = '{0}'
+#    AND
+#        `groups`.`name` = {1}
+#    AND
+#        `uch_plan`.`semestr` = {2}
+#    AND
+#        `discipline`.`short_name` = {3};
+    """
+
+    sql_teacher = """
     SELECT
         `auth_user`.`last_name`,
         `groups`.`name`,
@@ -92,18 +123,26 @@ def tariffication(request):
         Left JOIN `discipline`
             ON `uch_plan`.`disc_id` = `discipline`.`id`
     WHERE
-        `groups`.`name` = {0}
-    AND
-        `uch_plan`.`semestr` = {1}
-    AND
-        `discipline`.`short_name` = {2};
+        `auth_user`.`id` = '{0}'
     """
 
-    cursor = connection.cursor()
-    cursor.execute(sql_query)
+    teachers = models.Teachers.objects.all()
+    groups = models.Groups.objects.all()
+    disciplines = models.Discipline.objects.all()
 
-    for teacher, group, short_name, semestr, count_hours, type in cursor.fetchall():
-        print teacher, short_name
+    cursor = connection.cursor()
+    for teacher in teachers:
+        cursor.execute(sql_teacher.format(teacher.pk))
+        tariffications = cursor.fetchall()
+        for teacher, group, discipline,  in tariffications:
+            print tariffication
+
+
+#    cursor = connection.cursor()
+#    cursor.execute(sql_query)
+#
+#    for teacher, group, short_name, semestr, count_hours, type in cursor.fetchall():
+#        print teacher, short_name
 
 #
 #    # TODO ПЕРЕДЕЛАТЬ ВСЮ ТАБЛИЦУ

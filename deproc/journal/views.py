@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from deproc.journal.models import Assessment, Themes
 from deproc.journal.forms import ThemeForm
-from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline
+from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline, Tariffication, Groups_plan
 
 def group(request, id_group, id_discipline):
     """
@@ -16,14 +16,17 @@ def group(request, id_group, id_discipline):
     current_group = get_object_or_404(Groups, pk=id_group)
     current_discipline = get_object_or_404(Discipline, pk=id_discipline)
 
-    students_group = Groups_stud.objects.filter(group=current_group)
+    students_group = Groups_stud.objects.filter(
+        group=current_group,
+
+
+    )
     # сделать фильтр, типа
     # .filter(
     #   'tariffication__uch_plan_hour__uch_plan__disc = current_discipline,
 
     # )
     themes = Themes.objects.all()
-
     table = ()
     for student_group in students_group:
         marks = Assessment.objects.filter(student=student_group.student).order_by('theme')
@@ -67,6 +70,12 @@ def groups(request):
     """
     Список групп
     """
+    teacher_group = Tariffication.objects.filter(teacher = request.user)
+
+    print teacher_group
+    for grp in teacher_group:
+        print grp.teacher, grp.group_plan.group, grp.uch_plan_hour.uch_plan.disc, grp.uch_plan_hour.uch_plan.semestr, grp.uch_plan_hour.uch_plan.semestr,
+
     groups = Groups.objects.all()
     return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
 
