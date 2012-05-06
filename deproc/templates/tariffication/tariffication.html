@@ -18,12 +18,12 @@
             </tr>
             {% for tr in table %}
                 <tr style="height: 30px;">
-                    {% for td in tr %}
-                        {% if forloop.counter < 5 %}
-                            <td align="left"><b>{{ td }}</b></td>
-                        {% else %}
-                            <td align="left"><b>{{ td.1 }}</b></td>
-                        {% endif %}
+                    <td align="left"><b>{{ tr.teacher }}</b></td>
+                    <td align="left"><b>{{ tr.group }}</b></td>
+                    <td align="left"><b>{{ tr.discipline }}</b></td>
+                    <td align="left"><b>{{ tr.semestr }}</b></td>
+                    {% for hour in tr.hours %}
+                        <td align="left"><b>{{ hour }}</b></td>
                     {% endfor %}
                 </tr>
             {% endfor %}

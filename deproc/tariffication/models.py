@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User, Group
 from django.db import models
+from django.db import connection
 
 
 choise_sex = (
@@ -67,6 +68,35 @@ class Teachers(Profile):
     def get_teachers(self):
         teachers = Teachers.objects.all()
         return ((teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers)
+
+    def get_tariffication(self):
+        sql_teacher = """
+        SELECT
+            `auth_user`.`last_name`,
+            `groups`.`name`,
+            `discipline`.`short_name`,
+            `uch_plan`.`semestr`,
+            `uch_plan_hour`.`count_hours`,
+            `uch_plan_hour`.`type`
+        FROM `tariffication`
+            LEFT JOIN `auth_user`
+                ON `tariffication`.`teacher_id` = `auth_user`.`id`
+            LEFT JOIN `groups_plan`
+                ON `tariffication`.`group_plan_id` = `groups_plan`.`id`
+            LEFT JOIN `groups`
+                ON `groups_plan`.`group_id` = `groups`.`id`
+            LEFT JOIN `uch_plan_hour`
+                ON `tariffication`.`uch_plan_hour_id` = `uch_plan_hour`.`id`
+            LEFT JOIN `uch_plan`
+                ON `uch_plan_hour`.`uch_plan_id` = `uch_plan`.`id`
+            Left JOIN `discipline`
+                ON `uch_plan`.`disc_id` = `discipline`.`id`
+        WHERE
+            `auth_user`.`id` = '{0}'
+        """
+        cursor = connection.cursor()
+        cursor.execute(sql_teacher.format(self.pk))
+        return cursor.fetchall()
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
@@ -228,11 +258,10 @@ class Groups(models.Model):
         ('5, 6', '5, 6',),
         ('7, 8', '7, 8',),
         ('9, 10', '9, 10',),
-        )
+    )
 
     spec = models.ForeignKey(Speciality, verbose_name=u"Специальность") # 230105.*
     name = models.IntegerField(u'Группа', max_length=100, unique=True) # 808
-    # проверить choice_semesters[0]
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
 
