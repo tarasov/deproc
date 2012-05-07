@@ -14,7 +14,7 @@ def schedule(request):
 def index(request):
     groups = main_models.Groups.objects.all().order_by('name')
     teacher_list = main_models.Teachers.objects.all()
-    schedule_queryset = sch_models.Schedule.objects.all()
+    schedule_queryset = sch_models.Schedule.objects.all().select_related("plan__uch_plan_hour__uch_plan__disc")
 
     if request.method == 'GET':
         if 'day' in request.GET and request.GET['day']:
@@ -22,15 +22,12 @@ def index(request):
             date = date.split('.')
             new_date = ('%s-%s-%s' % tuple(date[::-1]))
             schdl_day = sch_models.Schedule_day.objects.all()
-
-            schdl_day_empty = sch_models.Schedule_empty.objects.all()
-
             new_date = datetime.datetime.strptime(new_date, '%Y-%m-%d')
-            if not sch_models.Schedule_day.objects.filter(day = str(new_date.date())):
-                this_day = sch_models.Schedule_day.objects.create(day = new_date.date())
+            if not schdl_day.filter(day = str(new_date.date())):
+                this_day = schdl_day.create(day = new_date.date())
             else:
-                this_day = sch_models.Schedule_day.objects.get(day = str(new_date.date()))
-
+                this_day = schdl_day.get(day = str(new_date.date()))
+            day = '%s-%s-%s' % (this_day.day.year, this_day.day.month, this_day.day.day)
             rng = range(1,6)
 
             schedule_group = {}
@@ -49,8 +46,8 @@ def index(request):
             for group in groups:
                 lessons = {}
                 sch = schedule_queryset.filter(
-                                                        plan__group_plan__group = group,
-                                                        day = this_day
+                    plan__group_plan__group = group,
+                    day = this_day
                 )
                 if sch:
                     for i in range(1,6):
@@ -67,8 +64,8 @@ def index(request):
             for teacher in teacher_list:
                 lessons = {}
                 tch = schedule_queryset.filter(
-                                            plan__teacher = teacher,
-                                            day = this_day
+                    plan__teacher = teacher,
+                    day = this_day
                 )
                 if tch:
                     for i in range(1,6):

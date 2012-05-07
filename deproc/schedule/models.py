@@ -35,9 +35,9 @@ class Schedule(models.Model):
         (3, u'3 пара'),
         (4, u'4 пара'),
         (5, u'5 пара'),
-    )
+        )
 
-    plan = models.ForeignKey(Tariffication, verbose_name=u"тарификация", null=True, blank=True)
+    plan = models.ForeignKey(Tariffication, verbose_name=u"тарификация")
     day = models.ForeignKey(Schedule_day, verbose_name=u"день")
     classroom = models.ForeignKey(Classroom, verbose_name=u"кабинет", null=True, blank=True)
     num_less = models.IntegerField(verbose_name=u"номер", choices=LESSON_CHOICES)

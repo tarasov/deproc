@@ -31,6 +31,10 @@ table.tariffication td, table.schedule td {
     text-align: center;
 }
 
+table.tariffication .addin:hover {
+    background-color: #ffebcd;
+}
+
 table.group-plan tr {
     border: 2px solid #ffebcd;
 }
@@ -41,4 +45,7 @@ table.schedule td {
 
 table.schedule {
     border: 2px solid #ffebcd;
+}
+table.schedule .group:hover {
+    background-color: #ffebcd;
 }

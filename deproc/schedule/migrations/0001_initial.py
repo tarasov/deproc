@@ -1,13 +1,13 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Classroom'
         db.create_table('classroom', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -26,7 +26,7 @@ class Migration(SchemaMigration):
         # Adding model 'Schedule'
         db.create_table('schedule', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tariffication.Tariffication'], null=True, blank=True)),
+            ('plan', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tariffication.Tariffication'])),
             ('day', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day'])),
             ('classroom', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Classroom'], null=True, blank=True)),
             ('num_less', self.gf('django.db.models.fields.IntegerField')()),
@@ -60,9 +60,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('schedule', ['Absences'])
 
-
     def backwards(self, orm):
-        
         # Deleting model 'Classroom'
         db.delete_table('classroom')
 
@@ -81,7 +79,6 @@ class Migration(SchemaMigration):
         # Deleting model 'Absences'
         db.delete_table('absences')
 
-
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -98,7 +95,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 4, 29, 19, 57, 59, 295305)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -106,7 +103,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 4, 29, 19, 57, 59, 295179)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -137,7 +134,7 @@ class Migration(SchemaMigration):
             'day': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Schedule_day']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'num_less': ('django.db.models.fields.IntegerField', [], {}),
-            'plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Tariffication']", 'null': 'True', 'blank': 'True'})
+            'plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Tariffication']"})
         },
         'schedule.schedule_day': {
             'Meta': {'object_name': 'Schedule_day', 'db_table': "'schedule_day'"},
@@ -172,7 +169,7 @@ class Migration(SchemaMigration):
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Disc_type']"})
         },
         'tariffication.groups': {
-            'Meta': {'object_name': 'Groups', 'db_table': "'groups'"},
+            'Meta': {'ordering': "['name']", 'object_name': 'Groups', 'db_table': "'groups'"},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'max_length': '100'}),
             'semestr': ('django.db.models.fields.CharField', [], {'default': "('1, 2', '1, 2')", 'max_length': '6'}),
@@ -206,7 +203,7 @@ class Migration(SchemaMigration):
         },
         'tariffication.tariffication': {
             'Meta': {'object_name': 'Tariffication', 'db_table': "'tariffication'"},
-            'group_plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Groups_plan']"}),
+            'group_plan': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'gpset'", 'to': "orm['tariffication.Groups_plan']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'teacher': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Teachers']"}),
             'uch_plan_hour': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.UchPlanHour']"})

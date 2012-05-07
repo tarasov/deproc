@@ -15,7 +15,8 @@ urlpatterns = patterns('deproc.tariffication.views',
 # Расписание
 urlpatterns += patterns('deproc.schedule.views',
     url(r'^schedule/$', 'schedule', name='schedule'),
-    url(r'^schedule/index/', 'index', name='schedule_index'),
+    url(r'^schedule/index', 'index', name='schedule_index'),
+#    url(r'^schedule/edit/', 'edit_lesson', name='schedule_edit'),
 )
 
 # Электронный журнал
