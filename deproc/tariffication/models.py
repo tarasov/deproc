@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User, Group
-from django.db import models
-from django.db import connection
+from django.db import models, connection
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
+#from deproc.schedule.models import Classroom
+
+
+class Classroom(models.Model):
+    number = models.IntegerField(max_length=100, null=False, blank=False)
+
+    class Meta:
+        verbose_name = u'кабинет'
+        verbose_name_plural = u'кабинеты'
+        db_table = 'classroom'
+
+    def __unicode__(self):
+        return u'%s' % self.number
+
 
 
 choise_sex = (
@@ -302,7 +315,7 @@ class Groups(models.Model):
 
 class Groups_stud(models.Model):
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
-    student = models.ForeignKey(Students, verbose_name='Студент')
+    student = models.ManyToManyField(Students, verbose_name='Студент')
 
     class Meta:
         verbose_name = u'студент группы'

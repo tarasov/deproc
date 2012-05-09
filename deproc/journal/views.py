@@ -2,65 +2,54 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
-from deproc.journal.models import Assessment, Themes
+from deproc.journal.models import Assessment, Journal_day
 from deproc.journal.forms import ThemeForm
-from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline, Tariffication, Groups_plan, User, Teachers
+from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline, Tariffication, Groups_plan, User, Teachers, Students
+from deproc.schedule.models import Schedule_day
 
 def group(request, id_group, id_discipline):
     """
     журнал для группы
     """
-    
     form_lab = ThemeForm(label_suffix='')
 
     current_group = get_object_or_404(Groups, pk=id_group)
     current_discipline = get_object_or_404(Discipline, pk=id_discipline)
 
-    students_group = Groups_stud.objects.filter(
-        group=current_group,
-
-
-    )
-    # сделать фильтр, типа
-    # .filter(
-    #   'tariffication__uch_plan_hour__uch_plan__disc = current_discipline,
-
-    # )
-    themes = Themes.objects.all()
-    table = ()
-    for student_group in students_group:
-        marks = Assessment.objects.filter(student=student_group.student).order_by('theme')
-        tr = ((Profile.objects.get(pk=student_group.student).pk, Profile.objects.get(pk=student_group.student).__unicode__(), ), )
-        marks_themes = [(mark.theme.pk, mark.mark) for mark in marks]
-        # оценок нету у студента
-        if not marks_themes:
-            tr += tuple(((i+1, 0) for i in xrange(len(themes))))
-            table += (tr, )
-            break
-
-        for theme in themes:
-            if theme.pk in dict(marks_themes).keys():
-                tr += ((theme.pk, dict(marks_themes)[theme.pk]), )
+    group = get_object_or_404(Groups_stud, group=current_group)
+    students = group.student.all()
+    days = Schedule_day.objects.all()
+    table = []
+    for student in students:
+        journal = {}
+        journal['student'] = student
+        journal['marks'] = []
+        for day in days:
+            marks = Assessment.objects.filter(student=student, day=day)
+            if marks:
+                marks_of_student = (day.pk, [mark for mark in marks]
+                journal['marks'].append((day.pk, marks[0]))
             else:
-                tr += ((theme.pk, 0), )
+                journal['marks'].append((day.pk, ''))
 
-        table += (tr, )
-    return render_to_response('journal/group.html', locals(), context_instance=RequestContext(request))
+        table.append(journal)
+    return render_to_response('journal/journal.html', locals(), context_instance=RequestContext(request))
 
-def mark_add(request, student, theme, mark):
+def add_mark(request, group, discipline, id_day, id_student, mark):
     """
      Добавление оценки
     """
     if request.method == 'GET':
-        student, theme_pk, mark = int(student), int(theme), int(mark),
-        theme = Themes.objects.get(pk=theme_pk)
-        Assessment.objects.filter(student=student, theme=theme).delete()
+        id_student, id_day, mark = int(id_student), int(id_day), int(mark),
+        day = get_object_or_404(Schedule_day, pk=id_day)
+        student = get_object_or_404(Students, pk=id_student)
+        Assessment.objects.filter(student=student, day=day).delete()
         if mark != "0":
-            assessments = Assessment(mark=mark, student=student, theme=theme)
-            assessments.save()
+            assessment = Assessment(mark = mark, student = student, day=day)
+            assessment.save()
             return HttpResponse(mark)
         else:
-            Assessment.objects.filter(student=student, theme=theme).delete()
+            Assessment.objects.filter(student = student, day = day).delete()
             return HttpResponse("")
     else:
         return HttpResponse("")
@@ -92,4 +81,4 @@ def select_discipline(request, id_group, id_discpiline):
     брать дисциплины указанной группы из тариффикации?
     """
     discipline = Discipline.objects.all()[0]
-    return render_to_response('journal/group.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('journal/journal.html', locals(), context_instance=RequestContext(request))

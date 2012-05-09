@@ -1,7 +1,10 @@
 $(function() {
     var s = 0;
     var l = 0;
-    
+
+
+
+
     $('#selMark').hide();
     $('#newStud').hide();
     $('.del').css({'opacity': '0.2'});
@@ -24,12 +27,14 @@ $(function() {
     });
     $('td.mark').hover(
         function(){
-            s = $(this).attr('s');
-            l = $(this).attr('l');
+            var expr = /(\d+)_(\d+)/;
+            student = expr.exec($(this).attr('id'))[1];
+            day = expr.exec($(this).attr('id'))[2];
+
 
             // подсветка лабораторной работы
             themeElem = '#' + l;
-            $('#themes tr').css({'background-color': '#FFF'});
+            $('#days tr').css({'background-color': '#FFF'});
             $(themeElem).css({'background-color': '#9CF'});
             // подсветка фамилии студента
             studElem = '#stud_' + s;
@@ -37,32 +42,13 @@ $(function() {
             $(studElem).css({'background-color': '#9CF'});
         },
         function(){
-            $('#themes tr').css({'background-color': '#FFF'})
+            $('#days tr').css({'background-color': '#FFF'})
             $('#mark td.name').css({'background-color': '#FFF'});
 
         }
     )
     // клик по ячейке с оценкой
     $('td.mark').click(function() {
-        
-        s = $(this).attr('s');
-        l = $(this).attr('l');
-        
-        // подсветка лабораторной работы
-        themeElem = '#' + l;
-        $('#themes tr').css({'background-color': '#FFF'});
-        $(themeElem).css({'background-color': '#9CF'});
-
-        // подсветка фамилии студента
-        studElem = '#stud_' + s;
-        $('#mark td.name').css({'background-color': '#FFF'});
-        $(studElem).css({'background-color': '#9CF'});
-
-
-        // выделяем новую ячейку
-        //$('td.mark').css({'background-color': '#FFF'});
-        //$(this).css({'background-color': '#9F9'});
-
         // перемещаем блок с оценками
         $('#selMark').show();
         $(this).offset(function(i, v) {
@@ -82,12 +68,12 @@ $(function() {
     
     // клик по оценке
     $('#selMark a').click(function() {
-        var id = '#' + s + '_' + l;
+        var id_td = '#' + student + '_' + day;
         $.get(
-            "../../mark/add/"+s+"/"+l+"/"+$(this).attr('mark')+"/",
+            'add_mark/'+ day + '/' + student + '/' + $(this).attr('mark') + '/',
             {},
             function(data) {
-                $(id).html(data);
+                $(id_td).html(data);
                 $('#selMark').hide();
             }
         );
@@ -149,7 +135,6 @@ $(function() {
     // добавление лабы
     $('.add_theme').click(function() {
         var name = $('input[name=name]').attr('value');
-        alert(name)
         $.post(
             "/theme/add/",
             {'name': name},
@@ -164,7 +149,7 @@ $(function() {
 
     // Лабы
 
-    $('#themes td.theme').click(function(){
+    $('#days td.theme').click(function(){
         var theme = $(this).attr('l');
         $('#mark td').show()
         $('#mark th').show()
@@ -172,7 +157,7 @@ $(function() {
         $('#mark th[l!='+ theme +']:not(.notHide)').hide();
     })
 
-    $('.themes').click(function(){
+    $('.days').click(function(){
         $('#mark th').show();
         $('#mark td').show();
     })

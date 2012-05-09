@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from deproc.tariffication import models as main_models
+from deproc.schedule.models import Schedule_day
 
 
 class Types_themes(models.Model):
@@ -15,16 +16,14 @@ class Types_themes(models.Model):
         return u'%s' % self.name
 
 
-class Themes(models.Model):
+class Journal_day(models.Model):
     describe    = models.CharField("Название", max_length=255, null = False, blank = False)
-    tariffication = models.ForeignKey(main_models.Tariffication, verbose_name='Тариффикация')
-    type = models.ForeignKey(Types_themes, verbose_name='Тип темы')
-    date_pub = models.DateTimeField(auto_now_add=True)
+    day = models.ForeignKey(Schedule_day, verbose_name='День')
 
     class Meta:
-        verbose_name = ('тему')
-        verbose_name_plural = ('темы')
-        db_table = 'themes'
+        verbose_name = ('день')
+        verbose_name_plural = ('дни')
+        db_table = 'journal_day'
 
     def __unicode__(self):
         return u'%s' % self.describe
@@ -33,7 +32,7 @@ class Themes(models.Model):
 class Assessment(models.Model):
     mark       = models.IntegerField("Оценка", null=False, blank=False)
     student    = models.ForeignKey(main_models.Students, verbose_name='Студент')
-    theme      = models.ForeignKey(Themes, verbose_name='Тема занятия')
+    day        = models.ForeignKey(Schedule_day, verbose_name='День занятия')
     date_pub   = models.DateTimeField(auto_now_add=True)
 
     class Meta:

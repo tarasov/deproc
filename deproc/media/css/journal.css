@@ -199,29 +199,29 @@ a {
 }
 
 
-#themes {
+#days {
     border-collapse: collapse;
     border: solid #999 1px;
     float: right;
     margin: 0px 0px 0px 20px;
 }
 
-#themes th {
+#days th {
     padding: 4px;
     border: solid #999 1px;
     background: #FF9;
 }
 
-#themes td {
+#days td {
     padding: 4px;
     border: solid #999 1px;
     text-align: center;
 }
 
-#themes td.theme {
+#days td.theme {
     font-size: 17px;
     cursor: pointer;
 }
-#themes .name {
+#days .name {
     text-align: left;
 }

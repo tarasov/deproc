@@ -12,5 +12,5 @@ urlpatterns = patterns('deproc.journal.views',
     url(r'^group/(\d+)/disciplines/$', 'disciplines', name='disciplines'),
     # проверить можно ли discipline/a/b/
     url(r'^group/(\d+)/discipline/(\d+)/$', 'group', name='group'),
-    url(r'^mark/add/(\d+)/(\d+)/(\d+)/$', 'mark_add'),
+    url(r'^group/(\d+)/discipline/(\d+)/add_mark/(\d+)/(\d+)/(\d+)/$', 'add_mark'),
 )

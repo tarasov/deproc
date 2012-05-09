@@ -76,7 +76,7 @@ def index(request):
                 else:
                     for i in range(1,6):
                         lessons[i] = ''
-                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0])
+                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name, teacher.other_name)
                 schedule_teacher[t] = lessons
 
 #                TODO отчет по провёденным парам, (на группу нажимаешь, там все тарификации, этой группы, с подсчетом часов, на них нажимаешь
