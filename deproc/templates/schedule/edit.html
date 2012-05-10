@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/schedule.js"></SCRIPT>
+{% endblock %}
+
+{% block main %}
+    <a href="/">назад</a><br>
+    <br><br><br>
+
+
+    <div class="row-fluid">
+        <table class="schedule span11" id="schedule">
+            <tbody>
+            <tr class="nso">
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> группа </b></th>
+{#                {% for i in rng %}#}
+{#                    <th align="left"><b> {{ i }} пара </b></th>#}
+{#                {% endfor %}#}
+            </tr>
+
+{#            {% for key, values in schedule_group.items %}#}
+{##}
+{#                <tr>#}
+{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
+{#                    <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key }}</b></div></td>#}
+{##}
+{#                    {% for n, lesson in values.items %}#}
+{#                        {% if lesson == ''%}#}
+{#                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="edit/{{ day }}/{{ key }}/{{ forloop.counter }}"><div><b>-</b></div></a> </td>#}
+{#                        {% else %}#}
+{#                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="edit/{{ day }}/{{ key }}/{{ forloop.counter }}"><div><b>{{ lesson }}</b></div></a> </td>#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{#                </tr>#}
+{##}
+{#            {% endfor %}#}
+
+            <tr class="nso">
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> преподаватель </b></th>
+{#                {% for i in rng %}#}
+{#                    <th align="left"><b> {{ i }} пара </b></th>#}
+{#                {% endfor %}#}
+            </tr>
+{##}
+{#            {% for key, values in schedule_teacher.items %}#}
+{##}
+{#                <tr>#}
+{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
+{#                    <td class="osn" align="left"><b> {{ key }} </b></td>#}
+                    {#                    {% if key == %}#}
+{#                    {% for n, lesson in values.items %}#}
+{##}
+{#                        <td align="left"><b> {{ lesson }} </b></td>#}
+{##}
+{#                    {% endfor %}#}
+{#                </tr>#}
+{##}
+{#            {% endfor %}#}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

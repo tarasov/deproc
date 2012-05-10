@@ -28,9 +28,9 @@
 
                     {% for n, lesson in values.items %}
                         {% if lesson == ''%}
-                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="edit/{{ day }}/{{ key }}/{{ forloop.counter }}"><div><b>-</b></div></a> </td>
+                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>-</b></div></a> </td>
                         {% else %}
-                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="edit/{{ day }}/{{ key }}/{{ forloop.counter }}"><div><b>{{ lesson }}</b></div></a> </td>
+                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>{{ lesson.0 }}</b><b class="type_hour">{{ lesson.2 }}</b><br/>{{ lesson.1 }}</div></a> </td>
                         {% endif %}
                     {% endfor %}
                 </tr>
@@ -49,12 +49,14 @@
 
                 <tr>
                     <td align="left"><b> {{ forloop.counter }} </b></td>
-                    <td class="osn" align="left"><b> {{ key }} </b></td>
+                    <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key.0 }}</b></div></td>
                     {#                    {% if key == %}#}
                     {% for n, lesson in values.items %}
-
-                        <td align="left"><b> {{ lesson }} </b></td>
-
+                        {% if lesson == ''%}
+                            <td class="group group_{{ key.1 }}" id="lesson_{{ lesson.pk }}" gr="{{ key.1 }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key.1 }}/{{ forloop.counter }}/"><div><b>-</b></div></a> </td>
+                        {% else %}
+                            <td class="group group_{{ key.1 }}" id="lesson_{{ lesson.pk }}" gr="{{ key.1 }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key.1 }}/{{ forloop.counter }}/"><div><b class="group_lesson">{{ lesson.1 }}</b><b>{{ lesson.0 }}</b><b class="type_hour">{{ lesson.2 }}</b></div></a> </td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
 
