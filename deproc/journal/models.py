@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from deproc.tariffication import models as main_models
-from deproc.schedule.models import Schedule_day
+from deproc.schedule.models import Schedule_day, Schedule
 
 
 class Types_themes(models.Model):
@@ -16,24 +16,24 @@ class Types_themes(models.Model):
         return u'%s' % self.name
 
 
-class Journal_day(models.Model):
-    describe    = models.CharField("Название", max_length=255, null = False, blank = False)
-    day = models.ForeignKey(Schedule_day, verbose_name='День')
+class Theme_of_day(models.Model):
+    day = models.ForeignKey(Schedule, verbose_name='День') # день из расписания
+    describe = models.CharField("Название", max_length=255, null = False, blank = False)
 
     class Meta:
         verbose_name = ('день')
         verbose_name_plural = ('дни')
-        db_table = 'journal_day'
+        db_table = 'theme_of_day'
 
     def __unicode__(self):
         return u'%s' % self.describe
 
 # Оценки
 class Assessment(models.Model):
-    mark       = models.IntegerField("Оценка", null=False, blank=False)
-    student    = models.ForeignKey(main_models.Students, verbose_name='Студент')
-    day        = models.ForeignKey(Schedule_day, verbose_name='День занятия')
-    date_pub   = models.DateTimeField(auto_now_add=True)
+    mark = models.IntegerField("Оценка", null=False, blank=False)
+    student = models.ForeignKey(main_models.Students, verbose_name='Студент')
+    theme = models.ForeignKey(Theme_of_day, verbose_name='Тема занятия')
+    date_pub = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = ('оценку')
