@@ -1,17 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from deproc.tariffication.models import Profile, Tariffication, Groups, Students
-
-class Classroom(models.Model):
-    number = models.IntegerField(max_length=100, null=False, blank=False)
-
-    class Meta:
-        verbose_name = u'кабинет'
-        verbose_name_plural = u'кабинеты'
-        db_table = 'classroom'
-
-    def __unicode__(self):
-        return u'%s' % self.number
+from deproc.tariffication.models import Tariffication, Groups, Students, Classroom
 
 
 class Schedule_day(models.Model):

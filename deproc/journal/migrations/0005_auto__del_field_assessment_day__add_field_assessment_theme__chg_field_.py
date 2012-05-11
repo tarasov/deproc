@@ -8,44 +8,26 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Types_themes'
-        db.create_table('types_themes', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-        ))
-        db.send_create_signal('journal', ['Types_themes'])
+        # Deleting field 'Assessment.day'
+        db.delete_column('assessment', 'day_id')
 
-        # Adding model 'Themes'
-        db.create_table('themes', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('describe', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('tariffication', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tariffication.Tariffication'])),
-            ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['journal.Types_themes'])),
-            ('date_pub', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('journal', ['Themes'])
+        # Adding field 'Assessment.theme'
+        db.add_column('assessment', 'theme', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['journal.Theme_of_day']), keep_default=False)
 
-        # Adding model 'Assessment'
-        db.create_table('assessment', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('mark', self.gf('django.db.models.fields.IntegerField')()),
-            ('student', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tariffication.Students'])),
-            ('theme', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['journal.Themes'])),
-            ('date_pub', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('journal', ['Assessment'])
+        # Changing field 'Theme_of_day.day'
+        db.alter_column('journal_day', 'day_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule']))
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Types_themes'
-        db.delete_table('types_themes')
+        # Adding field 'Assessment.day'
+        db.add_column('assessment', 'day', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day']), keep_default=False)
 
-        # Deleting model 'Themes'
-        db.delete_table('themes')
+        # Deleting field 'Assessment.theme'
+        db.delete_column('assessment', 'theme_id')
 
-        # Deleting model 'Assessment'
-        db.delete_table('assessment')
+        # Changing field 'Theme_of_day.day'
+        db.alter_column('journal_day', 'day_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day']))
 
 
     models = {
@@ -64,7 +46,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 4, 29, 19, 57, 43, 607835)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 5, 11, 22, 10, 13, 547818)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -72,7 +54,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 4, 29, 19, 57, 43, 607711)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 5, 11, 22, 10, 13, 547595)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -91,20 +73,37 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mark': ('django.db.models.fields.IntegerField', [], {}),
             'student': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Students']"}),
-            'theme': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['journal.Themes']"})
+            'theme': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['journal.Theme_of_day']"})
         },
-        'journal.themes': {
-            'Meta': {'object_name': 'Themes', 'db_table': "'themes'"},
-            'date_pub': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+        'journal.theme_of_day': {
+            'Meta': {'object_name': 'Theme_of_day', 'db_table': "'journal_day'"},
+            'day': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Schedule']"}),
             'describe': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'tariffication': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Tariffication']"}),
-            'type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['journal.Types_themes']"})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'journal.types_themes': {
             'Meta': {'object_name': 'Types_themes', 'db_table': "'types_themes'"},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'})
+        },
+        'schedule.schedule': {
+            'Meta': {'object_name': 'Schedule', 'db_table': "'schedule'"},
+            'classroom': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Classroom']", 'null': 'True', 'blank': 'True'}),
+            'day': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.Schedule_day']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'num_less': ('django.db.models.fields.IntegerField', [], {}),
+            'plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Tariffication']"})
+        },
+        'schedule.schedule_day': {
+            'Meta': {'object_name': 'Schedule_day', 'db_table': "'schedule_day'"},
+            'day': ('django.db.models.fields.DateField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'real': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        'tariffication.classroom': {
+            'Meta': {'object_name': 'Classroom', 'db_table': "'classroom'"},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'number': ('django.db.models.fields.IntegerField', [], {'max_length': '100'})
         },
         'tariffication.disc_type': {
             'Meta': {'object_name': 'Disc_type', 'db_table': "'disc_type'"},
@@ -119,7 +118,7 @@ class Migration(SchemaMigration):
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Disc_type']"})
         },
         'tariffication.groups': {
-            'Meta': {'object_name': 'Groups', 'db_table': "'groups'"},
+            'Meta': {'ordering': "['name']", 'object_name': 'Groups', 'db_table': "'groups'"},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'max_length': '100'}),
             'semestr': ('django.db.models.fields.CharField', [], {'default': "('1, 2', '1, 2')", 'max_length': '6'}),
@@ -153,7 +152,7 @@ class Migration(SchemaMigration):
         },
         'tariffication.tariffication': {
             'Meta': {'object_name': 'Tariffication', 'db_table': "'tariffication'"},
-            'group_plan': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Groups_plan']"}),
+            'group_plan': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'gpset'", 'to': "orm['tariffication.Groups_plan']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'teacher': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.Teachers']"}),
             'uch_plan_hour': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tariffication.UchPlanHour']"})

@@ -199,29 +199,51 @@ a {
 }
 
 
-#themes {
+#days {
     border-collapse: collapse;
     border: solid #999 1px;
     float: right;
-    margin: 0px 0px 0px 20px;
+    margin: 0px 30px 0px 20px;
 }
 
-#themes th {
+#days th {
     padding: 4px;
     border: solid #999 1px;
     background: #FF9;
 }
 
-#themes td {
+#days td {
     padding: 4px;
     border: solid #999 1px;
     text-align: center;
 }
 
-#themes td.theme {
+#days td.theme {
     font-size: 17px;
     cursor: pointer;
 }
-#themes .name {
+#days .name {
     text-align: left;
+}
+
+
+#add_theme_of_day {
+    position: absolute;
+    padding: 5px;
+    top: 10px;
+    right: 10px;
+    background: #FF9;
+    min-width: 110px;
+
+    -moz-border-radius: 0px 0px 0px 10px;
+    -webkit-border-radius: 0px 0px 0px 10px;
+    border-radius: 0px 10px 0px 10px;
+
+    -webkit-box-shadow: 5px 5px 9px 1px rgba(9, 9, 9, 0.4);
+    -moz-box-shadow: 5px 5px 9px 1px rgba(9, 9, 9, 0.4);
+    box-shadow: 5px 5px 9px 1px rgba(9, 9, 9, 0.4);
+
+    border: solid 1px #999;
+    opacity: 1;
+    z-index: 2;
 }

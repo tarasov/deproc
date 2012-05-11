@@ -111,7 +111,11 @@ def index(request):
                 else:
                     for i in range(1,6):
                         lessons[i] = ''
+<<<<<<< HEAD
+                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name, teacher.other_name)
+=======
                 t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0]), teacher.username
+>>>>>>> bf927117e93370de51d83a1987a44552c4396656
                 schedule_teacher[t] = lessons
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))

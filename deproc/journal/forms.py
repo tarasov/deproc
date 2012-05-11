@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.forms import ModelForm
-from deproc.journal.models import Assessment, Themes
+from deproc.journal.models import Assessment, Theme_of_day
 
 class ThemeForm(ModelForm):
     def as_p(self):
@@ -13,4 +13,4 @@ class ThemeForm(ModelForm):
             errors_on_separate_row = True)
 
     class Meta:
-        model = Themes
+        model = Theme_of_day

@@ -1,9 +1,11 @@
 $(function() {
     var s = 0;
     var l = 0;
-    
+
+
+
+
     $('#selMark').hide();
-    $('#newStud').hide();
     $('.del').css({'opacity': '0.2'});
 
     $('#mark td.mark').each(function() {
@@ -24,12 +26,14 @@ $(function() {
     });
     $('td.mark').hover(
         function(){
-            s = $(this).attr('s');
-            l = $(this).attr('l');
+            var expr = /(\d+)_(\d+)/;
+            student = expr.exec($(this).attr('id'))[1];
+            day = expr.exec($(this).attr('id'))[2];
+
 
             // подсветка лабораторной работы
             themeElem = '#' + l;
-            $('#themes tr').css({'background-color': '#FFF'});
+            $('#days tr').css({'background-color': '#FFF'});
             $(themeElem).css({'background-color': '#9CF'});
             // подсветка фамилии студента
             studElem = '#stud_' + s;
@@ -37,31 +41,13 @@ $(function() {
             $(studElem).css({'background-color': '#9CF'});
         },
         function(){
-            $('#themes tr').css({'background-color': '#FFF'})
+            $('#days tr').css({'background-color': '#FFF'})
             $('#mark td.name').css({'background-color': '#FFF'});
 
         }
     )
     // клик по ячейке с оценкой
     $('td.mark').click(function() {
-        
-        s = $(this).attr('s');
-        l = $(this).attr('l');
-        
-        // подсветка лабораторной работы
-        themeElem = '#' + l;
-        $('#themes tr').css({'background-color': '#FFF'});
-        $(themeElem).css({'background-color': '#9CF'});
-
-        // подсветка фамилии студента
-        studElem = '#stud_' + s;
-        $('#mark td.name').css({'background-color': '#FFF'});
-        $(studElem).css({'background-color': '#9CF'});
-
-
-        // выделяем новую ячейку
-        //$('td.mark').css({'background-color': '#FFF'});
-        //$(this).css({'background-color': '#9F9'});
 
         // перемещаем блок с оценками
         $('#selMark').show();
@@ -82,12 +68,12 @@ $(function() {
     
     // клик по оценке
     $('#selMark a').click(function() {
-        var id = '#' + s + '_' + l;
+        var id_td = '#' + student + '_' + day;
         $.get(
-            "../../mark/add/"+s+"/"+l+"/"+$(this).attr('mark')+"/",
+            'add_mark/'+ day + '/' + student + '/' + $(this).attr('mark') + '/',
             {},
             function(data) {
-                $(id).html(data);
+                $(id_td).html(data);
                 $('#selMark').hide();
             }
         );
@@ -102,78 +88,88 @@ $(function() {
         $(this).css({'background-color': '#FFF'});
     });
 
-    $('.del').mousemove(function() {
-        $(this).css({'opacity': '1'});
-    });
-
-    $('.del').mouseout(function() {
-        $(this).css({'opacity': '0.2'});
-    });
-
-    $('.del').click(function() {
-        var stud_id = $(this).attr('STUD_ID');
-        var x = '#st_' + stud_id;
-        $.get(
-            "/students/del/" + stud_id + "/",
-            {},
-            function(data) {
-                if (data == "OK") {
-                    $(x).remove();
-                }
-            }
-        );
-    });
-
-    $('#add_stud').click(function() {
-        $('#newStud').show();
-        $(this).offset(function(i, v) {
-            $('#newStud').animate({'top': v.top + 20, 'left': v.left + 20}, 1);
-        });
-    });
-
-    // добавление студента
-    $('#newStud .add_student').click(function() {
-        var l_name = $('#newStud input[name=l_name]').attr('value');
-        var f_name = $('#newStud input[name=f_name]').attr('value');
-        var s_name = $('#newStud input[name=s_name]').attr('value');
-        $.post(
-            "/students/add/",
-            {'f_name': f_name, 'l_name': l_name, 's_name': s_name},
-            function(data) {
-                $('#mark tr:last').after(data);
-                $('#newStud').hide();
-            }
-        );
-    });
-
-    // добавление лабы
-    $('.add_theme').click(function() {
-        var name = $('input[name=name]').attr('value');
-        alert(name)
-        $.post(
-            "/theme/add/",
-            {'name': name},
-            function(data) {
-                
-            }
-        );
-    });
-
-
 
 
     // Лабы
 
-    $('#themes td.theme').click(function(){
-        var theme = $(this).attr('l');
-        $('#mark td').show()
-        $('#mark th').show()
-        $('#mark td[l!='+ theme +']:not(.notHide)').hide();
-        $('#mark th[l!='+ theme +']:not(.notHide)').hide();
-    })
+    $('#add_theme_of_day').hide()
 
-    $('.themes').click(function(){
-        $('#mark th').show();
-        $('#mark td').show();
-    })
+//    $('#days td.theme').click(function(){
+//        var theme = $(this).attr('l');
+//        $('#mark td').show()
+//        $('#mark th').show()
+//        $('#mark td[l!='+ theme +']:not(.notHide)').hide();
+//        $('#mark th[l!='+ theme +']:not(.notHide)').hide();
+//    })
+
+    $('#days td.theme').click(function(){
+        var expr = /day_(\d+)/;
+        var day = expr.exec($(this).attr('id'))[1]
+
+        $('#add_theme_of_day a').attr('id', day);
+        $('#add_theme_of_day').show()
+        $(this).offset(function(i, v) {
+            $('#add_theme_of_day').animate({'top': v.top + 0, 'left': v.left + 0}, 150);
+        });
+    });
+
+
+
+
+
+    // добавление темы к дате
+    $('#add_theme_of_day a').click(function() {
+        var day = $(this).attr('id')
+        var describe = $('input[name=describe]').attr('value');
+
+//        alert('#day'+day)
+
+        $.post(
+            'add_theme/'+ day + '/',
+            {'describe': describe},
+            function(data) {
+                $('td#' + day + '.theme').html(data);
+                $('#add_theme_of_day').hide();
+            }
+        );
+    });
+
+
+    // реализовать в hover
+    $('#days td.day').mousemove(function() {
+        $(this).css({'background-color': '#5D5'});
+        $('#add_theme_of_day').hide();
+    });
+    $('#days td.day').mouseout(function() {
+        $(this).css({'background-color': '#FFF'});
+    });
+
+
+
+
+
+    // for csfr
+    $('html').ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // Only send the token to relative URLs i.e. locally.
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+
+
 });

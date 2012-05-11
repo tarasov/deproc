@@ -1,0 +1,70 @@
+{% extends "journal/index.html" %}
+
+{% block styles %}
+   {% endblock %}
+
+
+{% block content %}
+    <div id="selMark" class="span2">
+        <div class="close">
+            <a href="#"><img src="{{ MEDIA_URL }}img/close.png" align="absmiddle"></a>
+        </div>
+        <a class="mark_2" mark="2" href="#">2 (не о чем)</a>
+        <a class="mark_3" mark="3" href="#">3 (так се)</a>
+        <a class="mark_4" mark="4" href="#">4 (нормально)</a>
+        <a class="mark_5" mark="5" href="#">5 (круто)</a>
+        <a class="mark_0" mark="0" href="#">clear <img src="{{ MEDIA_URL }}img/clear.png" align="absmiddle"></a>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+
+            <table id = "mark"  class="span7">
+                <tr>
+                    <th>
+                        ФИО
+                    </th>
+                    {% for theme in themes %}
+                        <th class="mark" l="{{ theme.day.id }}">{{ theme.day.day.day }}</th>
+                    {% endfor %}
+                </tr>
+
+                {% for tr in table %}
+                    <tr>
+                        {# Студент #}
+                        <td class="name">{{ tr.student }}</td>
+                        {% for mark in tr.marks %}
+                            <td class="mark {{ mark.id }}" id="{{ tr.student.id }}_{{ mark.0 }}">{{ mark.1|join:', ' }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </table>
+
+
+            <div id="add_theme_of_day">
+                <form action="" method="post">{% csrf_token %}
+                    <input type="text" name="describe" style="min-height: 30px; width: 100%;"/>
+                    <a href="#"><img src="{{ MEDIA_URL }}img/add.png" align="absmiddle"></a>
+                </form>
+            </div>
+
+
+            <table id="days" class="span4">
+                <tr>
+                    <th class="span1">#</th>
+                    <th class="name" style="text-align: center;">
+                       Темы
+                    </th>
+                </tr>
+                {% for theme in themes %}
+                    <tr id="{{ theme.id }}">
+                        <td>{{ theme.day.day.day }}</td>
+                        <td id="day_{{ theme.id }}" class="theme">{{ theme.describe }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}
