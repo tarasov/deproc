@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.template.context import RequestContext
 from itertools import chain
@@ -11,9 +12,11 @@ def schedule(request):
     cal = forms.MyCalendarForm()
     return render_to_response('schedule/schedule.html', locals(), context_instance=RequestContext(request))
 
-def edit_lesson(request, year, month, day, group, lesson):
+def lesson(request, year, month, day, group, lesson):
     print year, month, day, group, lesson
-    return render_to_response('schedule/edit.html', locals(), context_instance=RequestContext(request))
+    tariffs = main_models.Tariffication.objects.filter(group_plan__group__name = group).select_related("group_plan__group__name", "uch_plan_hour__uch_plan__disc__name")
+    print tariffs
+    return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
 
 def index(request):

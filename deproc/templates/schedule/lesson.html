@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/schedule.js"></SCRIPT>
+{% endblock %}
+
+{% block main %}
+    <a href="/">назад</a><br>
+    <br><br><br>
+
+    <h2> {{ day }}.{{ month }}.{{ year }},</h2>  <span style="font-size: 20px;">группа <b>{{ group }}</b></span>
+    <br/><br/><br/>
+
+
+    <div class="row-fluid">
+        <table class="schedule span11" id="schedule">
+            <tbody>
+            <tr class="nso">
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> Дисциплина / Преподаватель </b></th>
+                <th align="left"><b> Лек </b></th>
+                <th align="left"><b> Практ </b></th>
+                <th align="left"><b> Конс </b></th>
+                <th align="left"><b> Экзам </b></th>
+                <th align="left"><b> Курс </b></th>
+                <th align="left"><b> Пров </b></th>
+            </tr>
+
+            {% for tariff in tariffs %}
+
+                <tr>
+                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ tariff.uch_plan_hour.uch_plan.disc.name }} / {{ tariff.teacher }}</b></div></td>
+                    <td class="group" id="" align="left"> <a href=""><div><b>{{ tariff.uch_plan_hour.count_hours }}</b></div></a> </td>
+                </tr>
+
+            {% endfor %}
+
+            <tr class="nso">
+                <th align="left"><b> # </b></th>
+                <th align="left"><b> итого </b></th>
+                <th align="left"><b> 1 </b></th>
+                <th align="left"><b> 2 </b></th>
+                <th align="left"><b> 3 </b></th>
+                <th align="left"><b> 4 </b></th>
+                <th align="left"><b> 5 </b></th>
+                <th align="left"><b> 6 </b></th>
+            </tr>
+{##}
+{#            {% for key, values in schedule_teacher.items %}#}
+{##}
+{#                <tr>#}
+{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
+{#                    <td class="osn" align="left"><b> {{ key }} </b></td>#}
+                    {#                    {% if key == %}#}
+{#                    {% for n, lesson in values.items %}#}
+{##}
+{#                        <td align="left"><b> {{ lesson }} </b></td>#}
+{##}
+{#                    {% endfor %}#}
+{#                </tr>#}
+{##}
+{#            {% endfor %}#}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
