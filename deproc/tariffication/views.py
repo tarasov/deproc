@@ -107,5 +107,5 @@ def pages(request, actions=actions):
             if th:
                 tr += (getattr(value, th[0]), )
         table += (tr + actions, )
-
+    print table
     return render_to_response('tariffication/pages.html', locals(), context_instance=RequestContext(request))

@@ -47,7 +47,9 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
-#ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+# для отображения иконки календаря
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 STATICFILES_DIRS = (
     #

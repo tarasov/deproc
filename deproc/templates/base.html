@@ -81,15 +81,20 @@
                     <ul class="nav nav-list">
                         <li class="nav-header">Пользовательские</li>
                         <li class="active"><a href="/">Главная</a></li>
-                        <li><a href="{% url schedule %}">Расписание</a></li>
                         {% block sidebar %}
                         {% endblock %}
+                        <li class="nav-header">Меню</li>
+                        <li><a href="#">Студентам</a></li>
+                        <li><a href="#">Преподавателям</a></li>
+                        <li><a href="#">Отчеты</a></li>
 
                         <li class="nav-header">Администратор</li>
                         <li><a href="{% url tariffication %}">Тарификация</a></li>
+                        <li><a href="{% url schedule %}">Расписание</a></li>
                         {% for page in pages %}
                             <li><a href="/{{ page.0 }}/">{{ page.1 }}</a></li>
                         {% endfor %}
+
                     </ul>
                 </div><!--/.well -->
             </div><!--/span-->
