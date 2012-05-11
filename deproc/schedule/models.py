@@ -37,10 +37,17 @@ class Schedule(models.Model):
         (5, u'5 пара'),
         )
 
+    HOUR_CHOICES = (
+        (1, u'1 час'),
+        (2, u'2 часа'),
+        )
+
     plan = models.ForeignKey(Tariffication, verbose_name=u"тарификация")
     day = models.ForeignKey(Schedule_day, verbose_name=u"день")
     classroom = models.ForeignKey(Classroom, verbose_name=u"кабинет", null=True, blank=True)
     num_less = models.IntegerField(verbose_name=u"номер", choices=LESSON_CHOICES)
+    hour_type = models.IntegerField(verbose_name=u"часов в паре", choices=HOUR_CHOICES)
+    comment = models.TextField(verbose_name=u"комментарий", null=True, blank=True)
 
     class Meta:
         verbose_name = u'расписание'

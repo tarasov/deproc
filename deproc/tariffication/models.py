@@ -33,6 +33,7 @@ class Profile(User):
     class Meta:
         verbose_name = u'пользователь'
         verbose_name_plural = u'пользователи'
+        ordering = ['last_name']
         db_table = 'profile'
 
     def get_full_name(self):
@@ -195,6 +196,8 @@ class Speciality(models.Model):
 
 class Disc_type(models.Model):
     name = models.CharField(u"Тип дисциплины", max_length=150, null=False, blank=False)
+#    short_name = models.CharField(u"Короткое название", max_length=150, null=True, blank=True)
+#    color = models.CharField(u"Цвет дисциплины", max_length=150, null=True, blank=True)
 
     class Meta:
         verbose_name = u'тип дисциплины'

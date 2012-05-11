@@ -28,6 +28,10 @@ table.schedule .group_lesson {
     padding-right: 5px;
 }
 
+table.schedule .teacher {
+    padding-left: 5px;
+}
+
 table.tariffication tr, table.group-plan tr, table.schedule tr {
     height: 25px;
     border: 2px solid #ffebcd;

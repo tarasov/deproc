@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.core.exceptions import MultipleObjectsReturned
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.template.context import RequestContext
@@ -20,20 +21,20 @@ def lesson(request, year, month, day, group, lesson):
 
 
 def index(request):
-    groups = main_models.Groups.objects.all().order_by('name')
+    groups = main_models.Groups.objects.all()
     teacher_list = main_models.Teachers.objects.all()
-    schedule_queryset = sch_models.Schedule.objects.all().select_related(
-        "plan__uch_plan_hour__uch_plan__disc",
-        "plan__group_plan__group",
-        "plan__teacher",
-    )
+    schedule_queryset = sch_models.Schedule.objects.all().select_related()
+#        "plan__uch_plan_hour__uch_plan__disc",
+#        "plan__group_plan__group",
+#        "plan__teacher",
+#    )
 
     if request.method == 'GET':
         if 'day' in request.GET and request.GET['day']:
             date = request.GET['day']
             date = date.split('.')
             new_date = ('%s-%s-%s' % tuple(date[::-1]))
-            schdl_day = sch_models.Schedule_day.objects.all()
+            schdl_day = sch_models.Schedule_day.objects.all().select_related()
             new_date = datetime.datetime.strptime(new_date, '%Y-%m-%d')
             if not schdl_day.filter(day = str(new_date.date())):
                 this_day = schdl_day.create(day = new_date.date())
@@ -56,6 +57,7 @@ def index(request):
 
 #            a = get_list_or_404(sch_models.Schedule, day = this_day)
 #            print a
+            #                                sc = sch.get(num_less = i)
 
             for group in groups:
                 lessons = {}
@@ -66,10 +68,23 @@ def index(request):
                 if sch:
                     for i in range(1,6):
                         if (sch.filter(num_less = i)):
-                            sc = sch.get(num_less = i)
-                            teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
-                            type_hour = sc.plan.uch_plan_hour.type
-                            lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, type_hour
+                            try:
+                                sc = get_object_or_404(sch, num_less = i)
+                            except MultipleObjectsReturned:
+                                sc = sch.filter(num_less = i)
+                                j = 1
+                                ls = {}
+                                for ss in sc:
+                                    teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
+                                    type_hour = ss.plan.uch_plan_hour.get_type_display()[0]
+                                    ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, type_hour
+                                    j += 1
+                                lessons[i] = ls
+                            else:
+                                sc = sch.get(num_less = i)
+                                teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
+                                type_hour = sc.plan.uch_plan_hour.get_type_display()[0]
+                                lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, type_hour
                         else:
                             lessons[i] = ''
                 else:
@@ -77,6 +92,7 @@ def index(request):
                         lessons[i] = ''
 
                 schedule_group[group.name] = lessons
+
 
             for teacher in teacher_list:
                 lessons = {}
@@ -98,5 +114,4 @@ def index(request):
                 t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0]), teacher.username
                 schedule_teacher[t] = lessons
 
-#                TODO отчет по провёденным парам, (на группу нажимаешь, там все тарификации, этой группы, с подсчетом часов, на них нажимаешь
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
