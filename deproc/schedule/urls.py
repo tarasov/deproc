@@ -9,4 +9,5 @@ urlpatterns = patterns('deproc.schedule.views',
     url(r'^calendar/$', 'schedule', name='schedule'),
     url(r'^index$', 'index', name='schedule_index'),
     url(r'^lesson/(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})/(?P<group>\d{3})/(?P<lesson>\d{1})/$', 'lesson'),
+    url(r'^lesson/(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})/(?P<group>\d{3})/(?P<lesson>\d{1})/add/(?P<plan>\d+)/$', 'add_lesson'),
 )

@@ -18,33 +18,47 @@
             <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> Дисциплина / Преподаватель </b></th>
-                <th align="left"><b> Лек </b></th>
-                <th align="left"><b> Практ </b></th>
-                <th align="left"><b> Конс </b></th>
-                <th align="left"><b> Экзам </b></th>
-                <th align="left"><b> Курс </b></th>
-                <th align="left"><b> Пров </b></th>
+{#                <th align="left"><b> Лек </b></th>#}
+{#                <th align="left"><b> Практ </b></th>#}
+{#                <th align="left"><b> Конс </b></th>#}
+{#                <th align="left"><b> Экзам </b></th>#}
+{#                <th align="left"><b> Курс </b></th>#}
+{#                <th align="left"><b> Пров </b></th>#}
             </tr>
 
-            {% for tariff in tariffs %}
+            {% for tr in table %}
 
                 <tr>
                     <td align="left"><b> {{ forloop.counter }} </b></td>
-                    <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ tariff.uch_plan_hour.uch_plan.disc.name }} / {{ tariff.teacher }}</b></div></td>
-                    <td class="group" id="" align="left"> <a href=""><div><b>{{ tariff.uch_plan_hour.count_hours }}</b></div></a> </td>
+                    <td id="group_{{ tr }}" class="group osn" align="left">
+
+                        <div>
+                            <b>
+                                {% for key in tr.keys %}
+                                    {{ key.0 }} - {{ key.1 }}
+                                {% endfor %}
+                            </b>
+                        </div>
+                    </td>
+                    {% for value in tr.values %}
+                        {% for v in value %}
+                            <td class="group" id="" align="left"> <a href="add/{{ v.3 }}"><div><b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b></div></a> </td>
+                        {% endfor %}
+                    {% endfor %}
                 </tr>
 
             {% endfor %}
 
+
             <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> итого </b></th>
-                <th align="left"><b> 1 </b></th>
-                <th align="left"><b> 2 </b></th>
-                <th align="left"><b> 3 </b></th>
-                <th align="left"><b> 4 </b></th>
-                <th align="left"><b> 5 </b></th>
-                <th align="left"><b> 6 </b></th>
+{#                <th align="left"><b> 1 </b></th>#}
+{#                <th align="left"><b> 2 </b></th>#}
+{#                <th align="left"><b> 3 </b></th>#}
+{#                <th align="left"><b> 4 </b></th>#}
+{#                <th align="left"><b> 5 </b></th>#}
+{#                <th align="left"><b> 6 </b></th>#}
             </tr>
 {##}
 {#            {% for key, values in schedule_teacher.items %}#}

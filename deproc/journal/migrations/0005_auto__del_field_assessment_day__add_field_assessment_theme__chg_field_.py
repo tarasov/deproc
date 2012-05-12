@@ -15,7 +15,7 @@ class Migration(SchemaMigration):
         db.add_column('assessment', 'theme', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['journal.Theme_of_day']), keep_default=False)
 
         # Changing field 'Theme_of_day.day'
-        db.alter_column('journal_day', 'day_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule']))
+#        db.alter_column('journal_day', 'day_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule']))
 
 
     def backwards(self, orm):
@@ -24,10 +24,10 @@ class Migration(SchemaMigration):
         db.add_column('assessment', 'day', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day']), keep_default=False)
 
         # Deleting field 'Assessment.theme'
-        db.delete_column('assessment', 'theme_id')
+#        db.delete_column('assessment', 'theme_id')
 
         # Changing field 'Theme_of_day.day'
-        db.alter_column('journal_day', 'day_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day']))
+#        db.alter_column('journal_day', 'day_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.Schedule_day']))
 
 
     models = {

@@ -1,33 +1,78 @@
 # -*- coding: utf-8 -*-
 import datetime
+from telepathy._generated.errors import DoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.template.context import RequestContext
 from itertools import chain
 from deproc.tariffication import models as main_models
 from deproc.schedule import models as sch_models
 from deproc.schedule import forms
+from django.db.models import Count
+
 
 def schedule(request):
     cal = forms.MyCalendarForm()
     return render_to_response('schedule/schedule.html', locals(), context_instance=RequestContext(request))
 
+def add_lesson(request, year, month, day, group, lesson, plan):
+#    print plan
+    this_day = sch_models.Schedule_day.objects.get(
+        day__day = day,
+        day__month = month,
+        day__year = year
+    )
+    this_plan = main_models.Tariffication.objects.get(pk = plan)
+    print this_plan
+    sch_models.Schedule.objects.create(plan = this_plan, day = this_day, num_less = lesson, hour_type = 2)
+    return HttpResponseRedirect('/schedule/index?day=' + day + '.' + month + '.' + year)
+
 def lesson(request, year, month, day, group, lesson):
-    print year, month, day, group, lesson
     tariffs = main_models.Tariffication.objects.filter(group_plan__group__name = group).select_related("group_plan__group__name", "uch_plan_hour__uch_plan__disc__name")
-    print tariffs
+    choices = main_models.choice_typeh
+
+    table = []
+    cba = ''
+
+
+    for tariff in tariffs:
+        abc = main_models.Tariffication.objects.filter(
+            teacher = tariff.teacher,
+        ).select_related()
+        if tariff.teacher != cba:
+            td = []
+            tr = {}
+            do_position = 0
+            for ab in abc:
+
+                sch = sch_models.Schedule.objects.filter(plan = ab)
+                counthrs = 0
+
+                for sc in sch:
+                    counthrs += sc.hour_type
+
+#                cnt = sch_models.Schedule.objects.filter(plan = ab).count()
+#                print cnt
+
+
+                a = ab.uch_plan_hour.get_type_display(), ab.uch_plan_hour.count_hours, counthrs, ab.pk
+                td.append(a)
+                tr[ab.teacher, ab.uch_plan_hour.uch_plan] = td
+            table.append(tr)
+        cba = tariff.teacher
+
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
 
 def index(request):
     groups = main_models.Groups.objects.all()
     teacher_list = main_models.Teachers.objects.all()
-    schedule_queryset = sch_models.Schedule.objects.all().select_related()
-#        "plan__uch_plan_hour__uch_plan__disc",
-#        "plan__group_plan__group",
-#        "plan__teacher",
-#    )
+    schedule_queryset = sch_models.Schedule.objects.all().select_related(
+        "plan__uch_plan_hour__uch_plan__disc",
+        "plan__group_plan__group",
+        "plan__teacher",
+    )
 
     if request.method == 'GET':
         if 'day' in request.GET and request.GET['day']:

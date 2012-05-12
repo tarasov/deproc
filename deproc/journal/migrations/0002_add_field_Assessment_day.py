@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'Assessment.day'
-        db.add_column('assessment', 'day', self.gf('django.db.models.fields.related.ForeignKey')(default=datetime.date(2012, 5, 7), to=orm['journal.Journal_day']), keep_default=False)
+        db.add_column('assessment', 'day', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['journal.Journal_day']), keep_default=False)
 
 
     def backwards(self, orm):

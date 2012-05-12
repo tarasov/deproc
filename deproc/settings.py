@@ -10,29 +10,27 @@ root = os.path.split(PROJECT_ROOT)[0]
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
-
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.BCryptPasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.SHA1PasswordHasher',
-    'django.contrib.auth.hashers.MD5PasswordHasher',
-    'django.contrib.auth.hashers.CryptPasswordHasher',
-    )
+#
+#PASSWORD_HASHERS = (
+#    'django.contrib.auth.hashers.BCryptPasswordHasher',
+#    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+#    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+#    'django.contrib.auth.hashers.SHA1PasswordHasher',
+#    'django.contrib.auth.hashers.MD5PasswordHasher',
+#    'django.contrib.auth.hashers.CryptPasswordHasher',
+#    )
 
 MANAGERS = ADMINS
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'deproc',
-        'USER': 'tarasov',
-        'PASSWORD': 'dpk',
-        'OPTIONS': {
-            'init_command': 'SET storage_engine=INNODB',
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'read_default_file': root + '/run/db_gavrilov.conf',
+                'init_command': 'SET storage_engine=INNODB',
+                },
             },
-        },
 }
 
 TIME_ZONE = 'Europe/Moscow'
