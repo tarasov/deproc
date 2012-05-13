@@ -1,4 +1,5 @@
 deproc/settings.py
+*settings.py
 .idea
 .idea/*
 *.pyc

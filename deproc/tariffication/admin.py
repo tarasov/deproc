@@ -1,6 +1,8 @@
+from django.contrib import admin
 from django.contrib.admin import ModelAdmin, site
 from django.contrib.auth.models import User, Group
 from django.contrib.sites.models import Site
+from django.utils.regex_helper import Choice
 from deproc.tariffication import models
 
 __author__ = 'tarasov'
