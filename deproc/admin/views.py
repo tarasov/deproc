@@ -26,11 +26,12 @@ def add_tariffication(request):
             else:
                 hour = 0
             uch_plan_pk = int(request.POST['uch_plan'])
+            teacher = request.POST['teacher']
             uch_plan = models.UchPlan.objects.get(pk=uch_plan_pk)
-            if models.UchPlanHour.objects.filter(uch_plan=uch_plan, type = choice[0]):
+            if models.UchPlanHour.objects.filter(uch_plan=uch_plan, tariffication__teacher = teacher, type = choice[0]):
                 # уже создан, тогда обновляем часы
                 # TODO пересмотреть обновление данных
-                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, type = choice[0]).pk
+                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, tariffication__teacher = teacher, type = choice[0]).pk
                 uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type = choice[0], count_hours = hour)
                 uch_plan_hour.count_hour = hour
                 uch_plan_hour.save()
