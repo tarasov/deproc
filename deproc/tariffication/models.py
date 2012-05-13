@@ -74,7 +74,7 @@ class Students(Profile):
 
 
 class Teachers(Profile):
-    cabinet = models.IntegerField("Кабинет")
+    cabinet = models.ForeignKey(Classroom, verbose_name = "Кабинет", null = True, blank = True)
 
     class Meta:
         verbose_name = u'преподователя'
@@ -253,13 +253,26 @@ class UchPlan(models.Model):
         return u'%s / %s / %s семестр' % (self.disc, self.spec.name, self.semestr)
 
 
+class TypeHour(models.Model):
+    name = models.CharField(u'название', max_length=20)
+    short_name = models.CharField(u'сокращение', max_length=6)
+
+    class Meta:
+        verbose_name = u'тип часа'
+        verbose_name_plural = u'типы часов'
+        db_table = 'typehour'
+
+    def __unicode__(self):
+        return u'%s' % self.short_name
+
+
 class UchPlanHour(models.Model):
     """
     Учебный план часа, тут указаны типы часов и их количество у определенного учебного плана
     """
     uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100)
-    # TODO rename to typeh
     type = models.CharField(u"Тип часа", max_length=100, null=True, blank=True, choices=choice_typeh) # лекция, практика, консультация
+    type_hour = models.ForeignKey(TypeHour, verbose_name = u"Тип часа") # лекция, практика, консультация
     count_hours = models.IntegerField(u"Количество часов", max_length=100)
 
     class Meta:
@@ -361,3 +374,5 @@ class Tariffication(models.Model):
 
     def __unicode__(self):
         return u'%s %s %s' % (Profile.objects.get(pk=self.teacher), self.group_plan, self.uch_plan_hour)
+
+
