@@ -31,7 +31,7 @@ def lesson(request, year, month, day, group, lesson):
 
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
-    ).select_related()
+    )
     choices = main_models.choice_typeh
 
     table = []
@@ -41,7 +41,7 @@ def lesson(request, year, month, day, group, lesson):
 
         abc = tariffs.filter(
             teacher = tariff.teacher,
-        ).select_related()
+        )
 
         if tariff.teacher != cba:
             td = []
@@ -53,7 +53,7 @@ def lesson(request, year, month, day, group, lesson):
                 sch = sch_models.Schedule.objects.filter(
                     plan = ab,
                     plan__uch_plan_hour__uch_plan__spec = ab.uch_plan_hour.uch_plan.spec
-                ).select_related()
+                )
                 counthrs = 0
 #                sch = sch_models.Schedule.objects.filter(plan = ab).annotate(hrs=Count('hour_type'))
 #                print sch
@@ -89,7 +89,11 @@ def lesson(request, year, month, day, group, lesson):
 def index(request):
     groups = main_models.Groups.objects.all()
     teacher_list = main_models.Teachers.objects.all()
-    schedule_queryset = sch_models.Schedule.objects.all().select_related()
+    schedule_queryset = sch_models.Schedule.objects.all().select_related(
+        "plan__uch_plan_hour__uch_plan__disc",
+        "plan__group_plan__group",
+        "plan__teacher",
+    )
     if request.method == 'GET':
         if 'day' in request.GET and request.GET['day']:
             date = request.GET['day']
@@ -124,6 +128,7 @@ def index(request):
                     plan__group_plan__group = group,
                     day = this_day
                 )
+
                 if sch:
                     for i in range(1,6):
                         if (sch.filter(num_less = i)):
@@ -135,15 +140,15 @@ def index(request):
                                 ls = {}
                                 for ss in sc:
                                     teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
-                                    type_hour = ss.plan.uch_plan_hour.get_type_display()[0]
-                                    ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, type_hour
+                                    hourtype = ss.plan.uch_plan_hour.get_type_display()[0]
+                                    ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
                             else:
                                 sc = sch.get(num_less = i)
                                 teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
-                                type_hour = sc.plan.uch_plan_hour.get_type_display()[0]
-                                lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, type_hour
+                                hourtype = sc.plan.uch_plan_hour.get_type_display()[0]
+                                lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, hourtype
                         else:
                             lessons[i] = ''
                 else:
@@ -152,6 +157,7 @@ def index(request):
 
                 schedule_group[group.name] = lessons
 
+            print teacher_list
 
             for teacher in teacher_list:
                 lessons = {}
@@ -170,15 +176,15 @@ def index(request):
                                 ls = {}
                                 for tt in tc:
                                     teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
-                                    type_hour = tt.plan.uch_plan_hour.get_type_display()[0]
-                                    ls[j] = tt.plan.uch_plan_hour.uch_plan.disc, teach, type_hour
+                                    hourtype = tt.plan.uch_plan_hour.get_type_display()[0]
+                                    ls[j] = tt.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
                             else:
                                 tc = tch.get(num_less = i)
                                 teach = '%s %s. %s.' % (tc.plan.teacher.last_name, tc.plan.teacher.first_name[0], tc.plan.teacher.other_name[0])
-                                type_hour = tc.plan.uch_plan_hour.get_type_display()[0]
-                                lessons[i] = tc.plan.uch_plan_hour.uch_plan.disc, tc.plan.group_plan.group, type_hour
+                                hourtype = tc.plan.uch_plan_hour.get_type_display()[0]
+                                lessons[i] = tc.plan.uch_plan_hour.uch_plan.disc, tc.plan.group_plan.group, hourtype
                         else:
                             lessons[i] = ''
                 else:

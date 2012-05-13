@@ -23,7 +23,7 @@
             {% for key, values in schedule_group.items %}
 
                 <tr>
-                    <td id="group_{{ key }}" class="group" align="center"> <div><b> {{ forloop.counter }} </b></td>
+                    <td id="group_{{ key }}" class="group" align="center"> <div><b class="forloop"> {{ forloop.counter }} </b></div></td>
                     <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key }}</b></div></td>
 
                     {% for n, lesson in values.items %}
@@ -56,9 +56,9 @@
             {% for key, values in schedule_teacher.items %}
 
                 <tr>
-                    <td id="group_{{ key }}" class="group" align="center"> <div><b> {{ forloop.counter }} </b></td>
+                    <td id="group_{{ key }}" class="group" align="center"> <div> <b class="forloop"> {{ forloop.counter }} </b></div></td>
                     <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key.0 }}</b></div></td>
-                    {#                    {% if key == %}#}
+
                     {% for n, lesson in values.items %}
                         {% if lesson == ''%}
                             <td class="group group_{{ key.1 }}" id="lesson_{{ lesson.pk }}" gr="{{ key.1 }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key.1 }}/{{ forloop.counter }}/"><div><b>-</b></div></a> </td>
