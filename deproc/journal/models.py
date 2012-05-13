@@ -17,7 +17,7 @@ class Types_themes(models.Model):
 
 
 class Theme_of_day(models.Model):
-    day = models.ForeignKey(Schedule, verbose_name='День') # день из расписания
+    day_of_schedule = models.ForeignKey(Schedule, verbose_name='День') # день из расписания
     describe = models.CharField("Название", max_length=255, null = False, blank = False)
 
     class Meta:
@@ -32,7 +32,7 @@ class Theme_of_day(models.Model):
 class Assessment(models.Model):
     mark = models.IntegerField("Оценка", null=False, blank=False)
     student = models.ForeignKey(main_models.Students, verbose_name='Студент')
-    theme = models.ForeignKey(Theme_of_day, verbose_name='Тема занятия')
+    theme_of_day = models.ForeignKey(Theme_of_day, verbose_name='Тема занятия')
     date_pub = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -13,7 +13,7 @@ class Schedule_day(models.Model):
         db_table = 'schedule_day'
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.day, self.real)
+        return u'%s' % (self.day.strftime('%m.%d'), )
 
 
 class Schedule(models.Model):

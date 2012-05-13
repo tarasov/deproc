@@ -24,13 +24,15 @@ MANAGERS = ADMINS
 
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'OPTIONS': {
-                'read_default_file': root + '/run/db_gavrilov.conf',
-                'init_command': 'SET storage_engine=INNODB',
-                },
-            },
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'deproc',
+        'USER': 'tarasov',
+        'PASSWORD': 'dpk',
+        'OPTIONS': {
+            'init_command': 'SET storage_engine=INNODB',
+        },
+    },
 }
 
 TIME_ZONE = 'Europe/Moscow'

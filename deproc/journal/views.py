@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db.models.aggregates import Count
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
@@ -15,22 +16,41 @@ def group(request, id_group, id_discipline):
 
     current_group = get_object_or_404(Groups, pk=id_group)
     current_discipline = get_object_or_404(Discipline, pk=id_discipline)
+    user = request.user
 
     group = get_object_or_404(Groups_stud, group=current_group)
+    days_of_schedule = Schedule.objects.filter(plan__teacher=user).order_by('day')[:10]
     students = group.student.all()
-    themes = Theme_of_day.objects.all()
+    journal_days = []
+    for day_of_schedule in days_of_schedule:
+        theme = Theme_of_day.objects.filter(day_of_schedule__day_id=day_of_schedule.day.id)
+        if theme:
+            journal_days.append({
+                'id': day_of_schedule.id,
+                'day': day_of_schedule.day.day,
+                'describe': theme[0].describe
+            })
+        else:
+            journal_days.append({
+                'id': day_of_schedule.id,
+                'day': day_of_schedule.day.day,
+                'describe': ''
+            })
+
+    themes = Theme_of_day.objects.filter()
     table = []
     for student in students:
         journal = {}
         journal['student'] = student
         journal['marks'] = []
-        for theme in themes:
-            marks = Assessment.objects.filter(student=student, theme=theme)
+        for day_of_schedule in days_of_schedule:
+            theme = Theme_of_day.objects.filter(day_of_schedule=day_of_schedule)
+            marks = Assessment.objects.filter(student=student, theme_of_day=theme)
             if marks:
                 marks_of_day = [int(mark.mark) for mark in marks]
-                journal['marks'].append( (theme.pk, marks_of_day,) )
+                journal['marks'].append((day_of_schedule.id, marks_of_day,))
             else:
-                journal['marks'].append( (theme.pk, '',) )
+                journal['marks'].append( (day_of_schedule.id, '',) )
         table.append(journal)
     return render_to_response('journal/journal.html', locals(), context_instance=RequestContext(request))
 
@@ -41,15 +61,15 @@ def add_mark(request, group, discipline, id_day, id_student, mark):
     """
     if request.method == 'GET':
         id_student, id_day, mark = int(id_student), int(id_day), int(mark),
-        day = get_object_or_404(Schedule_day, pk=id_day)
+        schedule_day = get_object_or_404(Schedule, pk=id_day)
+        theme, created = Theme_of_day.objects.get_or_create(day_of_schedule=schedule_day, defaults = {'describe': ''})
         student = get_object_or_404(Students, pk=id_student)
-#        Assessment.objects.filter(student=student, day=day).delete()
         if mark != "0":
-            assessment = Assessment(mark = mark, student = student, day=day)
+            assessment = Assessment(mark = mark, student = student, theme_of_day = theme)
             assessment.save()
             return HttpResponse(mark)
         else:
-            Assessment.objects.filter(student = student, day = day).delete()
+            Assessment.objects.filter(student = student, theme_of_day = theme).delete()
             return HttpResponse("")
     else:
         return HttpResponse("")

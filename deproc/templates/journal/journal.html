@@ -24,8 +24,8 @@
                     <th>
                         ФИО
                     </th>
-                    {% for theme in themes %}
-                        <th class="mark" l="{{ theme.day.id }}">{{ theme.day.day.day }}</th>
+                    {% for day in journal_days %}
+                        <th class="mark" l="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
                     {% endfor %}
                 </tr>
 
@@ -56,12 +56,18 @@
                        Темы
                     </th>
                 </tr>
-                {% for theme in themes %}
-                    <tr id="{{ theme.id }}">
-                        <td>{{ theme.day.day.day }}</td>
-                        <td id="day_{{ theme.id }}" class="theme">{{ theme.describe }}</td>
+                {% for day in journal_days %}
+                    <tr id="{{ day.id }}">
+                        <td>{{ day.day }}</td>
+                        <td id="day_{{ day.id }}" class="theme">{{ day.describe }}</td>
                     </tr>
                 {% endfor %}
+{#                {% for theme in themes %}#}
+{#                    <tr id="{{ theme.id }}">#}
+{#                        <td>{{ theme.day.day.day }}</td>#}
+{#                        <td id="day_{{ theme.id }}" class="theme">{{ theme.describe }}</td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
             </table>
 
         </div>

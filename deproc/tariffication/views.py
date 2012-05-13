@@ -29,8 +29,6 @@ actions = (
     'info', 'edit', 'delete'
 )
 
-
-
 def wellcome(request):
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 
