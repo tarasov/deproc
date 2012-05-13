@@ -48,9 +48,8 @@ def plan_group(request):
     return render_to_response('tariffication/group_plan.html', locals(), context_instance=RequestContext(request))
 
 def tariffication(request):
-    choices = choice_typeh
-
     # делаем цикл по семестрам для фильтрации тариффикации
+    choices = models.TypeHour.objects.all()
     teachers = models.Teachers.objects.all()
     groups = models.Groups.objects.all()
     disciplines = models.Discipline.objects.all()
@@ -59,7 +58,8 @@ def tariffication(request):
     for teacher in teachers:
         tariffications = teacher.get_tariffication()
         for i, (teacher, group, discipline, semestr, count_hours, type_of_hour)  in enumerate(tariffications):
-            if i % 4 == 0:
+            # каждый первый элемент, это общие данные для всех типов часа
+            if i % choices.count() == 0:
                 tr = {
                     'teacher': teacher,
                     'group': group,
@@ -69,9 +69,8 @@ def tariffication(request):
                     }
             else:
                 tr['hours'].append(count_hours)
-                # проверяем, все ли 4 типа часа заполнились
-                # если да, то записываем
-                if i % 3 == 0:
+                # проверяем, все ли типы часов добавились к строке и если да, то создаем новую строку
+                if i % choices.count() - 1 == 0:
                     table.append(tr)
 
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))

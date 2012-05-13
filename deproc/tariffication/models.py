@@ -18,6 +18,8 @@ class Classroom(models.Model):
         return u'%s' % self.number
 
 
+# TODO все кортежи раскидать по классам и потихоньку применять к проекту или создать модели (наилучший вариант)
+# например пола всего 2, по этому можно кинуть в класс Profike
 
 choise_sex = (
     ('M', 'мужчина',),
@@ -254,7 +256,7 @@ class UchPlan(models.Model):
 
 
 class TypeHour(models.Model):
-    name = models.CharField(u'название', max_length=20)
+    name = models.CharField(u'название', max_length=40)
     short_name = models.CharField(u'сокращение', max_length=6)
 
     class Meta:
@@ -272,7 +274,7 @@ class UchPlanHour(models.Model):
     """
     uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100)
     type = models.CharField(u"Тип часа", max_length=100, null=True, blank=True, choices=choice_typeh) # лекция, практика, консультация
-    type_hour = models.ForeignKey(TypeHour, verbose_name = u"Тип часа") # лекция, практика, консультация
+    type_hour = models.ForeignKey(TypeHour, verbose_name = u"Тип часа")
     count_hours = models.IntegerField(u"Количество часов", max_length=100)
 
     class Meta:
