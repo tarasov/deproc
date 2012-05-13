@@ -7,4 +7,21 @@
  */
 $(function() {
 
+    $('b.type_hour').each(function() {
+        var m = $.trim($(this).html());
+
+        if (m == 'Л') {
+            $(this).css({'color': '#dc143c'});
+        }
+        if (m == 'П') {
+            $(this).css({'color': '#df73ff'});
+        }
+        if (m == 'К') {
+            $(this).css({'color': '#77dd77'});
+        }
+        if (m == 'Э') {
+            $(this).css({'color': '#ff7518'});
+        }
+    });
+
 });

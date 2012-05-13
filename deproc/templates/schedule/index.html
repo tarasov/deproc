@@ -23,7 +23,7 @@
             {% for key, values in schedule_group.items %}
 
                 <tr>
-                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td id="group_{{ key }}" class="group" align="center"> <div><b> {{ forloop.counter }} </b></td>
                     <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key }}</b></div></td>
 
                     {% for n, lesson in values.items %}
@@ -33,12 +33,12 @@
                             <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/">
                                 <div>
                                 {% for kl, ls in lesson.items %}
-                                    <b>{{ ls.0 }}</b><b class="type_hour">{{ ls.2 }}</b> <span class="teacher">{{ ls.1 }}</span><br/>
+                                    <b>{{ ls.0 }}</b><b class="type_hour" m="{{ ls.2 }}">{{ ls.2 }}</b> <span class="teacher">{{ ls.1 }}</span><br/>
                                 {% endfor %}
                                 </div></a>
                             </td>
                         {% else %}
-                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>{{ lesson.0 }}</b><b class="type_hour">{{ lesson.2 }}</b><br/>{{ lesson.1 }}</div></a> </td>
+                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>{{ lesson.0 }}</b><b class="type_hour" m="{{ lesson.2 }}">{{ lesson.2 }}</b><br/>{{ lesson.1 }}</div></a> </td>
                         {% endif %}
                     {% endfor %}
                 </tr>
@@ -56,7 +56,7 @@
             {% for key, values in schedule_teacher.items %}
 
                 <tr>
-                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td id="group_{{ key }}" class="group" align="center"> <div><b> {{ forloop.counter }} </b></td>
                     <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key.0 }}</b></div></td>
                     {#                    {% if key == %}#}
                     {% for n, lesson in values.items %}
@@ -66,12 +66,12 @@
                             <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/">
                                 <div>
                                     {% for kl, ls in lesson.items %}
-                                        <b>{{ ls.0 }}</b><b class="type_hour">{{ ls.2 }}</b> <span class="teacher">{{ ls.1 }}</span><br/>
+                                        <b>{{ ls.0 }}</b><b class="type_hour" m="{{ ls.2 }}">{{ ls.2 }}</b> <span class="teacher">{{ ls.1 }}</span><br/>
                                     {% endfor %}
                                 </div></a>
                             </td>
                         {% else %}
-                            <td class="group group_{{ key.1 }}" id="lesson_{{ lesson.pk }}" gr="{{ key.1 }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key.1 }}/{{ forloop.counter }}/"><div><b class="group_lesson">{{ lesson.1 }}</b><b>{{ lesson.0 }}</b><b class="type_hour">{{ lesson.2 }}</b></div></a> </td>
+                            <td class="group group_{{ key.1 }}" id="lesson_{{ lesson.pk }}" gr="{{ key.1 }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key.1 }}/{{ forloop.counter }}/"><div><b class="group_lesson">{{ lesson.1 }}</b><b>{{ lesson.0 }}</b><b class="type_hour" m="{{ lesson.2 }}">{{ lesson.2 }}</b></div></a> </td>
                         {% endif %}
                     {% endfor %}
                 </tr>

@@ -9,6 +9,7 @@
     <br><br><br>
 
     <h2> {{ day }}.{{ month }}.{{ year }},</h2>  <span style="font-size: 20px;">группа <b>{{ group }}</b></span>
+    <b>пара № {{ lesson }}</b>
     <br/><br/><br/>
 
 
@@ -18,10 +19,10 @@
             <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> Дисциплина / Преподаватель </b></th>
-{#                <th align="left"><b> Лек </b></th>#}
-{#                <th align="left"><b> Практ </b></th>#}
-{#                <th align="left"><b> Конс </b></th>#}
-{#                <th align="left"><b> Экзам </b></th>#}
+                <th align="left"><b> Лекция </b></th>
+                <th align="left"><b> Практика </b></th>
+                <th align="left"><b> Консультация </b></th>
+                <th align="left"><b> Экзамен </b></th>
 {#                <th align="left"><b> Курс </b></th>#}
 {#                <th align="left"><b> Пров </b></th>#}
             </tr>
@@ -42,7 +43,11 @@
                     </td>
                     {% for value in tr.values %}
                         {% for v in value %}
-                            <td class="group" id="" align="left"> <a href="add/{{ v.3 }}"><div><b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b></div></a> </td>
+                            {% if v == '' %}
+                                    <td class="group" id="" align="left"> <a href=""><div><b></b></div></a> </td>
+                                {% else %}
+                                    <td class="group" id="" align="left"> <a href="add/{{ v.3 }}"><div><b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b></div></a> </td>
+                            {% endif %}
                         {% endfor %}
                     {% endfor %}
                 </tr>
@@ -53,28 +58,13 @@
             <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> итого </b></th>
-{#                <th align="left"><b> 1 </b></th>#}
-{#                <th align="left"><b> 2 </b></th>#}
-{#                <th align="left"><b> 3 </b></th>#}
-{#                <th align="left"><b> 4 </b></th>#}
+                <th align="left"><b> / </b></th>
+                <th align="left"><b> / </b></th>
+                <th align="left"><b> / </b></th>
+                <th align="left"><b> / </b></th>
 {#                <th align="left"><b> 5 </b></th>#}
 {#                <th align="left"><b> 6 </b></th>#}
             </tr>
-{##}
-{#            {% for key, values in schedule_teacher.items %}#}
-{##}
-{#                <tr>#}
-{#                    <td align="left"><b> {{ forloop.counter }} </b></td>#}
-{#                    <td class="osn" align="left"><b> {{ key }} </b></td>#}
-                    {#                    {% if key == %}#}
-{#                    {% for n, lesson in values.items %}#}
-{##}
-{#                        <td align="left"><b> {{ lesson }} </b></td>#}
-{##}
-{#                    {% endfor %}#}
-{#                </tr>#}
-{##}
-{#            {% endfor %}#}
 
             </tbody>
         </table>

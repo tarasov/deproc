@@ -17,7 +17,6 @@ table.schedule .nso {
 }
 
 table.schedule .type_hour {
-    color: #FF0000;
     font-size: 10px;
     padding-left: 5px;
 }
@@ -45,6 +44,8 @@ table.tariffication th, table.group-plan th, table.schedule th {
 
 table.schedule th {
     border: 2px solid #ffebcd;
+    color: #f3f42c;
+    background-color: #0088cc;
 }
 
 table.tariffication td, table.schedule td {
