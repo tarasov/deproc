@@ -327,6 +327,7 @@ class Groups(models.Model):
     def get_journal_url(self):
         return '../group/%s' % str(self.id)
 
+
     def __unicode__(self):
         return u'%s' % (self.name, )
 

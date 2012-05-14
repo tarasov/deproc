@@ -11,6 +11,9 @@ from deproc.schedule import models as sch_models
 from deproc.schedule import forms
 from django.db.models import Count
 
+def sql_schedule(request):
+    return locals()
+
 
 def schedule(request):
     cal = forms.MyCalendarForm()
@@ -99,7 +102,7 @@ def index(request):
             date = request.GET['day']
             date = date.split('.')
             new_date = ('%s-%s-%s' % tuple(date[::-1]))
-            schdl_day = sch_models.Schedule_day.objects.all().select_related()
+            schdl_day = sch_models.Schedule_day.objects.all()
             new_date = datetime.datetime.strptime(new_date, '%Y-%m-%d')
             if not schdl_day.filter(day = str(new_date.date())):
                 this_day = schdl_day.create(day = new_date.date())
@@ -107,6 +110,9 @@ def index(request):
                 this_day = schdl_day.get(day = str(new_date.date()))
             day = '%s-%s-%s' % (this_day.day.year, this_day.day.month, this_day.day.day)
             rng = range(1,6)
+
+#            for group in groups:
+#                print group.get_schedule_group()
 
             schedule_group = {}
             schedule_teacher = {}
@@ -117,10 +123,10 @@ def index(request):
 #
 #            a = get_object_or_404(sch_models.Schedule, pk = 30)
 #            print a
-
+#
 #            a = get_list_or_404(sch_models.Schedule, day = this_day)
 #            print a
-            #                                sc = sch.get(num_less = i)
+#                                            sc = sch.get(num_less = i)
 
             for group in groups:
                 lessons = {}
@@ -165,6 +171,7 @@ def index(request):
                     plan__teacher = teacher,
                     day = this_day
                 )
+
                 if tch:
                     for i in range(1,6):
                         if (tch.filter(num_less = i)):
