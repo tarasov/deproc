@@ -111,8 +111,34 @@ def index(request):
             day = '%s-%s-%s' % (this_day.day.year, this_day.day.month, this_day.day.day)
             rng = range(1,6)
 
-#            for group in groups:
-#                print group.get_schedule_group()
+            print this_day.pk
+
+
+            tf = {}
+            group_schedule = {}
+
+            for group in groups:
+                group_col = []
+                get_schedule = group.get_schedule(this_day.pk)
+                for i, (grp, disc, typehour, last, first, other, numless, counthours, comment, uch_plan_type, uch_plan_count) in enumerate(get_schedule):
+                    lesson_row = {
+                        'group': grp,
+                        'disc': disc,
+                        'typehour': typehour,
+                        'last': last,
+                        'first': first,
+                        'other': other,
+                        'numless': numless,
+                        'counthours': counthours,
+                        'comment': comment,
+                        'uch_plan_type': uch_plan_type,
+                        'uch_plan_count': uch_plan_count
+                        }
+                    print grp, disc, typehour, last, first, other, numless, counthours, comment, uch_plan_type, uch_plan_count
+                    group_col.append(lesson_row)
+
+                group_schedule[group] = group_col
+            print group_schedule
 
             schedule_group = {}
             schedule_teacher = {}
@@ -126,7 +152,6 @@ def index(request):
 #
 #            a = get_list_or_404(sch_models.Schedule, day = this_day)
 #            print a
-#                                            sc = sch.get(num_less = i)
 
             for group in groups:
                 lessons = {}
