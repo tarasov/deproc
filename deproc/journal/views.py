@@ -80,7 +80,7 @@ def groups(request):
     Список групп
     """
     user = get_object_or_404(Teachers, pk=request.user.pk)
-    groups = user.groups_lessons_are_taught()
+    groups = user.get_groups()
     return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
 
 
@@ -91,7 +91,7 @@ def disciplines(request, id_group):
 #    id_group = id_group
     disciplines = Discipline.objects.all()
     user = get_object_or_404(Teachers, pk=request.user.pk)
-    disciplines = user.disciplines_lessons_are_taught(id_group)
+    disciplines = user.get_disciplines_current_group(id_group)
     print disciplines
     return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
 

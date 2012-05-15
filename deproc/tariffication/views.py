@@ -48,31 +48,36 @@ def plan_group(request):
     return render_to_response('tariffication/group_plan.html', locals(), context_instance=RequestContext(request))
 
 def tariffication(request):
-    # делаем цикл по семестрам для фильтрации тариффикации
-    choices = models.TypeHour.objects.all()
-    count = choices.count()
+
     teachers = models.Teachers.objects.all()
-#    groups = models.Groups.objects.all()
-#    disciplines = models.Discipline.objects.all()
+    groups = models.Groups.objects.all()
 
     table = []
     for teacher in teachers:
-        tariffications = teacher.get_tariffication()
-        for i, (teacher, group, discipline, semestr, count_hours, type_of_hour)  in enumerate(tariffications):
-            # каждый первый элемент, это общие данные для всех типов часа
-            if i % count == 0:
-                tr = {
-                    'teacher': teacher,
-                    'group': group,
-                    'discipline': discipline,
-                    'semestr': semestr,
-                    'hours': [count_hours],
-                    }
-            else:
-                tr['hours'].append(count_hours)
-                # проверяем, все ли типы часов добавились к строке и если да, то создаем новую строку
-                if i % count == count-1:
-                    table.append(tr)
+        # выбираем группы в которых преподает преподователь
+        for group in teacher.get_groups():
+            # выбираем дисциплины, которые которые относятся к группе и преподователю
+            for discipline in group.get_disciplines(teacher):
+                tr = {}
+
+                tariffications = Tariffication.objects.filter(
+                    teacher = teacher,
+                    group_plan__group = group,
+                    uch_plan_hour__uch_plan__disc = discipline
+                ).select_related('group_plan__group', 'uch_plan_hour__uch_plan__disc')
+
+                for i, tariffication in enumerate(tariffications):
+                    if not i:
+                        tr = {
+                            'teacher': teacher,
+                            'group': group,
+                            'discipline': discipline,
+                            'semestr': tariffication.semestr,
+                            'hours': [tariffication.count_hours],
+                            }
+                    else:
+                        tr['hours'].append(tariffication.count_hours)
+                table.append(tr)
 
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 

@@ -3,8 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.db import models, connection
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
-#from deproc.schedule.models import Classroom
-
+from django.db.models import Q
 
 class Classroom(models.Model):
     number = models.IntegerField(max_length=100, null=False, blank=False)
@@ -116,20 +115,24 @@ class Teachers(Profile):
         cursor.execute(sql_teacher.format(self.pk))
         return cursor.fetchall()
 
-    # TODO переназвать в нормльный вид функции
-    def groups_lessons_are_taught(self):
+    def get_groups(self):
         """
         Группы в которых преподает преподователь
         """
         groups = Tariffication.objects.filter(teacher = self).values('group_plan__group').annotate(count=Count('group_plan__group'))
-        return [get_object_or_404(Groups, pk = int(group['group_plan__group'])) for group in groups]
+        return Groups.objects.filter(id__in = [int(group['group_plan__group']) for group in groups])
 
-    def disciplines_lessons_are_taught(self, id_group):
+    def get_disciplines_current_group(self, id_group):
         """
         Дисциплины в которых преподает преподователь, выбранной группы
         """
         group = get_object_or_404(Groups, pk=id_group)
-        groups = Tariffication.objects.filter(teacher = self, group_plan__group=group).values('uch_plan_hour__uch_plan__disc').annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
+
+        groups = Tariffication.objects.\
+                                filter(teacher = self, group_plan__group=group).\
+                                values('uch_plan_hour__uch_plan__disc').\
+                                annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
+
         return [get_object_or_404(Discipline, pk = int(group['uch_plan_hour__uch_plan__disc'])) for group in groups]
 
     def __unicode__(self):
@@ -314,7 +317,6 @@ class Groups(models.Model):
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
 
-
     class Meta:
         ordering = ['name']
         verbose_name = u'группу студентов'
@@ -372,6 +374,15 @@ class Groups(models.Model):
         cursor.execute(get_schedule.format(self.pk))
         return cursor.fetchall()
 
+    def get_disciplines(self, teacher=None):
+        if teacher:
+            #            self = group
+            disciplines = Tariffication.objects.filter(teacher = teacher, group_plan__group=self).values('uch_plan_hour__uch_plan__disc').annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
+        else:
+            disciplines = Tariffication.objects.filter(group_plan__group=self).values('uch_plan_hour__uch_plan__disc').annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
+
+        return [get_object_or_404(Discipline, pk = int(discipline['uch_plan_hour__uch_plan__disc'])) for discipline in disciplines]
+
     def __unicode__(self):
         return u'%s' % (self.name, )
 
@@ -418,6 +429,14 @@ class Tariffication(models.Model):
 
     def get_absolute_url(self):
         return 'tariffication/%s' % str(self.pk),
+
+    @property
+    def semestr(self):
+        return self.uch_plan_hour.uch_plan.semestr
+
+    @property
+    def count_hours(self):
+        return self.uch_plan_hour.count_hours
 
     def __unicode__(self):
         return u'%s %s %s' % (Profile.objects.get(pk=self.teacher), self.group_plan, self.uch_plan_hour)
