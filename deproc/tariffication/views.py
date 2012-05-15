@@ -50,16 +50,17 @@ def plan_group(request):
 def tariffication(request):
     # делаем цикл по семестрам для фильтрации тариффикации
     choices = models.TypeHour.objects.all()
+    count = choices.count()
     teachers = models.Teachers.objects.all()
-    groups = models.Groups.objects.all()
-    disciplines = models.Discipline.objects.all()
+#    groups = models.Groups.objects.all()
+#    disciplines = models.Discipline.objects.all()
 
     table = []
     for teacher in teachers:
         tariffications = teacher.get_tariffication()
         for i, (teacher, group, discipline, semestr, count_hours, type_of_hour)  in enumerate(tariffications):
             # каждый первый элемент, это общие данные для всех типов часа
-            if i % choices.count() == 0:
+            if i % count == 0:
                 tr = {
                     'teacher': teacher,
                     'group': group,
@@ -70,7 +71,7 @@ def tariffication(request):
             else:
                 tr['hours'].append(count_hours)
                 # проверяем, все ли типы часов добавились к строке и если да, то создаем новую строку
-                if i % choices.count() - 1 == 0:
+                if i % count == count-1:
                     table.append(tr)
 
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))

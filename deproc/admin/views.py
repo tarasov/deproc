@@ -12,7 +12,7 @@ from deproc.tariffication import views
 
 
 def add_tariffication(request):
-    choices = models.choice_typeh
+    choices = models.TypeHour.objects.all()
     if request.POST:
         dynamic_form = forms.DynamicForm(choices, request.POST)
     else:
@@ -21,23 +21,23 @@ def add_tariffication(request):
     if request.POST: # сохраняем
         for choice in choices:
             # для каждого типа часа сохраняем свой учебный план
-            if request.POST[choice[0]]:
-                hour = request.POST[choice[0]]
+            if request.POST[str(choice.id)]:
+                hour = request.POST[str(choice.id)]
             else:
                 hour = 0
             uch_plan_pk = int(request.POST['uch_plan'])
             teacher = request.POST['teacher']
             uch_plan = models.UchPlan.objects.get(pk=uch_plan_pk)
-            if models.UchPlanHour.objects.filter(uch_plan=uch_plan, tariffication__teacher = teacher, type = choice[0]):
+            if models.UchPlanHour.objects.filter(uch_plan=uch_plan, tariffication__teacher = teacher, type = int(choice.id)):
                 # уже создан, тогда обновляем часы
                 # TODO пересмотреть обновление данных
-                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, tariffication__teacher = teacher, type = choice[0]).pk
-                uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type = choice[0], count_hours = hour)
+                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, tariffication__teacher = teacher, type = int(choice.id)).pk
+                uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type = int(choice.id), count_hours = hour)
                 uch_plan_hour.count_hour = hour
                 uch_plan_hour.save()
             else:
                 # создаем часы учебного плана
-                uch_plan_hour = models.UchPlanHour(uch_plan=uch_plan, type = choice[0], count_hours = hour)
+                uch_plan_hour = models.UchPlanHour(uch_plan=uch_plan, type_hour = choice, count_hours = hour)
                 uch_plan_hour.save()
                 teacher = models.Teachers(pk=request.POST['teacher'])
                 group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
