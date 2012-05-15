@@ -27,6 +27,13 @@ table.schedule .group_lesson {
     padding-right: 5px;
 }
 
+table.schedule .forloop {
+    color: #0088cc;
+    padding: 5px;
+}
+
+style="color: #;
+
 table.schedule .teacher {
     padding-left: 5px;
 }

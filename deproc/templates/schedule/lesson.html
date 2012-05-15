@@ -30,15 +30,15 @@
             {% for tr in table %}
 
                 <tr>
-                    <td align="left"><b> {{ forloop.counter }} </b></td>
+                    <td align="left"><b class="forloop"> {{ forloop.counter }} </b></td>
                     <td id="group_{{ tr }}" class="group osn" align="left">
 
                         <div>
-                            <b>
+
                                 {% for key in tr.keys %}
-                                    {{ key.0 }} - {{ key.1 }}<br/>
+                                    <b style="color: #faa732;">{{ key.0 }}</b> - <b style="color: #ff7518;"> {{ key.1 }} </b><br/>
                                 {% endfor %}
-                            </b>
+
                         </div>
                     </td>
                     {% for value in tr.values %}

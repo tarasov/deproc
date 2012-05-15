@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.db import models
+from django.db import models, connection
 from deproc.tariffication.models import Tariffication, Groups, Students, Classroom
 
 

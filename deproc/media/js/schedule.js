@@ -24,4 +24,21 @@ $(function() {
         }
     });
 
+    $('b.type_hour').each(function() {
+        var m = $.trim($(this).html());
+
+        if (m == 'ЛК') {
+            $(this).css({'color': '#dc143c'});
+        }
+        if (m == 'ПК') {
+            $(this).css({'color': '#df73ff'});
+        }
+        if (m == 'КН') {
+            $(this).css({'color': '#77dd77'});
+        }
+        if (m == 'ЭК') {
+            $(this).css({'color': '#ff7518'});
+        }
+    });
+
 });
