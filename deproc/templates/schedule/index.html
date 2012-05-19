@@ -87,40 +87,4 @@
     </div>
     <br/><br/><br/>
 
-
-    {# new schedule #}
-
-
-    <div class="row-fluid">
-        <table class="schedule span11">
-            <tbody>
-            <tr class="nso">
-                <th align="left"><b> # </b></th>
-                <th align="left"><b> группа </b></th>
-            </tr>
-
-            {% for key, values in group_schedule.items %}
-
-                <tr>
-                    <td id="group_{{ key }}" class="group" align="center"> <div><b class="forloop"> {{ forloop.counter }} </b></div></td>
-                    <td id="group_{{ key }}" class="group osn" align="left"> <div><b>{{ key }}</b></div></td>
-
-                    {% for value in values %}
-
-                        <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/">
-                            <div>
-
-                                <b>{{ value.values.3 }}</b> - <b class="type_hour" m="{{ value.values.2 }}"> {{ value.values.2 }}</b><br/>
-                                {{ value.values.5 }} - пара #{{ value.values.4 }}
-
-                            </div></a> </td>
-                    {% endfor %}
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-        </table>
-    </div>
-
 {% endblock %}

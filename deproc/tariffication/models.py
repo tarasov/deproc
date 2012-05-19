@@ -316,7 +316,6 @@ class Groups(models.Model):
     name = models.IntegerField(u'Группа', max_length=100, unique=True) # 808
     semestr = models.CharField(u'семестры', max_length=6, choices=choice_semesters, default=choice_semesters[0])
 
-
     class Meta:
         ordering = ['name']
         verbose_name = u'группу студентов'
@@ -328,51 +327,6 @@ class Groups(models.Model):
 
     def get_journal_url(self):
         return '../group/%s' % str(self.id)
-
-    def get_schedule(self, day_id):
-        get_schedule = """
-        SELECT
-            `groups`.`name`,
-            `discipline`.`short_name`,
-            `typehour`.`short_name`,
-            `auth_user`.`last_name`,
-            `auth_user`.`first_name`,
-            `profile`.`other_name`,
-            `schedule`.`num_less`,
-            `schedule`.`hour_type`,
-            `schedule`.`comment`,
-            `uch_plan_hour`.`type`,
-            `uch_plan_hour`.`count_hours`
-        FROM
-            `schedule`
-        INNER JOIN
-            `tariffication` ON (`schedule`.`plan_id` = `tariffication`.`id`)
-        INNER JOIN
-            `groups_plan` ON (`tariffication`.`group_plan_id` = `groups_plan`.`id`)
-        INNER JOIN
-            `groups` ON (`groups_plan`.`group_id` = `groups`.`id`)
-        INNER JOIN
-            `teachers` ON (`tariffication`.`teacher_id` = `teachers`.`profile_ptr_id`)
-        INNER JOIN
-            `auth_user` ON (`teachers`.`profile_ptr_id` = `auth_user`.`id`)
-        INNER JOIN
-            `profile` ON (`teachers`.`profile_ptr_id` = `profile`.`user_ptr_id`)
-        INNER JOIN
-            `uch_plan_hour` ON (`tariffication`.`uch_plan_hour_id` = `uch_plan_hour`.`id`)
-        INNER JOIN
-            `uch_plan` ON (`uch_plan_hour`.`uch_plan_id` = `uch_plan`.`id`)
-        INNER JOIN
-            `discipline` ON (`uch_plan`.`disc_id` = `discipline`.`id`)
-        INNER JOIN
-            `typehour` ON (`uch_plan_hour`.`type_hour_id` = `typehour`.`id`)
-        WHERE
-            (`schedule`.`day_id` = %s AND `groups_plan`.`group_id` = '{0}')
-        ORDER BY
-            (`groups`.`name`)
-        """ % day_id
-        cursor = connection.cursor()
-        cursor.execute(get_schedule.format(self.pk))
-        return cursor.fetchall()
 
     def get_disciplines(self, teacher=None):
         if teacher:
