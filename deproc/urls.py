@@ -24,7 +24,8 @@ urlpatterns += patterns('deproc.schedule.views',
 
 # admin
 urlpatterns += patterns('deproc.admin.views',
-    url(r'^tariffication/add/$', 'add_tariffication', name='add_tariffication'),
+    url(r'^tariffication/(add)/$', 'add_tariffication', name='add_tariffication'),
+    url(r'^tariffication/(edit)/$', 'add_tariffication', name='edit_tariffication'),
     url(r'^plan_group/add/$', 'add_plan_group', name='add_plan_group'),
 )
 

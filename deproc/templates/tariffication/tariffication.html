@@ -12,9 +12,10 @@
                 <th align="left"><b>группа</b></th>
                 <th align="left"><b>дисциплина</b></th>
                 <th align="left"><b>семестр</b></th>
-                {% for typehour in choices %}
+                {% for typehour in typehours %}
                     <th align="left"><b>{{ typehour }}</b></th>
                 {% endfor %}
+                <th align="left"><b>изменить</b></th>
             </tr>
             {% for tr in table %}
                 <tr style="height: 30px;">
@@ -25,10 +26,17 @@
                     {% for hour in tr.hours %}
                         <td align="left"><b>{{ hour }}</b></td>
                     {% endfor %}
+                    <td align="left">
+                        <b>
+                            <a href="{% url edit_tariffication 'edit' %}">
+                                <img src="{{ MEDIA_URL }}img/edit.png"/>
+                            </a>
+                        </b>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
     </div>
-    <p><a href="{% url add_tariffication %}">Добавить тариффикацию</a></p>
+    <p><a href="{% url add_tariffication 'add' %}">Добавить тариффикацию</a></p>
 
 {% endblock %}

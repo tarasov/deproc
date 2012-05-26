@@ -11,7 +11,7 @@ from deproc.tariffication import models
 from deproc.tariffication import views
 
 
-def add_tariffication(request):
+def add_tariffication(request, action, ):
     choices = models.TypeHour.objects.all()
     if request.POST:
         dynamic_form = forms.DynamicForm(choices, request.POST)
@@ -44,8 +44,12 @@ def add_tariffication(request):
                 models.Tariffication(teacher = teacher, group_plan = group_plan, uch_plan_hour = uch_plan_hour).save()
         return HttpResponseRedirect(reverse('tariffication'))
     else: # показываем пустые формы
-        form_tariffication = forms.TarifficationModel()
-        form_uchplanhour = forms.UchPlanHourModel()
+        if action == 'edit':
+            form_tariffication = forms.TarifficationModel()
+            form_uchplanhour = forms.UchPlanHourModel()
+        elif action == 'add':
+            form_tariffication = forms.TarifficationModel()
+            form_uchplanhour = forms.UchPlanHourModel()
 
     return render_to_response('admin/add_tariffication.html', locals(), context_instance=RequestContext(request))
 

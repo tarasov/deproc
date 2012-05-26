@@ -51,6 +51,7 @@ def tariffication(request):
 
     teachers = models.Teachers.objects.all()
     groups = models.Groups.objects.all()
+    typehours = models.TypeHour.objects.all()
 
     table = []
     for teacher in teachers:

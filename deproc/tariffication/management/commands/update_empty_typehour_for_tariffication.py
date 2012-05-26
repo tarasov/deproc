@@ -24,17 +24,21 @@ class Command(BaseCommand):
                 for discipline in group.get_disciplines(teacher):
                     try:
                         for typehour in typehours:
-                            obj, is_created = Tariffication.objects.get_or_create(
-                                teacher = teacher,
-                                group_plan__group = group,
-                                uch_plan_hour__uch_plan__disc = discipline,
-                                uch_plan_hour__type_hour__name = typehour,
-                                defaults = {'type_hour': 0}
-                            )
-                        if is_created:
-                            transaction.commit()
-                        else:
-                            transaction.rollback()
+                            for tariffication in tariffications:
+                                if tariffication.objects.fitler():
+                                    pass
+#                                obj, is_created = tariffication.objects.get_or_create(
+#                                    teacher = teacher,
+#                                    tariffication = tariffication.group_plan,
+#                                    group_plan__group = group,
+#                                    uch_plan_hour__uch_plan__disc = discipline,
+#                                    uch_plan_hour__type_hour__name = typehour,
+#                                    defaults = {'count_hours': 0}
+#                                )
+                            if is_created:
+                                transaction.commit()
+                            else:
+                                transaction.rollback()
                     except Exception as e:
-                        logging.error('ERROR {0}; {1}'.format('ERROR!!!', str(e)))
+                        logging.error('ERROR {0};\n {1}'.format('ERROR!!!', str(e)))
                         transaction.rollback()
