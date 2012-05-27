@@ -115,10 +115,14 @@ class Teachers(Profile):
         cursor.execute(sql_teacher.format(self.pk))
         return cursor.fetchall()
 
-    def get_groups(self):
+    def get_groups(self, group = None):
         """
         Группы в которых преподает преподователь
         """
+        # если передали группу, возвращаем ее
+        if group:
+            return [group]
+
         groups = Tariffication.objects.filter(teacher = self).values('group_plan__group').annotate(count=Count('group_plan__group'))
         return Groups.objects.filter(id__in = [int(group['group_plan__group']) for group in groups])
 
@@ -328,9 +332,10 @@ class Groups(models.Model):
     def get_journal_url(self):
         return '../group/%s' % str(self.id)
 
-    def get_disciplines(self, teacher=None):
+    def get_disciplines(self, teacher=None, discipline = None):
         if teacher:
-            #            self = group
+            if discipline:
+                return [discipline]
             disciplines = Tariffication.objects.filter(teacher = teacher, group_plan__group=self).values('uch_plan_hour__uch_plan__disc').annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
         else:
             disciplines = Tariffication.objects.filter(group_plan__group=self).values('uch_plan_hour__uch_plan__disc').annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
@@ -391,6 +396,46 @@ class Tariffication(models.Model):
     @property
     def count_hours(self):
         return self.uch_plan_hour.count_hours
+
+    @property
+    def type_hours(self):
+        return self.uch_plan_hour.type_hour
+
+    def get_tariffication(self, teacher = None, group = None, discipline = None):
+        if not teacher:
+            teachers = Teachers.objects.all()
+        else:
+            teachers = [teacher]
+
+        table = []
+        for teacher in teachers:
+            # выбираем группы в которых преподает преподователь
+            for group in teacher.get_groups(group):
+                # выбираем дисциплины, которые которые относятся к группе и преподователю
+                for discipline in group.get_disciplines(teacher, discipline):
+                    tr = {}
+
+                    tariffications = Tariffication.objects.filter(
+                        teacher = teacher,
+                        group_plan__group = group,
+                        uch_plan_hour__uch_plan__disc = discipline
+                    ).select_related('group_plan__group', 'uch_plan_hour__uch_plan__disc')
+                    if teacher and group and discipline:
+                        return tariffications
+                    for i, tariffication in enumerate(tariffications):
+                        if not i:
+                            tr = {
+                                'teacher': teacher,
+                                'group': group,
+                                'discipline': discipline,
+                                'semestr': tariffication.semestr,
+                                'hours': [tariffication.count_hours],
+                            }
+                        else:
+                            tr['hours'].append(tariffication.count_hours)
+                    table.append(tr)
+        return table
+
 
     def __unicode__(self):
         return u'%s %s %s' % (Profile.objects.get(pk=self.teacher), self.group_plan, self.uch_plan_hour)

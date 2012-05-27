@@ -12,32 +12,29 @@ from deproc.tariffication import views
 
 
 def add_tariffication(request, action, teacher = None, group = None, discipline = None, semestr = None):
-    choices = models.TypeHour.objects.all()
-    if request.POST:
-        dynamic_form = forms.DynamicForm(choices, request.POST)
-    else:
-        dynamic_form = forms.DynamicForm(choices)
 
+    typehours = models.TypeHour.objects.all()
     if request.POST: # сохраняем
-        for choice in choices:
+        dynamic_form = forms.DynamicForm(request.POST)
+        for typehour in typehours:
             # для каждого типа часа сохраняем свой учебный план
-            if request.POST[str(choice.id)]:
-                hour = request.POST[str(choice.id)]
+            if request.POST[typehour.short_name]:
+                hour = request.POST[typehour.short_name]
             else:
                 hour = 0
             uch_plan_pk = int(request.POST['uch_plan'])
             teacher = request.POST['teacher']
             uch_plan = models.UchPlan.objects.get(pk=uch_plan_pk)
-            if models.UchPlanHour.objects.filter(uch_plan=uch_plan, tariffication__teacher = teacher, type = int(choice.id)):
+            if models.UchPlanHour.objects.filter(uch_plan=uch_plan, tariffication__teacher = teacher, type_hour = typehour):
                 # уже создан, тогда обновляем часы
                 # TODO пересмотреть обновление данных
-                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, tariffication__teacher = teacher, type = int(choice.id)).pk
-                uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type = int(choice.id), count_hours = hour)
+                uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, tariffication__teacher = teacher, type_hour = typehour).pk
+                uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type_hour = typehour, count_hours = hour)
                 uch_plan_hour.count_hour = hour
                 uch_plan_hour.save()
             else:
                 # создаем часы учебного плана
-                uch_plan_hour = models.UchPlanHour(uch_plan=uch_plan, type_hour = choice, count_hours = hour)
+                uch_plan_hour = models.UchPlanHour(uch_plan=uch_plan, type_hour = typehour, count_hours = hour)
                 uch_plan_hour.save()
                 teacher = models.Teachers(pk=request.POST['teacher'])
                 group_plan = models.Groups_plan.objects.get(pk=request.POST['group_plan'])
@@ -49,10 +46,10 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
             # Сделать с учетом курса, а то может быть больше 1 записи
             group_plan = models.Groups_plan.objects.get(group=group)
             form_tariffication = forms.TarifficationModel(
-                                initial = {
-                                    'teacher': teacher,
-                                    'group_plan': group_plan
-                                }
+                initial = {
+                    'teacher': teacher,
+                    'group_plan': group_plan
+                }
             )
 
             uch_plan = models.UchPlan.objects.get(
@@ -64,7 +61,14 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
                     'uch_plan': uch_plan
                 }
             )
+            group = models.Groups.objects.get(id = group)
+            discipline = models.Discipline.objects.get(id = discipline)
+            tariffications = models.Tariffication().get_tariffication(teacher=teacher, group=group, discipline=discipline)
+            hours = [{tariffication.type_hours: tariffication.count_hours} for tariffication in tariffications]
+            dynamic_form = forms.DynamicForm(tariffications)
+
         elif action == 'add':
+            dynamic_form = forms.DynamicForm()
             form_tariffication = forms.TarifficationModel()
             form_uchplan = forms.UchPlanModel()
 

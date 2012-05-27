@@ -23,12 +23,35 @@ class UchPlanModel(ModelForm):
 
 
 class DynamicForm(forms.Form):
-    def __init__(self, choices, *args, **kwargs):
+    def __init__(self, hours = None, *args, **kwargs):
         super(DynamicForm, self).__init__(*args, **kwargs)
-        choices = models.TypeHour.objects.all()
-        for i, choice in enumerate(choices):
-            label = choice.name
-            self.fields['%s' % choice.id] = forms.CharField(label=label, required=False, widget=forms.TextInput(attrs={"placeholder": u"0 часов"}))
+        typehours = models.TypeHour.objects.all()
+        for i, typehour in enumerate(typehours):
+            if typehours:
+                try:
+                    hour = hours.get(uch_plan_hour__type_hour=typehour)
+                    self.__get_field(typehour, i, hour)
+                except Exception:
+                    self.__get_field(typehour, i)
+            else:
+                self.__get_field(typehour, i)
+
+
+    def __get_field(self, typehour, i, hours = None):
+        label = typehour.name
+        if hours:
+            self.fields['%s' % typehour.short_name] = forms.CharField(
+                    label=label,
+                    required=False,
+                    initial = hours.count_hours,
+                    widget=forms.TextInput(attrs={"placeholder": u"0 часов"})
+            )
+        else:
+            self.fields['%s' % typehour.short_name] = forms.CharField(
+                    label=label,
+                    required=False,
+                    widget=forms.TextInput(attrs={"placeholder": u"0 часов"})
+            )
 
 
 class PlanGroupForm(ModelForm):
