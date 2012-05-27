@@ -280,7 +280,6 @@ class UchPlanHour(models.Model):
     Учебный план часа, тут указаны типы часов и их количество у определенного учебного плана
     """
     uch_plan = models.ForeignKey(UchPlan, verbose_name="Учебный план", max_length=100)
-    type = models.CharField(u"Тип часа", max_length=100, null=True, blank=True, choices=choice_typeh) # лекция, практика, консультация
     type_hour = models.ForeignKey(TypeHour, verbose_name = u"Тип часа")
     count_hours = models.IntegerField(u"Количество часов", max_length=100)
 
@@ -290,7 +289,7 @@ class UchPlanHour(models.Model):
         db_table = 'uch_plan_hour'
 
     def __unicode__(self):
-        return u'%s / %s / %s часов' % (self.uch_plan, self.type, self.count_hours)
+        return u'%s / %s / %s часов' % (self.uch_plan, self.type_hour, self.count_hours)
 
 
 class Year(models.Model):

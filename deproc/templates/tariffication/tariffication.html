@@ -15,7 +15,7 @@
                 {% for typehour in typehours %}
                     <th align="left"><b>{{ typehour }}</b></th>
                 {% endfor %}
-                <th align="left"><b>изменить</b></th>
+                <th align="left"></th>
             </tr>
             {% for tr in table %}
                 <tr style="height: 30px;">
@@ -29,7 +29,7 @@
                     <td align="left">
                         <b>
                             <a href="{% url edit_tariffication 'edit' tr.teacher.id tr.group.id tr.discipline.id tr.semestr %}">
-                                <img src="{{ MEDIA_URL }}img/edit.png"/>
+                                <img title = "изменить" src="{{ MEDIA_URL }}img/edit.png"/>
                             </a>
                         </b>
                     </td>

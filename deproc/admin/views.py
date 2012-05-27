@@ -64,7 +64,6 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
             group = models.Groups.objects.get(id = group)
             discipline = models.Discipline.objects.get(id = discipline)
             tariffications = models.Tariffication().get_tariffication(teacher=teacher, group=group, discipline=discipline)
-            hours = [{tariffication.type_hours: tariffication.count_hours} for tariffication in tariffications]
             dynamic_form = forms.DynamicForm(tariffications)
 
         elif action == 'add':
