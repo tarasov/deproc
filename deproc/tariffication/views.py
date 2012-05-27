@@ -60,7 +60,6 @@ def tariffication(request):
             # выбираем дисциплины, которые которые относятся к группе и преподователю
             for discipline in group.get_disciplines(teacher):
                 tr = {}
-
                 tariffications = Tariffication.objects.filter(
                     teacher = teacher,
                     group_plan__group = group,
