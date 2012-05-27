@@ -16,7 +16,7 @@ class TarifficationModel(ModelForm):
         fields = ('teacher', 'group_plan', )
 
 
-class UchPlanHourModel(ModelForm):
+class UchPlanModel(ModelForm):
     class Meta:
         model = models.UchPlanHour
         fields = ('uch_plan', )

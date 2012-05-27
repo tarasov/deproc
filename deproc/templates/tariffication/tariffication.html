@@ -28,7 +28,7 @@
                     {% endfor %}
                     <td align="left">
                         <b>
-                            <a href="{% url edit_tariffication 'edit' %}">
+                            <a href="{% url edit_tariffication 'edit' tr.teacher.id tr.group.id tr.discipline.id tr.semestr %}">
                                 <img src="{{ MEDIA_URL }}img/edit.png"/>
                             </a>
                         </b>

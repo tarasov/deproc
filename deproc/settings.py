@@ -147,7 +147,7 @@ LOGGING = {
         },
     }
 }
-#
-#
-#if DEBUG:
-#    from run.development import *
+
+
+if DEBUG:
+    from run.development import *
