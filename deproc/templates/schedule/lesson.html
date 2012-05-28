@@ -5,12 +5,22 @@
 {% endblock %}
 
 {% block main %}
-    <a href="/">назад</a><br>
+
+    <a class="btn btn-primary" href="{{ backlink }}"><i class="icon-arrow-left icon-white"></i> Назад</a>
     <br><br><br>
 
     <h2> {{ day }}.{{ month }}.{{ year }},</h2>  <span style="font-size: 20px;">группа <b>{{ group }}</b></span>
     <b>пара № {{ lesson }}</b>
     <br/><br/><br/>
+
+    {% if oshibka %}
+        <div class="alert alert-error">
+            <button class="close" data-dismiss="alert">×</button>
+            <strong> Ошибка! </strong> Нельзя добавлять больше пар!
+        </div>
+    {% endif %}
+
+    <h3> Уже существующие пары </h3>
 
     <div class="row-fluid">
         <table class="schedule span6">
@@ -18,19 +28,17 @@
                 <tr class="nso">
                     <th align="left"><b> Преподаватель </b></th>
                     <th align="left"><b> Дисциплина </b></th>
+                    <th align="left"><b> Тип Дисциплины </b></th>
                     <th align="left"><b> Удалить </b></th>
                 </tr>
                 {% for teach, disc in lessons.items %}
                 <tr>
                         <td class="group osn" align="left"><b> {{ teach }} </b></td>
-                        <td class="group" id="" align="left"> <a href=""><div><b> {{ disc }}</b></div></a> </td>
+                        <td class="group" id="" align="left"> <div><b> {{ disc.0 }}</b></div> </td>
+                        <td class="group" id="" align="left"> <div><b> {{ disc.1 }}</b></div> </td>
                         <td class="group" id="" align="left"><div>
-
                             <b>
-                                <a href="">
-                                    <img title = "Удалить" src="{{ MEDIA_URL }}img/remove.png"/>
-                                </a>
-
+                                <a title = "Удалить" class="icon-remove" href="delete/{{ disc.2 }}"></a>
                             </b>
                         </div> </td>
                 </tr>
@@ -42,18 +50,24 @@
     <br/><br/><br/>
 
 
+    <h3> Тарификации на текущую группу </h3>
+
     <div class="row-fluid">
         <table class="schedule span11" id="schedule">
             <tbody>
             <tr class="nso">
                 <th align="left"><b> # </b></th>
                 <th align="left"><b> Дисциплина / Преподаватель </b></th>
-                <th align="left"><b> Лекция </b></th>
-                <th align="left"><b> Практика </b></th>
-                <th align="left"><b> Консультация </b></th>
-                <th align="left"><b> Экзамен </b></th>
-                <th align="left"><b> Курс </b></th>
-                <th align="left"><b> Пров </b></th>
+
+                {% for type in typehour %}
+                    <th align="left"><b> {{ type }} </b></th>
+                {% endfor %}
+{#                <th align="left"><b> Лекция </b></th>#}
+{#                <th align="left"><b> Практика </b></th>#}
+{#                <th align="left"><b> Консультация </b></th>#}
+{#                <th align="left"><b> Экзамен </b></th>#}
+{#                <th align="left"><b> Курс </b></th>#}
+{#                <th align="left"><b> Пров </b></th>#}
             </tr>
 
             {% for tr in table %}
