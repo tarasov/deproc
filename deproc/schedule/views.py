@@ -35,6 +35,27 @@ def lesson(request, year, month, day, group, lesson):
 # TODO сделать показ стоящих пар, макс. 2, (удалить, добавить 1 или 2 часа)
 # TODO сумма всех показателей
 
+    this_day = sch_models.Schedule_day.objects.get(
+        day__day = day,
+        day__month = month,
+        day__year = year
+    )
+
+    list_lessons = sch_models.Schedule.objects.filter(
+        plan__group_plan__group__name = group,
+        day = this_day,
+        num_less = lesson
+    )
+
+    lessons = {}
+
+    for lt in list_lessons:
+        teach = '%s %s. %s.' % (lt.plan.teacher.last_name, lt.plan.teacher.first_name[0], lt.plan.teacher.other_name[0])
+        dsc = lt.plan.uch_plan_hour.uch_plan.disc
+        lessons[teach] = dsc
+
+    print lessons
+
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
     )
@@ -68,7 +89,7 @@ def lesson(request, year, month, day, group, lesson):
                 if tariff_teacher.uch_plan_hour.count_hours == 0:
                     lesson_info = ''
                 else:
-                    lesson_info = tariff_teacher.uch_plan_hour.get_type_display(), tariff_teacher.uch_plan_hour.count_hours, hours['count'], tariff_teacher.pk
+                    lesson_info = tariff_teacher.uch_plan_hour.type_hour.name, tariff_teacher.uch_plan_hour.count_hours, hours['count'], tariff_teacher.pk
                 if teacher == tariff_teacher.teacher:
                     if tariff_teacher.uch_plan_hour.uch_plan.disc != disc:
                         tr[teach, disc] = td
@@ -126,7 +147,7 @@ def index(request):
                             try:
                                 sc = get_object_or_404(sch, num_less = i)
                                 teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
-                                hourtype = sc.plan.uch_plan_hour.get_type_display()[0]
+                                hourtype = sc.plan.uch_plan_hour.type_hour.short_name
                                 lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, hourtype
                             except MultipleObjectsReturned:
                                 sc = sch.filter(num_less = i)
@@ -134,7 +155,7 @@ def index(request):
                                 ls = {}
                                 for ss in sc:
                                     teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
-                                    hourtype = ss.plan.uch_plan_hour.get_type_display()[0]
+                                    hourtype = ss.plan.uch_plan_hour.type_hour.short_name
                                     ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
@@ -164,14 +185,14 @@ def index(request):
                                 ls = {}
                                 for tt in tc:
                                     teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
-                                    hourtype = tt.plan.uch_plan_hour.get_type_display()[0]
+                                    hourtype = tt.plan.uch_plan_hour.type_hour.short_name
                                     ls[j] = tt.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
                             else:
                                 tc = tch.get(num_less = i)
                                 teach = '%s %s. %s.' % (tc.plan.teacher.last_name, tc.plan.teacher.first_name[0], tc.plan.teacher.other_name[0])
-                                hourtype = tc.plan.uch_plan_hour.get_type_display()[0]
+                                hourtype = tc.plan.uch_plan_hour.type_hour.short_name
                                 lessons[i] = tc.plan.uch_plan_hour.uch_plan.disc, tc.plan.group_plan.group, hourtype
                         else:
                             lessons[i] = ''

@@ -614,7 +614,7 @@ CREATE TABLE `schedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plan_id` int(11) DEFAULT NULL,
   `day_id` int(11) NOT NULL,
-  `classroom_id` int(11),
+  `classroom_id` int(11) DEFAULT NULL,
   `num_less` int(11) NOT NULL,
   `comment` longtext,
   `count_hours` int(11) NOT NULL,
@@ -703,7 +703,7 @@ CREATE TABLE `schedule_filled` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `lesson_id` int(11) NOT NULL,
   `plan_id` int(11) DEFAULT NULL,
-  `classroom_id` int(11),
+  `classroom_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `schedule_filled_6d25d6e2` (`lesson_id`),
   KEY `schedule_filled_5a80280f` (`plan_id`),
@@ -1143,4 +1143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-19 11:58:51
+-- Dump completed on 2012-05-28 13:49:27

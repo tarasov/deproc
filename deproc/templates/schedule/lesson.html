@@ -12,6 +12,35 @@
     <b>пара № {{ lesson }}</b>
     <br/><br/><br/>
 
+    <div class="row-fluid">
+        <table class="schedule span6">
+            <tbody>
+                <tr class="nso">
+                    <th align="left"><b> Преподаватель </b></th>
+                    <th align="left"><b> Дисциплина </b></th>
+                    <th align="left"><b> Удалить </b></th>
+                </tr>
+                {% for teach, disc in lessons.items %}
+                <tr>
+                        <td class="group osn" align="left"><b> {{ teach }} </b></td>
+                        <td class="group" id="" align="left"> <a href=""><div><b> {{ disc }}</b></div></a> </td>
+                        <td class="group" id="" align="left"><div>
+
+                            <b>
+                                <a href="">
+                                    <img title = "Удалить" src="{{ MEDIA_URL }}img/remove.png"/>
+                                </a>
+
+                            </b>
+                        </div> </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <br/><br/><br/>
+
 
     <div class="row-fluid">
         <table class="schedule span11" id="schedule">
