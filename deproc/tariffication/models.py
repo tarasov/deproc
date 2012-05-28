@@ -132,12 +132,12 @@ class Teachers(Profile):
         """
         group = get_object_or_404(Groups, pk=id_group)
 
-        groups = Tariffication.objects.\
+        disciplines = Tariffication.objects.\
                                 filter(teacher = self, group_plan__group=group).\
                                 values('uch_plan_hour__uch_plan__disc').\
                                 annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
 
-        return [get_object_or_404(Discipline, pk = int(group['uch_plan_hour__uch_plan__disc'])) for group in groups]
+        return [Discipline.objects.get(pk = discipline['uch_plan_hour__uch_plan__disc']) for discipline in disciplines]
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)

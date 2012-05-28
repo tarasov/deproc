@@ -7,19 +7,19 @@ from deproc.journal.models import Assessment, Theme_of_day
 from deproc.journal.forms import ThemeForm
 from deproc.tariffication.models import Groups, Profile, Groups_stud, Discipline, Tariffication, Groups_plan, User, Teachers, Students
 from deproc.schedule.models import Schedule_day, Schedule
+from django.core.urlresolvers import reverse
 
-def group(request, id_group, id_discipline):
+def journal(request, teacher, group, discipline):
     """
     журнал для группы
     """
     form_lab = ThemeForm(label_suffix='')
 
-    current_group = get_object_or_404(Groups, pk=id_group)
-    current_discipline = get_object_or_404(Discipline, pk=id_discipline)
-    user = request.user
+    current_group = get_object_or_404(Groups, pk=group)
+    current_discipline = get_object_or_404(Discipline, pk=discipline)
 
     group = get_object_or_404(Groups_stud, group=current_group)
-    days_of_schedule = Schedule.objects.filter(plan__teacher=user).order_by('day')[:10]
+    days_of_schedule = Schedule.objects.filter(plan__teacher=teacher).order_by('day')[:10]
     students = group.student.all()
     journal_days = []
     for day_of_schedule in days_of_schedule:
@@ -75,24 +75,27 @@ def add_mark(request, group, discipline, id_day, id_student, mark):
         return HttpResponse("")
 
 
-def groups(request):
-    """
-    Список групп
-    """
-    user = get_object_or_404(Teachers, pk=request.user.pk)
-    groups = user.get_groups()
+def teachers(request):
+    if Teachers.objects.filter(id = request.user.pk):
+        return HttpResponseRedirect(reverse('groups', kwargs = {'teacher': request.user.pk}))
+    else:
+        teachers = Teachers.objects.all()
+        return render_to_response('journal/teachers.html', locals(), context_instance=RequestContext(request))
+
+
+def groups(request, teacher):
+    teacher = Teachers.objects.get(id = teacher)
+    if isinstance(teacher, Teachers):
+        groups = teacher.get_groups()
+    else:
+        groups = Groups.objects.all()
     return render_to_response('journal/groups.html', locals(), context_instance=RequestContext(request))
 
 
-def disciplines(request, id_group):
-    """
-    Список предметов пропедавателя выбранной группы
-    """
-#    id_group = id_group
-    disciplines = Discipline.objects.all()
-    user = get_object_or_404(Teachers, pk=request.user.pk)
-    disciplines = user.get_disciplines_current_group(id_group)
-    print disciplines
+def disciplines(request, teacher, group):
+    teacher = Teachers.objects.get(id=teacher)
+    id_group = group
+    disciplines = teacher.get_disciplines_current_group(group)
     return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
 
 def select_discipline(request, id_group, id_discpiline):
