@@ -61,7 +61,7 @@ def delete_lesson(request, year, month, day, group, lesson, id_lesson):
 
 def lesson(request, year, month, day, group, lesson):
 
-# TODO сумма всех показателей
+# TODO сумма всех показателей, не верный показ
 
     if request.GET.get('error', False):
         oshibka = True
@@ -92,55 +92,45 @@ def lesson(request, year, month, day, group, lesson):
         tpdsc = lt.plan.uch_plan_hour.type_hour.name
         lessons[teach] = dsc, tpdsc, lt.pk
 
+
+
+
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
-    )
-    choices = main_models.choice_typeh
+    ).order_by('teacher', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour')
+
 
     table = []
     last_teacher = ''
 
     for tariff in tariffs:
 
-        tariffs_teacher = tariffs.filter(
-            teacher = tariff.teacher,
-        )
+        td = []
+        tr = {}
+        disc = ''
+        teacher = ''
 
-        if tariff.teacher != last_teacher:
-            td = []
-            tr = {}
-            disc = ''
-            teacher = ''
-            for tariff_teacher in tariffs_teacher:
+        hours = sch_models.Schedule.objects.filter(
+            plan = tariff,
+            plan__uch_plan_hour__uch_plan__spec = tariff.uch_plan_hour.uch_plan.spec
+        ).aggregate(count=Sum('count_hours'))
 
-                hours = sch_models.Schedule.objects.filter(
-                    plan = tariff_teacher,
-                    plan__uch_plan_hour__uch_plan__spec = tariff_teacher.uch_plan_hour.uch_plan.spec
-                ).aggregate(count=Sum('count_hours'))
-                if not hours['count']:
-                    hours['count'] = 0
+        if not hours['count']: hours['count'] = 0
 
-                teach = '%s %s. %s.' % (tariff_teacher.teacher.last_name, tariff_teacher.teacher.first_name[0], tariff_teacher.teacher.other_name[0])
+        teach = '%s %s. %s.' % (tariff.teacher.last_name, tariff.teacher.first_name[0], tariff.teacher.other_name[0])
 
-                if tariff_teacher.uch_plan_hour.count_hours == 0:
-                    lesson_info = ''
-                else:
-                    lesson_info = tariff_teacher.uch_plan_hour.type_hour.name, tariff_teacher.uch_plan_hour.count_hours, hours['count'], tariff_teacher.pk
-                if teacher == tariff_teacher.teacher:
-                    if tariff_teacher.uch_plan_hour.uch_plan.disc != disc:
-                        tr[teach, disc] = td
-                        table.append(tr)
-                        td = []
-                        tr = {}
+        if tariff.uch_plan_hour.count_hours == 0:
+            lesson_info = ''
+        else:
+            lesson_info = tariff.uch_plan_hour.type_hour.short_name, tariff.uch_plan_hour.count_hours, hours['count'], tariff.pk
 
-                td.append(lesson_info)
-                tr[teach, tariff_teacher.uch_plan_hour.uch_plan.disc] = td
+        td.append(lesson_info)
+        tr[teach, tariff.uch_plan_hour.uch_plan.disc] = td
 
-                disc = tariff_teacher.uch_plan_hour.uch_plan.disc
-                teacher = tariff_teacher.teacher
+        disc = tariff.uch_plan_hour.uch_plan.disc
+        teacher = tariff.teacher
 
-            table.append(tr)
-        last_teacher = tariff.teacher
+        table.append(tr)
 
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
