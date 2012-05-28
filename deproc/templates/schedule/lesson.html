@@ -31,17 +31,31 @@
                     <th align="left"><b> Тип Дисциплины </b></th>
                     <th align="left"><b> Удалить </b></th>
                 </tr>
-                {% for teach, disc in lessons.items %}
-                <tr>
-                        <td class="group osn" align="left"><b> {{ teach }} </b></td>
-                        <td class="group" id="" align="left"> <div><b> {{ disc.0 }}</b></div> </td>
-                        <td class="group" id="" align="left"> <div><b> {{ disc.1 }}</b></div> </td>
+
+                {% if ls %}
+                    <tr>
+                        <td class="group osn" align="left"><b> </b></td>
+                        <td class="group" id="" align="left"> <div><b> </b></div> </td>
+                        <td class="group" id="" align="left"> <div><b> </b></div> </td>
                         <td class="group" id="" align="left"><div>
                             <b>
-                                <a title = "Удалить" class="icon-remove" href="delete/{{ disc.2 }}"></a>
+                                <a title = "Удалить" class="icon-remove"></a>
                             </b>
                         </div> </td>
-                </tr>
+                    </tr>
+                {% endif %}
+
+                {% for teach, disc in lessons.items %}
+                        <tr>
+                                <td class="group osn" align="left"><b style="color: #faa732;"> {{ teach }} </b></td>
+                                <td class="group osn" id="" align="left"> <div><b style="color: #ff7518;"> {{ disc.0 }}</b></div> </td>
+                                <td class="group" id="" align="left"> <div><b style="color: #2f96b4;"> {{ disc.1 }}</b></div> </td>
+                                <td class="group" id="" align="left"><div>
+                                    <b>
+                                        <a title = "Удалить" class="icon-remove" href="delete/{{ disc.2 }}"></a>
+                                    </b>
+                                </div> </td>
+                        </tr>
                 {% endfor %}
             </tbody>
         </table>

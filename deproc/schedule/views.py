@@ -92,8 +92,10 @@ def lesson(request, year, month, day, group, lesson):
         tpdsc = lt.plan.uch_plan_hour.type_hour.name
         lessons[teach] = dsc, tpdsc, lt.pk
 
-
-
+    if lessons == {}:
+        ls = True
+    else:
+        ls = False
 
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
