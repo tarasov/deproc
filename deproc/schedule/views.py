@@ -61,7 +61,7 @@ def delete_lesson(request, year, month, day, group, lesson, id_lesson):
 
 def lesson(request, year, month, day, group, lesson):
 
-# TODO сумма всех показателей, не верный показ
+# TODO сумма всех показателей
 
     if request.GET.get('error', False):
         oshibka = True
