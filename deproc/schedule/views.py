@@ -4,7 +4,7 @@ from telepathy._generated.errors import DoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
 from django.db.models.aggregates import Sum
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
+from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404, redirect
 from django.template.context import RequestContext
 from itertools import chain
 from deproc.tariffication import models as main_models
@@ -20,20 +20,57 @@ def schedule(request):
     return render_to_response('schedule/schedule.html', locals(), context_instance=RequestContext(request))
 
 def add_lesson(request, year, month, day, group, lesson, plan):
+
+    link = '/schedule/lesson/' + year + '-' + month + '-' + day + '/' + group + '/' + lesson
+
     this_day = sch_models.Schedule_day.objects.get(
         day__day = day,
         day__month = month,
         day__year = year
     )
     this_plan = main_models.Tariffication.objects.get(pk = plan)
-    sch_models.Schedule.objects.create(plan = this_plan, day = this_day, num_less = lesson, count_hours = 2)
-#    request.GET['count_hour']
-    return HttpResponseRedirect('/schedule/index?day=' + day + '.' + month + '.' + year)
+
+    flt_teacher = sch_models.Schedule.objects.filter(
+        plan__teacher = this_plan.teacher,
+        day = this_day,
+        num_less = lesson
+    )
+
+    flt_group = sch_models.Schedule.objects.filter(
+        plan__group_plan__group = this_plan.group_plan.group,
+        day = this_day,
+        num_less = lesson
+    )
+
+    if flt_teacher.count() > 0 or flt_group.count() >= 2:
+        er = True
+        link += "?error=%s" % er
+    else:
+        er = False
+        link += '/'
+        sch_models.Schedule.objects.create(plan = this_plan, day = this_day, num_less = lesson, count_hours = 2)
+
+    return HttpResponseRedirect(link)
+
+
+
+
+def delete_lesson(request, year, month, day, group, lesson, id_lesson):
+    sch_models.Schedule.objects.get(pk = id_lesson).delete()
+    return HttpResponseRedirect('/schedule/lesson/' + year + '-' + month + '-' + day + '/' + group + '/' + lesson + '/')
 
 def lesson(request, year, month, day, group, lesson):
 
-# TODO сделать показ стоящих пар, макс. 2, (удалить, добавить 1 или 2 часа)
 # TODO сумма всех показателей
+
+    if request.GET.get('error', False):
+        oshibka = True
+    else:
+        oshibka = False
+
+    backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
+
+    typehour = main_models.TypeHour.objects.all()
 
     this_day = sch_models.Schedule_day.objects.get(
         day__day = day,
@@ -52,12 +89,17 @@ def lesson(request, year, month, day, group, lesson):
     for lt in list_lessons:
         teach = '%s %s. %s.' % (lt.plan.teacher.last_name, lt.plan.teacher.first_name[0], lt.plan.teacher.other_name[0])
         dsc = lt.plan.uch_plan_hour.uch_plan.disc
-        lessons[teach] = dsc
+        tpdsc = lt.plan.uch_plan_hour.type_hour.name
+        lessons[teach] = dsc, tpdsc, lt.pk
+
+    if lessons == {}:
+        ls = True
+    else:
+        ls = False
 
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
-    )
-    choices = main_models.choice_typeh
+    ).order_by('teacher', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour')
 
     table = []
     last_teacher = ''
@@ -87,7 +129,7 @@ def lesson(request, year, month, day, group, lesson):
                 if tariff_teacher.uch_plan_hour.count_hours == 0:
                     lesson_info = ''
                 else:
-                    lesson_info = tariff_teacher.uch_plan_hour.type_hour.name, tariff_teacher.uch_plan_hour.count_hours, hours['count'], tariff_teacher.pk
+                    lesson_info = tariff_teacher.uch_plan_hour.type_hour.short_name, tariff_teacher.uch_plan_hour.count_hours, hours['count'], tariff_teacher.pk
                 if teacher == tariff_teacher.teacher:
                     if tariff_teacher.uch_plan_hour.uch_plan.disc != disc:
                         tr[teach, disc] = td
@@ -108,6 +150,9 @@ def lesson(request, year, month, day, group, lesson):
 
 
 def index(request):
+
+    backlink = '/schedule/calendar/'
+
     groups = main_models.Groups.objects.all()
     teacher_list = main_models.Teachers.objects.all()
     schedule_queryset = sch_models.Schedule.objects.all().select_related(

@@ -5,16 +5,14 @@
 {% endblock %}
 
 {% block main %}
-    <a href="/">назад</a><br>
+    <a class="btn btn-primary" href="{{ backlink }}"><i class="icon-arrow-left icon-white"></i> Назад</a>
     <br><br><br>
 
     <h1> {{ day }}</h1>
     <br/><br/><br/>
 
-    {# old schedule #}
-
     <div class="row-fluid">
-        <table class="schedule span11" id="schedule">
+        <table class="schedule span12" id="schedule">
             <tbody>
             <tr class="nso">
                 <th align="left"><b> # </b></th>
