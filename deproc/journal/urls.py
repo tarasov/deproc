@@ -17,10 +17,10 @@ urlpatterns = patterns('deproc.journal.views',
     url(r'^(?P<teacher>\d+)/group/(?P<group>\d+)/discipline/(?P<discipline>\d+)/$',
         'journal', name='journal'
     ),
-    url(r'^(?P<teacher>\d+)/group/(?P<group>\d+)/discipline/(?P<discipline>\d+)/add_theme/(\d+)/$',
+    url(r'^\d+/group/\d+/discipline/\d+/add_theme/(\d+)/$',
         'add_theme_of_day', name='add_theme_of_day'
     ),
-    url(r'^(?P<teacher>\d+)/group/(?P<group>\d+)/discipline/(?P<discipline>\d+)/add_mark/(\d+)/(\d+)/(\d+)/$',
+    url(r'^\d+/group/\d+/discipline/\d+/add_mark/(\d+)/(\d+)/(\d+)/$',
         'add_mark'
     ),
 )

@@ -10,30 +10,35 @@ from deproc.schedule.models import Schedule_day, Schedule
 from django.core.urlresolvers import reverse
 
 def journal(request, teacher, group, discipline):
-    """
-    журнал для группы
-    """
     form_lab = ThemeForm(label_suffix='')
 
-    current_group = get_object_or_404(Groups, pk=group)
-    current_discipline = get_object_or_404(Discipline, pk=discipline)
+    discipline = Discipline.objects.get(id=discipline)
 
-    group = get_object_or_404(Groups_stud, group=current_group)
-    days_of_schedule = Schedule.objects.filter(plan__teacher=teacher).order_by('day')[:10]
-    students = group.student.all()
+    if Groups_stud.objects.filter(group_id = group):
+        group = Groups.objects.get(id=group)
+        group_stud = Groups_stud.objects.get(group_id=group)
+    else:
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    days_of_schedule = Schedule.objects.filter(
+                        plan__teacher_id = teacher,
+                        plan__group_plan__group = group
+                    ).order_by('day')[:10]
+    students = group_stud.student.all()
     journal_days = []
     for day_of_schedule in days_of_schedule:
-        theme = Theme_of_day.objects.filter(day_of_schedule__day_id=day_of_schedule.day.id)
+        theme = Theme_of_day.objects.filter(day_of_schedule=day_of_schedule)
         if theme:
             journal_days.append({
                 'id': day_of_schedule.id,
                 'day': day_of_schedule.day.day,
+                'num_less': day_of_schedule.num_less,
                 'describe': theme[0].describe
             })
         else:
             journal_days.append({
                 'id': day_of_schedule.id,
                 'day': day_of_schedule.day.day,
+                'num_less': day_of_schedule.num_less,
                 'describe': ''
             })
 
@@ -50,20 +55,17 @@ def journal(request, teacher, group, discipline):
                 marks_of_day = [int(mark.mark) for mark in marks]
                 journal['marks'].append((day_of_schedule.id, marks_of_day,))
             else:
-                journal['marks'].append( (day_of_schedule.id, '',) )
+                journal['marks'].append((day_of_schedule.id, '',))
         table.append(journal)
     return render_to_response('journal/journal.html', locals(), context_instance=RequestContext(request))
 
 
-def add_mark(request, group, discipline, id_day, id_student, mark):
-    """
-     Добавление оценки
-    """
+def add_mark(request, day, student, mark):
     if request.method == 'GET':
-        id_student, id_day, mark = int(id_student), int(id_day), int(mark),
-        schedule_day = get_object_or_404(Schedule, pk=id_day)
+        student, day, mark = int(student), int(day), int(mark),
+        schedule_day = get_object_or_404(Schedule, pk=day)
         theme, created = Theme_of_day.objects.get_or_create(day_of_schedule=schedule_day, defaults = {'describe': ''})
-        student = get_object_or_404(Students, pk=id_student)
+        student = get_object_or_404(Students, pk=student)
         if mark != "0":
             assessment = Assessment(mark = mark, student = student, theme_of_day = theme)
             assessment.save()
@@ -94,8 +96,8 @@ def groups(request, teacher):
 
 def disciplines(request, teacher, group):
     teacher = Teachers.objects.get(id=teacher)
-    id_group = group
-    disciplines = teacher.get_disciplines_current_group(group)
+    group = Groups.objects.get(id=group)
+    disciplines = teacher.get_disciplines_current_group(group.id)
     return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
 
 def select_discipline(request, id_group, id_discpiline):
@@ -111,15 +113,17 @@ def select_discipline(request, id_group, id_discpiline):
 
 from django.views.decorators.csrf import csrf_protect
 @csrf_protect
-def add_theme_of_day(request, group, discipline, day):
+def add_theme_of_day(request, day_of_schedule):
     """
     Добавляем тему выбранного дня
     """
+    describe = request.POST['describe']
+    day_of_schedule = Schedule.objects.get(id=day_of_schedule)
 
-    if Schedule.objects.filter(day=day):
-        print 'HAHA'
+    themes_of_day = Theme_of_day.objects.filter(day_of_schedule = day_of_schedule)
+    if themes_of_day:
+        themes_of_day.delete()
 
+    Theme_of_day(day_of_schedule = day_of_schedule, describe = describe).save()
 
-
-    response = request.POST['describe']
-    return HttpResponse(response)
+    return HttpResponse(describe)

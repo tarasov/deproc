@@ -3,6 +3,9 @@
 {% block styles %}
 {% endblock %}
 
+{% block title %}
+    {{ group }} группы
+{% endblock %}
 
 {% block content %}
     <div class="container-fluid">
@@ -10,7 +13,7 @@
 
             {% for discipline in disciplines %}
                 <p style="text-align: center; font-size: 20px;">
-                    <a href="{% url journal teacher=teacher.id group=id_group discipline=discipline.pk %}">
+                    <a href="{% url journal teacher=teacher.id group=group.pk discipline=discipline.pk %}">
                         {{ discipline }}
                     </a>
                 </p>

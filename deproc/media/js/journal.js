@@ -2,41 +2,48 @@ $(function() {
     var s = 0;
     var l = 0;
 
+    $("a[rel*=leanModal]").leanModal({ top : 200, overlay : 0.45, closeButton: ".modal_close" });
 
-
-
-    $('#selMark').hide();
     $('.del').css({'opacity': '0.2'});
 
     $('#mark td.mark').each(function() {
-        var m = $.trim($(this).html());
-
-        if (m == '5') {
-            $(this).css({'color': 'red'});
-        }
-        if (m == '4') {
-            $(this).css({'color': 'green'});
-        }
-        if (m == '3') {
-            $(this).css({'color': 'blue'});
-        }
-        if (m == '2') {
-            $(this).css({'color': 'black'});
-        }
+        var id_td = '#' + this.id + ' a';
+        var marks = this.outerText.split(', ');
+        change_color_of_mark(id_td, marks)
     });
+
+    function change_color_of_mark(id_td, marks) {
+        for (var index in marks){
+            var id_mark = id_td + ' span.' + marks[index]
+            switch (marks[index]) {
+                case '5':
+                    $(id_mark).css('color', 'red');
+                    break;
+                case '4':
+                    $(id_mark).css('color', 'green');
+                    break;
+                case '3':
+                    $(id_mark).css('color', 'blue');
+                    break;
+                case '2':
+                    $(id_mark).css('color', 'black');
+                    break;
+            }
+        }
+    }
+
     $('td.mark').hover(
         function(){
             var expr = /(\d+)_(\d+)/;
             student = expr.exec($(this).attr('id'))[1];
             day = expr.exec($(this).attr('id'))[2];
 
-
             // подсветка лабораторной работы
-            themeElem = '#' + l;
+            var themeElem = '#' + l;
             $('#days tr').css({'background-color': '#FFF'});
             $(themeElem).css({'background-color': '#9CF'});
             // подсветка фамилии студента
-            studElem = '#stud_' + s;
+            var studElem = '#stud_' + s;
             $('#mark td.name').css({'background-color': '#FFF'});
             $(studElem).css({'background-color': '#9CF'});
         },
@@ -45,91 +52,61 @@ $(function() {
             $('#mark td.name').css({'background-color': '#FFF'});
 
         }
-    )
-    // клик по ячейке с оценкой
-    $('td.mark').click(function() {
+    );
 
-        // перемещаем блок с оценками
-        $('#selMark').show();
-        $(this).offset(function(i, v) {
-            $('#selMark').animate({'top': v.top + 0, 'left': v.left + 0}, 150);
-        });
-    });
-    
-    // закрыть окно с оценками
-    $('#selMark .close a').click(function() {
-        $('#selMark').hide();
-    });
-    
-    // закрыть окно с формой.. студента
-    $('#newStud .close a').click(function() {
-        $('#newStud').hide();
-    });
-    
-    // клик по оценке
-    $('#selMark a').click(function() {
-        var id_td = '#' + student + '_' + day;
+    // добавление оценки
+    $('#form_marks a').click(function() {
+        var id_td = '#' + student + '_' + day  + ' a';
         $.get(
             'add_mark/'+ day + '/' + student + '/' + $(this).attr('mark') + '/',
             {},
-            function(data) {
-                $(id_td).html(data);
-                $('#selMark').hide();
+            function(mark) {
+                var html_marks = $(id_td).html();
+                var span_mark = '<span class="' + mark + '">' + mark + '</span>';
+                if (html_marks.trim()) {
+                    span_mark = ', ' + span_mark;
+                }
+                $(id_td).html(html_marks.trim() + span_mark);
+                change_color_of_mark(id_td, [mark]);
+                $("#lean_overlay").fadeOut(200);
+                $('#form_marks').css({"display":"none"});
             }
         );
     });
 
     $('#mark td.mark').mousemove(function() {
         $(this).css({'background-color': '#5D5'});
-        $('#selMark').hide();      
+        $('#selMark').hide();
     });
-    
+
     $('#mark td.mark').mouseout(function() {
         $(this).css({'background-color': '#FFF'});
     });
 
 
 
-    // Лабы
 
-    $('#add_theme_of_day').hide()
-
-//    $('#days td.theme').click(function(){
-//        var theme = $(this).attr('l');
-//        $('#mark td').show()
-//        $('#mark th').show()
-//        $('#mark td[l!='+ theme +']:not(.notHide)').hide();
-//        $('#mark th[l!='+ theme +']:not(.notHide)').hide();
-//    })
-
-    $('#days td.theme').click(function(){
+    $('#days td.theme').hover(function(){
         var expr = /day_(\d+)/;
-        var day = expr.exec($(this).attr('id'))[1]
-
-        $('#add_theme_of_day a').attr('id', day);
-        $('#add_theme_of_day').show()
-        $(this).offset(function(i, v) {
-            $('#add_theme_of_day').animate({'top': v.top + 0, 'left': v.left + 0}, 150);
-        });
+        day = expr.exec($(this).attr('id'))[1]
     });
 
+    // если тема уже есть, то подставляем в инпут
+    $("a[name=form_themes]").click(function(){
+        $('#form_themes input[name=describe]').attr('value', this.text)
+    });
 
-
-
-
-    // добавление темы к дате
-    $('#add_theme_of_day a').click(function() {
-        var day = $(this).attr('id')
+    // добавление темы к дню из расписания
+    $('#form_themes a').click(function() {
         var describe = $('input[name=describe]').attr('value');
-
-//        alert('#day'+day)
 
         $.post(
             'add_theme/'+ day + '/',
             {'describe': describe},
             function(data) {
-                $('td#' + day + '.theme').html(data);
-                $('#add_theme_of_day').hide();
+                $('td#day_' + day + '.theme a').html(data);
+                $("#lean_overlay").fadeOut(200);
+                $('#form_themes').css({"display":"none"});
             }
         );
     });
@@ -143,8 +120,6 @@ $(function() {
     $('#days td.day').mouseout(function() {
         $(this).css({'background-color': '#FFF'});
     });
-
-
 
 
 
