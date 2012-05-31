@@ -75,11 +75,18 @@ $(function() {
     });
 
     $('#mark td.mark').mousemove(function() {
-        $(this).css({'background-color': '#5D5'});
-        $('#selMark').hide();
+        $(this).css({'background-color': '#eee'});
     });
 
     $('#mark td.mark').mouseout(function() {
+        $(this).css({'background-color': '#FFF'});
+    });
+
+    $('#days td.theme').mousemove(function() {
+        $(this).css({'background-color': '#eee'});
+    });
+
+    $('#days td.theme').mouseout(function() {
         $(this).css({'background-color': '#FFF'});
     });
 

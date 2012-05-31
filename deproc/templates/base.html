@@ -43,29 +43,32 @@
                 <a class="brand" href="#">@dmitrovdpk</a>
                 <div class="nav-collapse">
                     <ul class="nav">
-                        <li class="active"><a href="/">Home</a></li>
+                        <li class="active"><a href="/">Главная</a></li>
                     </ul>
 
                     {% if user.is_authenticated %}
                         <ul class="nav pull-right">
                             <li class="divider-vertical"></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-user icon-white"></i>
+                                    {{ user.get_full_name }}
+                                    <b class="caret"></b>
+                                </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Profile</a></li>
-                                    <li><a href="#">My Page</a></li>
-                                    <li><a href="#">Settings</a></li>
+                                    <li><a href="{% url profile %}"><i class="icon-home"></i> Профиль</a></li>
+                                    <li><a href="{% url settings %}"><i class="icon-cog"></i> Настройки</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="/logout/">LogOut</a></li>
+                                    <li><a href="{% url logout %}">Выйти</a></li>
                                 </ul>
                             </li>
                         </ul>
                     {% else %}
-                        <form class="navbar-form pull-right" action="/login/" method="post">
+                        <form class="navbar-form pull-right" action="{% url login %}" method="post">
                             {% csrf_token %}
-                            <input class="search-query span2" type="text" placeholder="Username" id="id_username" name="username" maxlength="30" >
-                            <input class="search-query span2" type="password" placeholder="password" name="password" id="id_password" >
-                            <button type="submit" class="btn">Go</button>
+                            <input class="search-query span2" type="text" placeholder="Пользователь" id="id_username" name="username" maxlength="30" >
+                            <input class="search-query span2" type="password" placeholder="Пароль" name="password" id="id_password" >
+                            <button type="submit" class="btn">Войти</button>
                         </form>
                     {% endif %}
                 </div><!-- /.nav-collapse -->
@@ -87,6 +90,7 @@
                         <li><a href="#">Студентам</a></li>
                         <li><a href="#">Преподавателям</a></li>
                         <li><a href="#">Отчеты</a></li>
+                        <li><a href="{% url teachers %}">Журнал</a></li>
 
                         <li class="nav-header">Администратор</li>
                         <li><a href="{% url tariffication %}">Тарификация</a></li>

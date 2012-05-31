@@ -137,12 +137,6 @@ def edit_page(request, pk):
     url = reverse('%s' % model_name.lower())
     return render_to_response('admin/edit_page.html', locals(), context_instance=RequestContext(request))
 
-def delete_page(request, pk, confirm = False):
-    """
-    Удаляем выбранные данные
-    """
-    path_info = request.META['PATH_INFO'].split('/')[1]
-    model_name = path_info[0].upper() + path_info[1:]
-    Model = getattr(models, model_name)
-    Model.objects.get(pk=pk).delete()
-    return HttpResponseRedirect(reverse('%s' % path_info))
+
+def action_page(request, page, pk, action):
+    return render_to_response('admin/edit_page.html', locals(), context_instance=RequestContext(request))

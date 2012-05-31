@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import re
+from django.contrib.auth.views import login, logout
 from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
@@ -26,7 +27,7 @@ pages_list = {
     }
 
 actions = (
-    'info', 'edit', 'delete'
+    'info', 'edit',
 )
 
 def wellcome(request):
@@ -81,13 +82,12 @@ def tariffication(request):
 
     return render_to_response('tariffication/tariffication.html', locals(), context_instance=RequestContext(request))
 
-def pages(request, actions=actions):
+def pages(request, page, actions = actions):
     # TODO сделать для всех простых страниц
     # специальности, группы, дисциплины, пользователи,
     # студенты, преподователи, [учебный год?]
     # потому что предоставление информации происходит однотипно (показ таблицы)
-    path_info = request.META['PATH_INFO'].split('/')[1]
-    model_name = pages_list[path_info][0]
+    model_name = pages_list[page][0]
     Model = getattr(models, model_name)
     values = Model.objects.all()
 
@@ -110,5 +110,4 @@ def pages(request, actions=actions):
             if th:
                 tr += (getattr(value, th[0]), )
         table += (tr + actions, )
-    print table
     return render_to_response('tariffication/pages.html', locals(), context_instance=RequestContext(request))

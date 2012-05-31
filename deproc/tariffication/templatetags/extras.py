@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.template.base import Library
-from deproc import settings
+from django.conf import settings
 from django.utils.safestring import mark_safe
 
 
@@ -18,8 +18,3 @@ def add_icon(value, arg, autoescape=False):
     if value == 'edit':
     # иконка информации
         return mark_safe(icon % (arg, 'edit', media_url, 'edit'))
-
-
-    if value == 'delete':
-    # иконка информации
-        return mark_safe(icon % (arg, 'delete', media_url, 'delete'))
