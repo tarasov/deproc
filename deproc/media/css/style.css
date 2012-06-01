@@ -1,4 +1,10 @@
 
+.add-icon {
+
+}
+.edit-icon {
+
+}
 table.tariffication {
     background-color: rgba(237, 237, 255, 0.26);
 }
@@ -32,7 +38,6 @@ table.schedule .forloop {
     padding: 5px;
 }
 
-style="color: #;
 
 table.schedule .teacher {
     padding-left: 5px;

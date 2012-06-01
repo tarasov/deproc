@@ -231,12 +231,12 @@ class Disc_type(models.Model):
 
 
 class Discipline(models.Model):
-    name = models.CharField(u"Дисциплина", max_length=150, null=False, blank=False) # Программное обеспечени компьютерных сетей
-    short_name = models.CharField(u"Короткое название", max_length=100, null=False, blank=False) # ПОКС
-    type = models.ForeignKey(Disc_type, verbose_name=u"Тип дисциплины") # лекция, практика, консультация
+    name = models.CharField(u"Дисциплина", max_length=150, null=False, blank=False)
+    short_name = models.CharField(u"Короткое название", max_length=100, null=False, blank=False)
+    type = models.ForeignKey(Disc_type, verbose_name=u"Тип дисциплины")
 
     class Meta:
-        verbose_name = u'дисциплина'
+        verbose_name = u'дисциплину'
         verbose_name_plural = u'дисциплины'
         db_table = 'discipline'
 

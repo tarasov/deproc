@@ -45,27 +45,8 @@ urlpatterns += patterns('',
 )
 
 
-
 urlpatterns += patterns('',
     url(r'^([a-z]+)/$', 'deproc.tariffication.views.pages'),
-    url(r'^([a-z]+)/add/$', 'deproc.admin.views.add_page'),
-    url(r'^([a-z]+)/(\d+)/([a-z]+)/$', 'deproc.admin.views.action_page')
+    url(r'^(?P<page>[a-z]+)/(?P<action>add)/$', 'deproc.admin.views.action_page'),
+    url(r'^(?P<page>[a-z]+)/(?P<pk>\d+)/(?P<action>[a-z]+)$', 'deproc.admin.views.action_page')
 )
-
-#def get_urls():
-#    from django.conf.urls import patterns, url
-#    from deproc.tariffication.views import pages_list
-#
-#    urls_list = patterns('',
-#        # в цикле добавим пути (urls)
-#    )
-#
-#    for page_list in pages_list.keys():
-#        urls_list.append(url(r'^%s/$' % page_list, 'deproc.tariffication.views.pages', name='%s' % page_list))
-#        urls_list.append(url(r'^%s/add/$' % page_list, 'deproc.admin.views.add_page', name='%s_add' % page_list))
-#        # TODO сделать проверку на существование функции
-#        for action in actions:
-#            urls_list.append(url(r'^%s/(\d+)/%s/$' % (page_list, action, ), 'deproc.admin.views.%s_page' % action, name='%s_%s' % (action, page_list, )))
-#    return urls_list
-#
-#urlpatterns += get_urls()

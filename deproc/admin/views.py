@@ -6,13 +6,10 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
 from deproc.admin.forms import dynamic_form_page
-from deproc.tariffication import forms
-from deproc.tariffication import models
-from deproc.tariffication import views
+from deproc.tariffication import forms, models
 
 
 def add_tariffication(request, action, teacher = None, group = None, discipline = None, semestr = None):
-
     typehours = models.TypeHour.objects.all()
     if request.POST: # сохраняем
         dynamic_form = forms.DynamicForm(request.POST)
@@ -27,7 +24,6 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
             uch_plan = models.UchPlan.objects.get(pk=uch_plan_pk)
             if models.UchPlanHour.objects.filter(uch_plan=uch_plan, tariffication__teacher = teacher, type_hour = typehour):
                 # уже создан, тогда обновляем часы
-                # TODO пересмотреть обновление данных
                 uch_plan_id = models.UchPlanHour.objects.get(uch_plan=uch_plan, tariffication__teacher = teacher, type_hour = typehour).pk
                 uch_plan_hour = models.UchPlanHour(pk = uch_plan_id, uch_plan = uch_plan, type_hour = typehour, count_hours = hour)
                 uch_plan_hour.count_hour = hour
@@ -73,70 +69,57 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
 
     return render_to_response('admin/add_tariffication.html', locals(), context_instance=RequestContext(request))
 
-
 def add_plan_group(request):
     form_plan_group = forms.PlanGroupForm()
     return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))
 
-def add_page(request):
-    """
-    Делаем добавления данных
-    """
-    path_info = request.META['PATH_INFO'].split('/')[1]
-    model_name = path_info[0].upper() + path_info[1:]
-    Model = getattr(models, model_name)
-    # создается ModelForm
+def action_page(request, page, pk = None, action = None):
+    Model = getattr(models, page.title())
     form_inst = dynamic_form_page(Model)
+    if action == 'edit':
+        text = u'Редактировать %s' % (Model._meta.verbose_name, )
+    elif action == 'add':
+        text = u'Добавить {0}'.format(Model._meta.verbose_name)
+    else:
+        text = u'Информация'
 
+    isdelete = False
     if request.POST:
-        form = form_inst(request.POST)
+        if pk: # редактирование
+            # если форма пустая, то удаляем ее
+            for key, value in request.POST.iteritems():
+                # не проверяем токен. потому что он всегда есть
+                if key == 'csrfmiddlewaretoken':
+                    continue
+                # если хоть одно значение указано, то завершаем проверку и редактируем
+                if value:
+                    isdelete = False
+                    break
+                isdelete = True
+
+            if isdelete:
+                # TODO переписать метод удаления, лучше добавить поле is_delete = True
+                Model.objects.get(pk=pk).delete()
+                return HttpResponseRedirect('/{0}/'.format(page))
+            form = form_inst(request.POST, instance = Model.objects.get(pk=pk))
+        else: # добавление
+            form = form_inst(request.POST)
+
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('%s' % path_info))
+            return HttpResponseRedirect('/{0}/'.format(page))
+
+    if pk:
+        value = Model.objects.get(pk=pk)
+        if action == 'info':
+            fields = value._meta.fields
+            table = ()
+            for field in fields:
+                if field.name == 'id': continue # заменяем id на #
+                tr = (field.verbose_name, getattr(value, field.name))
+                table += (tr, )
+        else:
+            form = form_inst(instance = Model.objects.get(pk=pk))
     else:
         form = form_inst()
-
-    url = reverse('%s' % model_name.lower())
-    return render_to_response('admin/add_page.html', locals(), context_instance=RequestContext(request))
-
-# действия для страниц
-def info_page(request, pk):
-    path_info = request.META['PATH_INFO'].split('/')[1]
-    model_name = path_info[0].upper() + path_info[1:]
-    Model = getattr(models, model_name)
-    value = Model.objects.get(pk=pk)
-    # названия полей выбранной модели
-    fields = value._meta.fields
-
-    table = ()
-    for field in fields:
-        if field.name == 'id': continue
-        tr = (field.verbose_name, getattr(value, field.name))
-        table += (tr, )
-#    print table
-    return render_to_response('admin/info_page.html', locals(), context_instance=RequestContext(request))
-
-
-def edit_page(request, pk):
-    """
-    Делаем редактирование выбранных данных
-    """
-    path_info = request.META['PATH_INFO'].split('/')[1]
-    model_name = path_info[0].upper() + path_info[1:]
-    Model = getattr(models, model_name)
-    # создается ModelForm
-    form_inst = dynamic_form_page(Model)
-
-    if request.POST:
-        form = form_inst(request.POST, instance = Model.objects.get(pk=pk))
-        if form.is_valid():
-            form.save()
-    else:
-        form = form_inst(instance = Model.objects.get(pk=pk))
-
-    url = reverse('%s' % model_name.lower())
-    return render_to_response('admin/edit_page.html', locals(), context_instance=RequestContext(request))
-
-
-def action_page(request, page, pk, action):
-    return render_to_response('admin/edit_page.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('admin/action_page.html'.format(action), locals(), context_instance=RequestContext(request))
