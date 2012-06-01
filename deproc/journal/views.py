@@ -78,11 +78,10 @@ def add_mark(request, day, student, mark):
 
 
 def teachers(request):
-    if Teachers.objects.filter(id = request.user.pk):
+    if request.user.is_authenticated() and Teachers.objects.filter(id = request.user.pk):
         return HttpResponseRedirect(reverse('groups', kwargs = {'teacher': request.user.pk}))
-    else:
-        teachers = Teachers.objects.all()
-        return render_to_response('journal/teachers.html', locals(), context_instance=RequestContext(request))
+    teachers = Teachers.objects.all()
+    return render_to_response('journal/teachers.html', locals(), context_instance=RequestContext(request))
 
 
 def groups(request, teacher):

@@ -38,19 +38,14 @@ $(function() {
             student = expr.exec($(this).attr('id'))[1];
             day = expr.exec($(this).attr('id'))[2];
 
-            // подсветка лабораторной работы
-            var themeElem = '#' + l;
-            $('#days tr').css({'background-color': '#FFF'});
-            $(themeElem).css({'background-color': '#9CF'});
-            // подсветка фамилии студента
-            var studElem = '#stud_' + s;
-            $('#mark td.name').css({'background-color': '#FFF'});
-            $(studElem).css({'background-color': '#9CF'});
-        },
-        function(){
-            $('#days tr').css({'background-color': '#FFF'})
-            $('#mark td.name').css({'background-color': '#FFF'});
-
+//            var studElem = '#stud_' + s;
+//            $('#mark td.name').css({'background-color': '#FFF'});
+//            $(studElem).css({'background-color': '#9CF'});
+//        },
+//        function(){
+//            $('#days tr').css({'background-color': '#FFF'})
+//            $('#mark td.name').css({'background-color': '#FFF'});
+//
         }
     );
 
@@ -119,14 +114,14 @@ $(function() {
     });
 
 
-    // реализовать в hover
-    $('#days td.day').mousemove(function() {
-        $(this).css({'background-color': '#5D5'});
-        $('#add_theme_of_day').hide();
-    });
-    $('#days td.day').mouseout(function() {
-        $(this).css({'background-color': '#FFF'});
-    });
+//    // реализовать в hover
+//    $('#days td.day').mousemove(function() {
+//        $(this).css({'background-color': '#5D5'});
+//        $('#add_theme_of_day').hide();
+//    });
+//    $('#days td.day').mouseout(function() {
+//        $(this).css({'background-color': '#FFF'});
+//    });
 
 
 

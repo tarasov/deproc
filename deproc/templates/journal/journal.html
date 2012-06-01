@@ -8,66 +8,61 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <table id = "mark"  class="span7">
-                <tr>
-                    <th class="span3">
-                        ФИО
-                    </th>
-                    {% for day in journal_days %}
-                        <th class="mark" l="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
-                    {% endfor %}
-                </tr>
+    <table id = "mark"  class="span8">
+        <tr>
+            <th class="span1">#</th>
+            <th class="span3">
+            ФИО
+            </th>
+            {% for day in journal_days %}
+                <th l="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
+            {% endfor %}
+        </tr>
 
-                {% for tr in table %}
-                    <tr>
-                        <td class="name">{{ tr.student }}</td>
-                        {% for mark in tr.marks %}
-                            <td class="mark {{ mark.id }}" id="{{ tr.student.id }}_{{ mark.0 }}">
-                                <a id="go" rel="leanModal" name="form_marks" href="#form_marks">
-                                    {% for mark in mark.1 %}
-                                        {% if not forloop.last %}
-                                            <span class="{{ mark }}">{{ mark }}</span>,
-                                        {% else %}
-                                            <span class="{{ mark }}">{{ mark }}</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                </a>
-                            </td>
-                        {% endfor %}
-                    </tr>
+        {% for tr in table %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="name">{{ tr.student }}</td>
+                {% for mark in tr.marks %}
+                    <td class="mark {{ mark.id }}" id="{{ tr.student.id }}_{{ mark.0 }}">
+                        <a id="go" rel="leanModal" name="form_marks" href="#form_marks">
+                            {% for mark in mark.1 %}
+                                {% if not forloop.last %}
+                                    <span class="{{ mark }}">{{ mark }}</span>,
+                                {% else %}
+                                    <span class="{{ mark }}">{{ mark }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                    </td>
                 {% endfor %}
-            </table>
+            </tr>
+        {% endfor %}
+    </table>
 
-            <table id="days" class="span4">
-                <tr>
-                    <th class="span1">#</th>
-                    <th class="name" style="text-align: center;">
-                       Темы
-                    </th>
-                </tr>
-                {% for day in journal_days %}
-                    <tr id="{{ day.id }}">
-                        <td>
-                            <span style="font-size: 14px;">
-                                <p>{{ day.day }}</p>
-                                <p>{{ day.num_less }} пара</p>
-                            </span>
-                        </td>
-                        <td id="day_{{ day.id }}" class="theme">
-                            <a id="go" rel="leanModal" name="form_themes" href="#form_themes">
-                                {{ day.describe }}
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-
-
-
+    <table id="days" class="span4">
+        <tr>
+            <th>Дата</th>
+            <th class="span3">
+               Темы
+            </th>
+        </tr>
+        {% for day in journal_days %}
+            <tr id="{{ day.id }}">
+                <td class="day span1">
+                    <span>
+                        <p>{{ day.day }}</p>
+                        <p>{{ day.num_less }} пара</p>
+                    </span>
+                </td>
+                <td id="day_{{ day.id }}" class="theme">
+                    <a id="go" rel="leanModal" name="form_themes" href="#form_themes">
+                        <p>{{ day.describe }}</p>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 
     <div id="form_themes">
         <div id="ct">

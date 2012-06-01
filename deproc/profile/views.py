@@ -21,4 +21,4 @@ def logout_user(request):
 
 def login_user(request):
     login(request)
-    return HttpResponseRedirect(reverse('wellcome'))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])

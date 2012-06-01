@@ -8,25 +8,20 @@
     {% block meta %}
     {% endblock %}
 
-{#    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" type="type/css" rel="stylesheet" /> <!-- default bootstrap -->#}
     <link href="{{ MEDIA_URL }}css/bootstrap.css" type="text/css" rel="stylesheet"> <!-- edited: topmenu -->
     <link href="{{ MEDIA_URL }}css/style.css" type="type/css" rel="stylesheet" />
 
 
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap.js"></script>
-{#    <script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap-dropdown.js"></script>#}
 
     {% block styles %}
     <!-- css / js -->
     {% endblock %}
 
-
     {% block headcal %}
 
     {% endblock %}
-
-
     <!--<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico" type="image/x-icon" />-->
 </head>
 <body>
@@ -43,7 +38,13 @@
                 <a class="brand" href="#">@dmitrovdpk</a>
                 <div class="nav-collapse">
                     <ul class="nav">
-                        <li class="active"><a href="/">Главная</a></li>
+                        <li class="active">
+                            <a href="/">Главная</a>
+                        </li>
+                        <li>
+                            <a href="{% url teachers %}">Журнал</a>
+                        </li>
+
                     </ul>
 
                     {% if user.is_authenticated %}
@@ -78,7 +79,7 @@
 
 
     <div class="container-fluid">
-        <div class="row-fluid">
+        <div     class="row-fluid">
             <div class="span3">
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
@@ -107,24 +108,12 @@
                 {% block main %}
 
                 {% endblock %}
-            </div><!--/span-->
-        </div><!--/row-->
-
-
+            </div>
+        </div>
     </div>
-
-    <br/>
-    <br/>
-    <br/>
-
-    <div class="container">
-
+<hr/>
         <footer class="footer">
-            <p style="padding: 50px;"> by <a href="https://twitter.com/#!/monosyde" target="_blank">@monosyde</a> and <a href="http://twitter.com/#!/RuslanTarasov" target="_blank">@RuslanTarasov</a> </p>
+            <p style="padding: 20px;">© Дмитровский институт непрерывного образования by <a href="https://twitter.com/#!/monosyde" target="_blank">@monosyde</a> and <a href="http://twitter.com/#!/RuslanTarasov" target="_blank">@RuslanTarasov</a> </p>
         </footer>
-
-    </div>
-
-
 </body>
 </html>

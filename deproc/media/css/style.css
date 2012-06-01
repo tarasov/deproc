@@ -1,9 +1,14 @@
-
-.add-icon {
-
+.icon-info-big {
+    padding: 0;
+    min-height: 26px;
+    min-width: 26px;
+    background: url("../img/info.png") left top no-repeat;
 }
-.edit-icon {
-
+.icon-edit-big {
+    padding: 0;
+    min-height: 26px;
+    min-width: 26px;
+    background: url("../img/edit.png") left top no-repeat;
 }
 table.tariffication {
     background-color: rgba(237, 237, 255, 0.26);
@@ -13,7 +18,7 @@ table.schedule {
     background-color: rgba(237, 237, 255, 0.26);
 }
 
-table.schedule .osn {
+table.schedule .osn, table#mark td.name, table#days td.day {
     border: 2px solid #ffebcd;
     background-color: #ffffcc;
 }
@@ -43,40 +48,42 @@ table.schedule .teacher {
     padding-left: 5px;
 }
 
-table.tariffication tr, table.group-plan tr, table.schedule tr {
+table.tariffication tr,
+table.group-plan tr,
+table.schedule tr,
+table#mark tr
+table#days tr {
     height: 25px;
     border: 2px solid #ffebcd;
 }
 
-table.tariffication th, table.group-plan th, table.schedule th {
+table.tariffication th,
+table.group-plan th,
+table.schedule th,
+table#mark th,
+table#days th {
     text-align: center;
     color: #35a119;
     font-size: medium;
 }
 
-table.schedule th {
+table.schedule th,
+table#mark th,
+table#days th {
     border: 2px solid #ffebcd;
     color: #f3f42c;
     background-color: #0088cc;
 }
 
-table.tariffication td, table.schedule td {
+table.tariffication td, table.schedule td, table#mark td {
     text-align: center;
 }
 
-table.tariffication .addin:hover {
-    background-color: #ffebcd;
-}
-
-table.group-plan tr {
-    border: 2px solid #ffebcd;
-}
-
-table.schedule td {
-    border: 2px solid #ffebcd;
-}
-
-table.schedule {
+table.schedule td,
+table.tariffication .addin:hover,
+table.group-plan tr,
+table#mark td,
+table#days td {
     border: 2px solid #ffebcd;
 }
 table.schedule .group:hover {

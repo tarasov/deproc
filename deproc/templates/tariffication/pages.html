@@ -2,8 +2,7 @@
 
 {% block main %}
     {% load extras %}
-    Страницы
-    <br><br><br>
+    <br>
 
     <div class="row-fluid">
         <table class="tariffication span11">
@@ -19,7 +18,7 @@
                             {% if td not in actions %}
                                 <td align="left"><b>{{ td }}</b></td>
                             {% else %}
-                                <td align="left">{{ td|add_icon:tr.0 }}</td>
+                                <td align="left"><a href="/{{ tr.0 }}/{{ td }}"><i class="icon-{{ td }}-big"></i></a></td>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
