@@ -69,10 +69,37 @@ def lesson(request, year, month, day, group, lesson):
     else:
         oshibka = False
 
-#    backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
-    backlink = request.META['HTTP_REFERER']
+    backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
+#    backlink = request.META['HTTP_REFERER']
 
     typehour = main_models.TypeHour.objects.all()
+
+    sum_hours = []
+    for typeh in typehour:
+
+        vsego = main_models.Tariffication.objects.filter(
+            group_plan__group__name = group,
+            uch_plan_hour__type_hour = typeh
+        ).aggregate(count=Sum('uch_plan_hour__count_hours'))
+        if not vsego['count']:
+            vsego['count'] = 0
+
+
+        vidano = sch_models.Schedule.objects.filter(
+            plan__group_plan__group__name = group,
+            plan__uch_plan_hour__type_hour = typeh
+        ).aggregate(count=Sum('count_hours'))
+        if not vidano['count']:
+            vidano['count'] = 0
+
+        if vsego and vidano:
+            sum_hours.append({
+                'type': typeh,
+                'vsego': vsego['count'],
+                'vidano': vidano['count']
+            })
+
+    print sum_hours
 
     this_day = sch_models.Schedule_day.objects.get(
         day__day = day,
@@ -92,12 +119,8 @@ def lesson(request, year, month, day, group, lesson):
         teach = '%s %s. %s.' % (lt.plan.teacher.last_name, lt.plan.teacher.first_name[0], lt.plan.teacher.other_name[0])
         dsc = lt.plan.uch_plan_hour.uch_plan.disc
         tpdsc = lt.plan.uch_plan_hour.type_hour.name
-        lessons[teach] = dsc, tpdsc, lt.pk
-
-    if lessons == {}:
-        ls = True
-    else:
-        ls = False
+        count_hours = lt.count_hours
+        lessons[teach] = dsc, tpdsc, count_hours, lt.pk
 
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
