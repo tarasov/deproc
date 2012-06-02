@@ -31,6 +31,12 @@ table.schedule tr#lesson th {
     font-size: 13px;
 }
 
+table.schedule td.double {
+    white-space:nowrap;
+    overflow:hidden
+}
+
+
 
 table.schedule .type_hour {
     font-size: 10px;
