@@ -31,6 +31,8 @@ def journal(request, teacher, group, discipline):
             journal_days.append({
                 'id': day_of_schedule.id,
                 'day': day_of_schedule.day.day,
+                'count_hours': day_of_schedule.count_hours,
+                'shor_name': day_of_schedule.plan.type_hours.name,
                 'num_less': day_of_schedule.num_less,
                 'describe': theme[0].describe
             })
@@ -38,6 +40,7 @@ def journal(request, teacher, group, discipline):
             journal_days.append({
                 'id': day_of_schedule.id,
                 'day': day_of_schedule.day.day,
+                'count_hours': day_of_schedule.count_hours,
                 'num_less': day_of_schedule.num_less,
                 'describe': ''
             })

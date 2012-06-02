@@ -51,8 +51,13 @@
             <tr id="{{ day.id }}">
                 <td class="day span1">
                     <span>
-                        <p>{{ day.day }}</p>
-                        <p>{{ day.num_less }} пара</p>
+                        <p>{{ day.day|date:"m.d" }}</p>
+                        <p>
+                            {{ day.num_less }} пара ({{ day.count_hours }})
+                        </p>
+                        <p>
+                            {{ day.shor_name}}
+                        </p>
                     </span>
                 </td>
                 <td id="day_{{ day.id }}" class="theme">
