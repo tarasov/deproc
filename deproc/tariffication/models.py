@@ -397,6 +397,10 @@ class Tariffication(models.Model):
         return self.uch_plan_hour.count_hours
 
     @property
+    def disc(self):
+        return self.uch_plan_hour.uch_plan.disc
+
+    @property
     def type_hours(self):
         return self.uch_plan_hour.type_hour
 

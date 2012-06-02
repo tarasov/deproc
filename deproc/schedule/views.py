@@ -3,13 +3,14 @@ import datetime
 from telepathy._generated.errors import DoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
 from django.db.models.aggregates import Sum
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404, redirect
 from django.template.context import RequestContext
 from itertools import chain
 from deproc.tariffication import models as main_models
 from deproc.schedule import models as sch_models
 from deproc.schedule import forms
+import json
 
 def sql_schedule(request):
     return locals()
@@ -150,13 +151,13 @@ def lesson(request, year, month, day, group, lesson):
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
 
-def index(request, teacher = None):
+def index(request, id_teacher = None):
 
     backlink = '/schedule/calendar/'
 
     groups = main_models.Groups.objects.all()
-    if teacher:
-        teacher_list = main_models.Teachers.objects.get(pk=teacher)
+    if id_teacher:
+        teacher_list = main_models.Teachers.objects.filter(id=id_teacher)
     else:
         teacher_list = main_models.Teachers.objects.all()
 
@@ -201,7 +202,7 @@ def index(request, teacher = None):
                                 for tt in tc:
                                     teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
                                     hourtype = tt.plan.uch_plan_hour.type_hour.short_name
-                                    ls[j] = tt.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
+                                    ls[j] = tt.plan.disc, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
                             else:
@@ -214,9 +215,12 @@ def index(request, teacher = None):
                 else:
                     for i in range(1,6):
                         lessons[i] = ''
-                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0]), teacher.username
+                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0])
                 schedule_teacher[t] = lessons
-            # response
+
+            if id_teacher:
+                return HttpResponse(json.dumps(schedule_teacher))
+
             for group in groups:
                 lessons = {}
                 sch = schedule_queryset.filter(
