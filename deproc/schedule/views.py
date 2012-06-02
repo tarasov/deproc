@@ -225,14 +225,14 @@ def index(request, id_teacher = None):
                                 for tt in tc:
                                     teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
                                     hourtype = tt.plan.uch_plan_hour.type_hour.short_name
-                                    ls[j] = tt.plan.disc, teach, hourtype
+                                    ls[j] = tt.plan.disc.name, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
                             else:
                                 tc = tch.get(num_less = i)
                                 teach = '%s %s. %s.' % (tc.plan.teacher.last_name, tc.plan.teacher.first_name[0], tc.plan.teacher.other_name[0])
                                 hourtype = tc.plan.uch_plan_hour.type_hour.short_name
-                                lessons[i] = tc.plan.uch_plan_hour.uch_plan.disc, tc.plan.group_plan.group, hourtype
+                                lessons[i] = tc.plan.disc.name, tc.plan.group_plan.group.name, hourtype
                         else:
                             lessons[i] = ''
                 else:

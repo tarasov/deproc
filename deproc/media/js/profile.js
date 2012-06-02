@@ -8,12 +8,24 @@ $(function() {
         var curr_date = '14';
         var curr_month = '05';
         var curr_year = now.getFullYear();
-
+        var html = '';
         $.get(
             url,
             {'day': curr_date + '.' + curr_month + '.' + curr_year},
-            function(tr) {
-                $('p#schedule').html(tr);
+            function(data) {
+                var tr = JSON.parse(data);
+                for(var key in tr) {
+                    for (var value in tr[key]) {
+                        html += value + ' ';
+                        if (tr[key][value] != '' ) {
+                            html += tr[key][value][1].toString() + ' ' + tr[key][value][0] + '<br>';
+                        } else {
+                            html += '<br>';
+                        }
+                    }
+                }
+
+                $('p#schedule').html(html);
             }
 
 

@@ -17,10 +17,12 @@
             Часы остаток
         </p>
         <p>
-            <a class = "show_schedule" rel="{% url schedule_index id_teacher=user.pk %}" href="#">показать расписание на сегодня</a>
+            <a class = "show_schedule" rel="{% url schedule_index id_teacher=user.pk %}" href="#">
+                показать расписание на сегодня
+            </a>
         </p>
-        <p id = "schedule"></p>
-
+        <p id = "schedule">
+        </p>
     </div>
     <div class="span3">PHOTO</div>
 {% endblock %}
