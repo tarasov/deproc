@@ -17,6 +17,11 @@ urlpatterns += patterns('',
     url(r'schedule/', include('deproc.schedule.urls'))
 )
 
+# Графики
+urlpatterns += patterns('',
+    url(r'report/', include('deproc.report.urls'))
+)
+
 # Электронный журнал
 urlpatterns += patterns('',
     url(r'^journal/', include('deproc.journal.urls')),

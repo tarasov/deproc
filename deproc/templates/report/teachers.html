@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Назад</a>
+    <br><br><br>
+
+    <form action="" method="GET">
+        <select>
+            {% for teacher in teachers %}
+                <option>{{ teacher }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-success" href="">Success</button>
+    </form>
+
+
+
+
+{% endblock %}

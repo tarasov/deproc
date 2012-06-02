@@ -43,7 +43,17 @@ def add_lesson(request, year, month, day, group, lesson, plan, count_hours = 2):
         num_less = lesson
     )
 
-    if flt_teacher.count() > 0 or flt_group.count() >= 2:
+    vsego = main_models.Tariffication.objects.get(
+        pk = this_plan.pk
+    )
+
+    vidano = sch_models.Schedule.objects.filter(
+        plan = this_plan
+    ).aggregate(count=Sum('count_hours'))
+    if not vidano['count']:
+        vidano['count'] = 0
+
+    if flt_teacher.count() > 0 or flt_group.count() >= 2 or vidano['count'] >= vsego.uch_plan_hour.count_hours or int(count_hours) + int(vidano['count']) > vsego.uch_plan_hour.count_hours:
         er = True
         link += "?error=%s" % er
     else:
