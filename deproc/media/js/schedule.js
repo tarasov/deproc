@@ -7,25 +7,15 @@
  */
 $(function() {
 
-    $('b.type_hour').each(function() {
-        var m = $.trim($(this).html());
+    $('td.group').hover(
+        function(){
+            plan = this.id
+        }
+    );
 
-        if (m == 'Л') {
-            $(this).css({'color': '#dc143c'});
-        }
-        if (m == 'П') {
-            $(this).css({'color': '#df73ff'});
-        }
-        if (m == 'К') {
-            $(this).css({'color': '#77dd77'});
-        }
-        if (m == 'Э') {
-            $(this).css({'color': '#ff7518'});
-        }
+    $('#form_hours a').click(function() {
+            window.location = 'add/'+ plan + '/' + $(this).attr('count_hours') + '/'
     });
-
-
-
 
     $('b.type_hour').each(function() {
         var m = $.trim($(this).html());
@@ -49,5 +39,7 @@ $(function() {
             $(this).css({'color': '#c9a0dc'});
         }
     });
+
+    $("a[rel*=leanModal]").leanModal({ top : 200, overlay : 0.45, closeButton: ".modal_close" });
 
 });

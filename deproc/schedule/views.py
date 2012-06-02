@@ -19,7 +19,7 @@ def schedule(request):
     cal = forms.MyCalendarForm()
     return render_to_response('schedule/schedule.html', locals(), context_instance=RequestContext(request))
 
-def add_lesson(request, year, month, day, group, lesson, plan):
+def add_lesson(request, year, month, day, group, lesson, plan, count_hours = 2):
 
     link = '/schedule/lesson/' + year + '-' + month + '-' + day + '/' + group + '/' + lesson
 
@@ -48,7 +48,7 @@ def add_lesson(request, year, month, day, group, lesson, plan):
     else:
         er = False
         link += '/'
-        sch_models.Schedule.objects.create(plan = this_plan, day = this_day, num_less = lesson, count_hours = 2)
+        sch_models.Schedule.objects.create(plan = this_plan, day = this_day, num_less = lesson, count_hours = count_hours)
 
     return HttpResponseRedirect(link)
 
@@ -68,7 +68,8 @@ def lesson(request, year, month, day, group, lesson):
     else:
         oshibka = False
 
-    backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
+#    backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
+    backlink = request.META['HTTP_REFERER']
 
     typehour = main_models.TypeHour.objects.all()
 
@@ -82,7 +83,7 @@ def lesson(request, year, month, day, group, lesson):
         plan__group_plan__group__name = group,
         day = this_day,
         num_less = lesson
-    )
+    ).select_related()
 
     lessons = {}
 
@@ -99,7 +100,7 @@ def lesson(request, year, month, day, group, lesson):
 
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
-    ).order_by('teacher', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour')
+    ).order_by('teacher', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour').select_related()
 
     table = []
     last_teacher = ''
@@ -149,12 +150,16 @@ def lesson(request, year, month, day, group, lesson):
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
 
-def index(request):
+def index(request, teacher = None):
 
     backlink = '/schedule/calendar/'
 
     groups = main_models.Groups.objects.all()
-    teacher_list = main_models.Teachers.objects.all()
+    if teacher:
+        teacher_list = main_models.Teachers.objects.get(pk=teacher)
+    else:
+        teacher_list = main_models.Teachers.objects.all()
+
     schedule_queryset = sch_models.Schedule.objects.all().select_related(
         "plan__uch_plan_hour__uch_plan__disc",
         "plan__group_plan__group",
@@ -176,39 +181,6 @@ def index(request):
 
             schedule_group = {}
             schedule_teacher = {}
-
-            for group in groups:
-                lessons = {}
-                sch = schedule_queryset.filter(
-                    plan__group_plan__group = group,
-                    day = this_day
-                )
-
-                if sch:
-                    for i in range(1,6):
-                        if (sch.filter(num_less = i)):
-                            try:
-                                sc = get_object_or_404(sch, num_less = i)
-                                teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
-                                hourtype = sc.plan.uch_plan_hour.type_hour.short_name
-                                lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, hourtype
-                            except MultipleObjectsReturned:
-                                sc = sch.filter(num_less = i)
-                                j = 1
-                                ls = {}
-                                for ss in sc:
-                                    teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
-                                    hourtype = ss.plan.uch_plan_hour.type_hour.short_name
-                                    ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
-                                    j += 1
-                                lessons[i] = ls
-                        else:
-                            lessons[i] = ''
-                else:
-                    for i in range(1,6):
-                        lessons[i] = ''
-
-                schedule_group[group.name] = lessons
 
             for teacher in teacher_list:
                 lessons = {}
@@ -244,5 +216,39 @@ def index(request):
                         lessons[i] = ''
                 t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0]), teacher.username
                 schedule_teacher[t] = lessons
+            # response
+            for group in groups:
+                lessons = {}
+                sch = schedule_queryset.filter(
+                    plan__group_plan__group = group,
+                    day = this_day
+                )
+
+                if sch:
+                    for i in range(1,6):
+                        if (sch.filter(num_less = i)):
+                            try:
+                                sc = get_object_or_404(sch, num_less = i)
+                                teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
+                                hourtype = sc.plan.uch_plan_hour.type_hour.short_name
+                                lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, hourtype
+                            except MultipleObjectsReturned:
+                                sc = sch.filter(num_less = i)
+                                j = 1
+                                ls = {}
+                                for ss in sc:
+                                    teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
+                                    hourtype = ss.plan.uch_plan_hour.type_hour.short_name
+                                    ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
+                                    j += 1
+                                lessons[i] = ls
+                        else:
+                            lessons[i] = ''
+                else:
+                    for i in range(1,6):
+                        lessons[i] = ''
+
+                schedule_group[group.name] = lessons
+
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
