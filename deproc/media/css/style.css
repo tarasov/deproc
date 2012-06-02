@@ -27,6 +27,11 @@ table.schedule .nso {
     background-color: #a9dba9;
 }
 
+table.schedule tr#lesson th {
+    font-size: 13px;
+}
+
+
 table.schedule .type_hour {
     font-size: 10px;
     padding-left: 5px;
