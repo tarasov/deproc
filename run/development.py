@@ -5,7 +5,7 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 TEMPLATE_CONTEXT_PROCESSORS +=('django.core.context_processors.debug',)
 
-ENABLED_TOOLBAR = False
+ENABLED_TOOLBAR = True
 
 if ENABLED_TOOLBAR:
     MIDDLEWARE_CLASSES += ('lib.debug_toolbar.middleware.DebugToolbarMiddleware',)

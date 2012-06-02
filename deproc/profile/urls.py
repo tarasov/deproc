@@ -2,7 +2,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from deproc.tariffication.views import actions
-import settings
 
 # Аккаунт
 urlpatterns = patterns('deproc.profile.views',

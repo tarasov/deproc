@@ -88,7 +88,7 @@
 
                 <tr>
                     <td align="left"><b class="forloop"> {{ forloop.counter }} </b></td>
-                    <td id="group_{{ tr }}" class="group osn" align="left">
+                    <td class="group osn" align="left">
 
                         <div>
 
@@ -103,7 +103,13 @@
                             {% if v == '' %}
                                     <td class="group" id="" align="left"> <a href=""><div><b></b></div></a> </td>
                                 {% else %}
-                                    <td class="group" id="" align="left"> <a href="add/{{ v.3 }}"><div><b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b></div></a> </td>
+                                    <td class="group" id="{{ v.3 }}" align="left">
+                                        <a id="go" rel="leanModal" name="form_hours" href="#form_hours">
+                                            <b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b>
+
+{#                                        <a href="add/{{ v.3 }}"><div><b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b></div>#}
+
+                                        </a> </td>
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
@@ -126,5 +132,23 @@
             </tbody>
         </table>
     </div>
+
+    <div id="form_hours">
+        <div id="ct">
+            <div id="ct-header">
+                <h2 style="text-align: center;">Количество часов</h2>
+            </div>
+
+            <div style="padding-top: 10px; margin-left: 80px;">
+                <form action="">
+                    <p style="font-size: 23px;"><a class="hour_1" count_hours="1" href="#"> 1 час </a></p>
+                    <p style="font-size: 23px;"><a class="hour_2" count_hours="2" href="#"> 2 часа </a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
 
 {% endblock %}
