@@ -9,7 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('deproc.tariffication.views',
     url(r'^$', 'wellcome', name='wellcome'),
     url(r'^tariffication/$', 'tariffication', name='tariffication'),
-    url(r'^plan_group/$', 'plan_group', name='plan_group'),
+    url(r'^group_plan/$', 'group_plan', name='group_plan'),
 )
 
 # Расписание

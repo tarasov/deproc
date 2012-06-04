@@ -301,8 +301,11 @@ class Year(models.Model):
         verbose_name_plural = u'учебные года'
         db_table = 'year'
 
+    def get_absolute_url(self):
+        return 'year/%s' % str(self.id)
+
     def __unicode__(self):
-        return u'%s %s' % (self.date_begin, self.date_end )
+        return u'%s - %s' % (self.date_begin, self.date_end )
 
 
 class Groups(models.Model):

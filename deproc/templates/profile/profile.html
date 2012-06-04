@@ -17,12 +17,15 @@
             Часы остаток
         </p>
         <p>
-            <a class = "show_schedule" rel="{% url schedule_index id_teacher=user.pk %}" href="#">
-                показать расписание на сегодня
+            <a class = "visible_schedule" rel="{% url schedule_index id_teacher=user.pk %}" href="#">
+                <span class="show">показать расписание на сегодня</span>
+                <span class="hide">скрыть расписание на сегодня</span>
             </a>
         </p>
         <p id = "schedule">
         </p>
     </div>
-    <div class="span3">PHOTO</div>
+    <div class="span3">
+        <img src="{{ MEDIA_URL }}img/alien.jpg" width="140px" height="240px">
+    </div>
 {% endblock %}

@@ -24,6 +24,7 @@ pages_list = {
     'groups': ('Groups', 'Группы'),
     'discipline': ('Discipline', 'Дисциплины'),
     'speciality': ('Speciality', 'Специальности'),
+    'year': ('Year', 'Учебные года'),
     }
 
 actions = (
@@ -33,7 +34,7 @@ actions = (
 def wellcome(request):
     return render_to_response('tariffication/index.html', locals(), context_instance=RequestContext(request))
 
-def plan_group(request):
+def group_plan(request):
     table = ()
     specialty = models.Speciality.objects.all()
     year = models.Year.objects.all().order_by('-date_begin')[0]
