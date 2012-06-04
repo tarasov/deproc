@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block styles %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/profile.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="span7">
+
+        <table class="tariffication span11">
+            <tr style="height: 30px;">
+                <td align="left" colspan="2"><a href="{{ user.get_absolute_url }}">{{ user }}</a></td>
+            </tr>
+            {{ form.as_table }}
+        </table>
+
+    </div>
+{% endblock %}

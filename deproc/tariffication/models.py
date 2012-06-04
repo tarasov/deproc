@@ -50,6 +50,10 @@ class Profile(User):
         ordering = ['last_name']
         db_table = 'profile'
 
+    def get_absolute_url(self):
+        return "/profile/%s/" % self.id
+
+
     def get_full_name(self):
         full_name = u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
         return full_name.strip()
@@ -69,75 +73,6 @@ class Students(Profile):
     def get_students(self):
         students = Students.objects.all()
         return ((student.pk, student.username) for student in students)
-
-    def __unicode__(self):
-        return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
-
-
-class Teachers(Profile):
-    cabinet = models.ForeignKey(Classroom, verbose_name = "Кабинет", null = True, blank = True)
-
-    class Meta:
-        verbose_name = u'преподователя'
-        verbose_name_plural = u'преподователи'
-        db_table = 'teachers'
-
-    def get_teachers(self):
-        teachers = Teachers.objects.all()
-        return ((teacher.pk, '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )) for teacher in teachers)
-
-    def get_tariffication(self):
-        sql_teacher = """
-        SELECT
-            `auth_user`.`last_name`,
-            `groups`.`name`,
-            `discipline`.`short_name`,
-            `uch_plan`.`semestr`,
-            `uch_plan_hour`.`count_hours`,
-            `uch_plan_hour`.`type`
-        FROM `tariffication`
-            LEFT JOIN `auth_user`
-                ON `tariffication`.`teacher_id` = `auth_user`.`id`
-            LEFT JOIN `groups_plan`
-                ON `tariffication`.`group_plan_id` = `groups_plan`.`id`
-            LEFT JOIN `groups`
-                ON `groups_plan`.`group_id` = `groups`.`id`
-            LEFT JOIN `uch_plan_hour`
-                ON `tariffication`.`uch_plan_hour_id` = `uch_plan_hour`.`id`
-            LEFT JOIN `uch_plan`
-                ON `uch_plan_hour`.`uch_plan_id` = `uch_plan`.`id`
-            Left JOIN `discipline`
-                ON `uch_plan`.`disc_id` = `discipline`.`id`
-        WHERE
-            `auth_user`.`id` = '{0}'
-        """
-        cursor = connection.cursor()
-        cursor.execute(sql_teacher.format(self.pk))
-        return cursor.fetchall()
-
-    def get_groups(self, group = None):
-        """
-        Группы в которых преподает преподователь
-        """
-        # если передали группу, возвращаем ее
-        if group:
-            return [group]
-
-        groups = Tariffication.objects.filter(teacher = self).values('group_plan__group').annotate(count=Count('group_plan__group'))
-        return Groups.objects.filter(id__in = [int(group['group_plan__group']) for group in groups])
-
-    def get_disciplines_current_group(self, id_group):
-        """
-        Дисциплины в которых преподает преподователь, выбранной группы
-        """
-        group = get_object_or_404(Groups, pk=id_group)
-
-        disciplines = Tariffication.objects.\
-                                filter(teacher = self, group_plan__group=group).\
-                                values('uch_plan_hour__uch_plan__disc').\
-                                annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
-
-        return [Discipline.objects.get(pk = discipline['uch_plan_hour__uch_plan__disc']) for discipline in disciplines]
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
@@ -347,7 +282,6 @@ class Groups(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name, )
 
-
 class Groups_stud(models.Model):
     group = models.ForeignKey(Groups, verbose_name=u'Группа')
     student = models.ManyToManyField(Students, verbose_name='Студент')
@@ -360,6 +294,79 @@ class Groups_stud(models.Model):
     def __unicode__(self):
         return u'%s' % (self.group.name, )
 
+class Teachers(Profile):
+    cabinet = models.ForeignKey(Classroom, verbose_name = "Кабинет", null = True, blank = True)
+    manager = models.ForeignKey(Groups, verbose_name='Классный руководитель', null = True, blank = True)
+
+    class Meta:
+        verbose_name = u'преподователя'
+        verbose_name_plural = u'преподователи'
+        db_table = 'teachers'
+
+    def get_teachers(self):
+        teachers = Teachers.objects.all()
+        return (
+            (
+                teacher.pk,
+                '%s %s %s' % (teacher.last_name, teacher.first_name, teacher.other_name, )
+                ) for teacher in teachers\
+            )
+
+    def get_tariffication(self):
+        sql_teacher = """
+        SELECT
+            `auth_user`.`last_name`,
+            `groups`.`name`,
+            `discipline`.`short_name`,
+            `uch_plan`.`semestr`,
+            `uch_plan_hour`.`count_hours`,
+            `uch_plan_hour`.`type`
+        FROM `tariffication`
+            LEFT JOIN `auth_user`
+                ON `tariffication`.`teacher_id` = `auth_user`.`id`
+            LEFT JOIN `groups_plan`
+                ON `tariffication`.`group_plan_id` = `groups_plan`.`id`
+            LEFT JOIN `groups`
+                ON `groups_plan`.`group_id` = `groups`.`id`
+            LEFT JOIN `uch_plan_hour`
+                ON `tariffication`.`uch_plan_hour_id` = `uch_plan_hour`.`id`
+            LEFT JOIN `uch_plan`
+                ON `uch_plan_hour`.`uch_plan_id` = `uch_plan`.`id`
+            Left JOIN `discipline`
+                ON `uch_plan`.`disc_id` = `discipline`.`id`
+        WHERE
+            `auth_user`.`id` = '{0}'
+        """
+        cursor = connection.cursor()
+        cursor.execute(sql_teacher.format(self.pk))
+        return cursor.fetchall()
+
+    def get_groups(self, group = None):
+        """
+        Группы в которых преподает преподователь
+        """
+        # если передали группу, возвращаем ее
+        if group:
+            return [group]
+
+        groups = Tariffication.objects.filter(teacher = self).values('group_plan__group').annotate(count=Count('group_plan__group'))
+        return Groups.objects.filter(id__in = [int(group['group_plan__group']) for group in groups])
+
+    def get_disciplines_current_group(self, id_group):
+        """
+        Дисциплины в которых преподает преподователь, выбранной группы
+        """
+        group = get_object_or_404(Groups, pk=id_group)
+
+        disciplines = Tariffication.objects.\
+        filter(teacher = self, group_plan__group=group).\
+        values('uch_plan_hour__uch_plan__disc').\
+        annotate(count=Count('uch_plan_hour__uch_plan__disc__short_name'))
+
+        return [Discipline.objects.get(pk = discipline['uch_plan_hour__uch_plan__disc']) for discipline in disciplines]
+
+    def __unicode__(self):
+        return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
 
 class Groups_plan(models.Model):
     """

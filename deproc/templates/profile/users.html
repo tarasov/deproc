@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block styles %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/profile.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="span7">
+
+        <table class="tariffication span11">
+            <tr>
+                {% for th in ths %}
+                    <th align="left"><b>{{ th.1|capfirst }}</b></th>
+                {% endfor %}
+            </tr>
+            {% for user in users %}
+                <tr style="height: 30px;">
+                    <td align="left"><a href="{{ user.get_absolute_url }}">{{ user }}</a></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="addin" colspan="{{ ths|length }}"><a href="./add"><div><b>+</b></div></a></td>
+            </tr>
+        </table>
+
+    </div>
+{% endblock %}

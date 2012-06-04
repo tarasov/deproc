@@ -252,6 +252,8 @@ def index(request, id_teacher = None):
                 schedule_teacher[t] = lessons
 
             if id_teacher:
+                if not any(schedule_teacher.values()[0].values()):
+                    schedule_teacher = {}
                 return HttpResponse(json.dumps(schedule_teacher))
 
             for group in groups:

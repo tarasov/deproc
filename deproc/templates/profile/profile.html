@@ -7,18 +7,21 @@
 
     <div class="span7">
         <p>
-            <h3>{{ user.get_full_name }}</h3>
-            <h3>{{ user.pk }}</h3>
+            <h3>
+                {{ teacher }}
+            </h3>
         </p>
-        <p>
-            Руководитель группы GROUP
-        </p>
+        {% if teacher.manager %}
+            <p>
+                Руководитель группы {{ teacher.manager }}
+            </p>
+        {% endif %}
         <p>
             Часы остаток
         </p>
         <p>
             <a class = "visible_schedule" rel="{% url schedule_index id_teacher=user.pk %}" href="#">
-                <span class="show">показать расписание на сегодня</span>
+                <span id="{{ today }}" class="show">показать расписание на сегодня</span>
                 <span class="hide">скрыть расписание на сегодня</span>
             </a>
         </p>

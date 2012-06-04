@@ -79,7 +79,7 @@
 
 
     <div class="container-fluid">
-        <div     class="row-fluid">
+        <div class="row-fluid">
             <div class="span3">
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
@@ -97,6 +97,8 @@
                         <li><a href="{% url tariffication %}">Тарификация</a></li>
                         <li><a href="{% url schedule %}">Расписание</a></li>
                         <li><a href="{% url group_plan %}">Группы учебного года</a></li>
+                        <li><a href="{% url profiles 'teachers' %}">Преподаватели</a></li>
+                        <li><a href="{% url profiles 'students' %}">Студенты</a></li>
                         {% for page in pages %}
                             <li><a href="/{{ page.0 }}/">{{ page.1 }}</a></li>
                         {% endfor %}

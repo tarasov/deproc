@@ -3,21 +3,27 @@ $(function() {
 
     $('a.visible_schedule .show').click(function() {
         var url = $(this.parentNode).attr('rel');
-        var now = new Date();
-//        var curr_date = now.getDate();
-//        var curr_month = now.getMonth();
-        var curr_date = '14';
-        var curr_month = '05';
-        var curr_year = now.getFullYear();
-        var html = '' +
-            '<table class="schedule span5">' +
-            '<tr>' +
-                '<th>Пара</th><th>Группа</th><th>Предмет</th>' +
-            '</tr>';
+        var date = $(this).attr('id');
+        var html = '';
+//        var now = new Date();
+//        var curr_date = '14';
+//        var curr_month = '05';
+//        var curr_year = now.getFullYear();
         $.get(
             url,
-            {'day': curr_date + '.' + curr_month + '.' + curr_year},
+            {'day': date},
+//            {'day': curr_date + '.' + curr_month + '.' + curr_year},
             function(data) {
+                if (data != '{}') {
+                    html = '' +
+                        '<table class="schedule span5">' +
+                        '<tr>' +
+                        '<th>Пара</th><th>Группа</th><th>Предмет</th>' +
+                        '</tr>';
+                } else {
+                    html = '<h3>На сегодня пар нету</h3>';
+                }
+
                 var tr = JSON.parse(data);
                 for(var key in tr) {
                     for (var value in tr[key]) {
@@ -29,11 +35,10 @@ $(function() {
                         }
                     }
                     html += '</table>';
-                    $('a.show_schedule span').html('скрыть');
-                    $('a.visible_schedule .show').hide();
-                    $('a.visible_schedule .hide').show();
-                    $('p#schedule').html(html);
                 }
+                $('a.visible_schedule .show').hide();
+                $('a.visible_schedule .hide').show();
+                $('p#schedule').html(html);
             }
         )
     });
@@ -43,12 +48,4 @@ $(function() {
         $('a.visible_schedule .show').show();
         $('a.visible_schedule .hide').hide();
     });
-
-    $('td.mark').hover(
-        function(){
-            var expr = /(\d+)_(\d+)/;
-            student = expr.exec($(this).attr('id'))[1];
-            day = expr.exec($(this).attr('id'))[2];
-        }
-    );
 });
