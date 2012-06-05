@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    <br>
-
     <div class="row-fluid">
         <table class="tariffication span12">
             <tr>
@@ -15,9 +13,9 @@
                     {% for td in tr %}
                         {% if forloop.counter0 %}
                             {% if td not in actions %}
-                                <td align="left"><b>{{ td }}</b></td>
+                                <td><b>{{ td }}</b></td>
                             {% else %}
-                                <td align="left"><a href="/{{ tr.0 }}/{{ td }}"><i class="icon-{{ td }}-big"></i></a></td>
+                                <td style="width: 3%;"><a href="{{ tr.0 }}{{ td }}"><i class="icon-{{ td }}-big"></i></a></td>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
@@ -28,5 +26,4 @@
                 </tr>
         </table>
     </div>
-
 {% endblock %}

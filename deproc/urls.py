@@ -51,7 +51,16 @@ urlpatterns += patterns('',
 
 
 urlpatterns += patterns('',
-    url(r'^([a-z]+)/$', 'deproc.tariffication.views.pages'),
-    url(r'^(?P<page>[a-z]+)/(?P<action>add)/$', 'deproc.admin.views.action_page'),
-    url(r'^(?P<page>[a-z]+)/(?P<pk>\d+)/(?P<action>[a-z]+)$', 'deproc.admin.views.action_page')
+    url(r'^([a-z_]+)/$', 'deproc.tariffication.views.pages'),
+    url(r'^(?P<page>[a-z_]+)/(?P<action>add)/$', 'deproc.admin.views.action_page'),
+    # эта урл только для генерации ссылки на info && edit
+    url(
+        r'^(?P<page>[a-z_]+)/(?P<pk>\d+)/$',
+        'deproc.admin.views.action_page',
+        name = 'action_page',
+    ),
+    url(
+        r'^(?P<page>[a-z_]+)/(?P<pk>\d+)/(?P<action>[a-z]+)$',
+        'deproc.admin.views.action_page',
+    ),
 )

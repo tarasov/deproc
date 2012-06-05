@@ -3,13 +3,15 @@
 
 {% block main %}
     <a href="{% url tariffication %}">Вернуться</a>
-    <br><br><br>
+    <br><br>
     <div class="row-fluid">
-        <form action="" method="POST">{% csrf_token %}
-            <table class="tariffication span9">
-                <tr>
-                    <th colspan="2">Нагрузка учебной части</th>
-                </tr>
+        <div class="span2">&nbsp;</div>
+
+        <table class="tariffication span8">
+            <tr>
+                <th colspan="2">Нагрузка учебной части</th>
+            </tr>
+            <form action="" method="POST">{% csrf_token %}
                 {{ form_tariffication.as_table }}
                 {{ form_uchplan.as_table }}
                 {{ dynamic_form.as_table }}
@@ -18,7 +20,7 @@
                         <input type="submit" value="Добавить"/>
                     </td>
                 </tr>
-            </table>
-        </form>
+            </form>
+        </table>
     </div>
 {% endblock %}

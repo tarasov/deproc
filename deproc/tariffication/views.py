@@ -1,20 +1,10 @@
 # -*- coding: utf-8 -*-
-import logging
-import re
-from django.contrib.auth.views import login, logout
-from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound, Http404
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.template.defaulttags import csrf_token
-from deproc.tariffication import forms
 from deproc.tariffication import models
-from deproc.tariffication import forms
-from django.db.models import get_models
-from deproc.tariffication.models import Tariffication, choice_typeh
-from django.db.models import Count
-from django.views.decorators.csrf import csrf_protect
+from deproc.tariffication.models import Tariffication\
+#, choice_typeh
 
 
 # страницы, из которых будет генерироваться urlpatterns
@@ -25,6 +15,8 @@ pages_list = {
     'discipline': ('Discipline', 'Дисциплины'),
     'speciality': ('Speciality', 'Специальности'),
     'year': ('Year', 'Учебные года'),
+    'group_of_students': ('Groups_stud', 'Группа студентов'),
+    'uch_plan': ('UchPlan', 'Учебный план'),
     }
 
 actions = (
@@ -76,7 +68,7 @@ def tariffication(request):
                             'discipline': discipline,
                             'semestr': tariffication.semestr,
                             'hours': [tariffication.count_hours],
-                            }
+                        }
                     else:
                         tr['hours'].append(tariffication.count_hours)
                 table.append(tr)
@@ -88,7 +80,9 @@ def pages(request, page, actions = actions):
     # специальности, группы, дисциплины, пользователи,
     # студенты, преподователи, [учебный год?]
     # потому что предоставление информации происходит однотипно (показ таблицы)
-    model_name = pages_list[page][0]
+    if not page in pages_list:
+        raise Http404
+    model_name = pages_list.get(page)[0]
     Model = getattr(models, model_name)
     values = Model.objects.all()
 
@@ -104,11 +98,14 @@ def pages(request, page, actions = actions):
     ths = ths + ['' for i in actions]
 
     table = ()
-    for value in values:
+    for i, value in enumerate(values, 1):
         tr = ()
         tr = tr + (value.get_absolute_url(), )
-        for th in ths:
+        for j, th in enumerate(ths):
             if th:
-                tr += (getattr(value, th[0]), )
+                if not j:
+                    tr += (i, )
+                else:
+                    tr += (getattr(value, th[0]), )
         table += (tr + actions, )
     return render_to_response('tariffication/pages.html', locals(), context_instance=RequestContext(request))

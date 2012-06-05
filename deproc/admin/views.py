@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponseServerError, HttpRespo
 from django.template import RequestContext
 from deproc.admin.forms import dynamic_form_page
 from deproc.tariffication import forms, models
+from deproc.tariffication.views import pages_list
 
 
 def add_tariffication(request, action, teacher = None, group = None, discipline = None, semestr = None):
@@ -74,7 +75,8 @@ def add_plan_group(request):
     return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))
 
 def action_page(request, page, pk = None, action = None):
-    Model = getattr(models, page.title())
+    back_url, page = page, pages_list.get(page)[0] # узнаем название модели
+    Model = getattr(models, page)
     form_inst = dynamic_form_page(Model)
     if action == 'edit':
         text = u'Редактировать %s' % (Model._meta.verbose_name, )
@@ -100,14 +102,14 @@ def action_page(request, page, pk = None, action = None):
             if isdelete:
                 # TODO переписать метод удаления, лучше добавить поле is_delete = True
                 Model.objects.get(pk=pk).delete()
-                return HttpResponseRedirect('/{0}/'.format(page))
+                return HttpResponseRedirect('/{0}/'.format(back_url))
             form = form_inst(request.POST, instance = Model.objects.get(pk=pk))
         else: # добавление
             form = form_inst(request.POST)
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/{0}/'.format(page))
+            return HttpResponseRedirect('/{0}/'.format(back_url))
 
     if pk:
         value = Model.objects.get(pk=pk)

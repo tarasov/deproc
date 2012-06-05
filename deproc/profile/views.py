@@ -33,6 +33,10 @@ def user(request, user):
 
     return render_to_response('profile/user.html', locals(), context_instance=RequestContext(request))
 
+def group(request, group):
+    group = models.Groups_stud.objects.get(pk = group)
+    return render_to_response('profile/group.html', locals(), context_instance=RequestContext(request))
+
 def settings(request):
     return render_to_response('profile/settings.html', locals(), context_instance=RequestContext(request))
 

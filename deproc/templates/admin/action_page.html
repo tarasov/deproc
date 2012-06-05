@@ -1,35 +1,35 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    <a href="/{{ page }}/">Вернуться</a>
-    <br><br><br>
     <div class="row-fluid">
-        <form action="" method="POST">{% csrf_token %}
-            <table class="tariffication span6">
-                <tr>
-                    <th colspan="2">{{ text }}</th>
-                </tr>
-                {% if action == 'info' %}
-                    {% for tr in table %}
-                        <tr style="height: 30px;">
-                            <td style="text-align: left">
-                                <b>{{ tr.0|capfirst }}</b>
-                            </td>
-                            <td style="text-align: left">
-                                {{ tr.1 }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
+{#        <a href="/{{ back_url }}/">Вернуться</a>#}
+        <div class="span4">&nbsp;</div>
+        <table class="tariffication span4">
+            <tr>
+                <th colspan="2">{{ text }}</th>
+            </tr>
+            {% if action == 'info' %}
+                {% for tr in table %}
+                    <tr style="height: 30px;">
+                        <td style="text-align: left">
+                            <b>{{ tr.0|capfirst }}</b>
+                        </td>
+                        <td style="text-align: left">
+                            {{ tr.1 }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <form action="" method="POST">{% csrf_token %}
                     {{ form.as_table }}
                     <tr>
                         <th colspan="2">
-                            <input type="submit" value="Добавить">
+                            <input type="submit" value="Сохранить">
                         </th>
                     </tr>
-                {% endif %}
-            </table>
-        </form>
+                </form>
+            {% endif %}
+        </table>
     </div>
 
 {% endblock %}

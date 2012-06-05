@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.db import models, connection
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
+from django.core.urlresolvers import reverse
 
 class Classroom(models.Model):
     number = models.IntegerField(max_length=100, null=False, blank=False)
@@ -30,12 +30,12 @@ choice_otch = (
     ('Z', 'зачет',)
 )
 
-choice_typeh = (
-    ('L', 'Лекция',),
-    ('P', 'Практика',),
-    ('K', 'Консультация',),
-    ('E', 'Экзамен',),
-)
+#choice_typeh = (
+#    ('L', 'Лекция',),
+#    ('P', 'Практика',),
+#    ('K', 'Консультация',),
+#    ('E', 'Экзамен',),
+#)
 
 
 class Profile(User):
@@ -51,7 +51,7 @@ class Profile(User):
         db_table = 'profile'
 
     def get_absolute_url(self):
-        return "/profile/%s/" % self.id
+        return reverse('user', args = [self.id])
 
 
     def get_full_name(self):
@@ -64,6 +64,7 @@ class Profile(User):
 
 class Students(Profile):
     cart = models.IntegerField("Номер студенческого")
+    elder = models.BooleanField('Староста')
 
     class Meta:
         verbose_name = u'студента'
@@ -145,7 +146,7 @@ class Speciality(models.Model):
         db_table = 'speciality'
 
     def get_absolute_url(self):
-        return 'speciality/%s' % str(self.id)
+        return reverse('action_page', kwargs={'page': 'speciality', 'pk': self.id})
 
     def __unicode__(self):
         return u'%s %s' % (self.name, self.num_spec)
@@ -176,7 +177,7 @@ class Discipline(models.Model):
         db_table = 'discipline'
 
     def get_absolute_url(self):
-        return 'discipline/%s' % str(self.id)
+        return reverse('action_page', kwargs={'page': 'discipline', 'pk': self.id})
 
     def __unicode__(self):
         return u'%s' % (self.short_name, )
@@ -192,6 +193,9 @@ class UchPlan(models.Model):
         verbose_name = u'учебный план'
         verbose_name_plural = u'учебные планы'
         db_table = 'uch_plan'
+
+    def get_absolute_url(self):
+        return reverse('action_page', kwargs={'page': 'uch_plan', 'pk': self.id})
 
     def __unicode__(self):
         return u'%s / %s / %s семестр' % (self.disc, self.spec.name, self.semestr)
@@ -237,7 +241,7 @@ class Year(models.Model):
         db_table = 'year'
 
     def get_absolute_url(self):
-        return 'year/%s' % str(self.id)
+        return reverse('action_page', kwargs={'page': 'year', 'pk': self.id})
 
     def __unicode__(self):
         return u'%s - %s' % (self.date_begin, self.date_end )
@@ -264,10 +268,14 @@ class Groups(models.Model):
         db_table = 'groups'
 
     def get_absolute_url(self):
-        return 'groups/%s' % str(self.id)
+        return reverse('action_page', kwargs={'page': 'groups', 'pk': self.id})
 
     def get_journal_url(self):
         return '../group/%s' % str(self.id)
+
+    def get_group_students_absolute_url(self):
+        group_of_students = Groups_stud.objects.get(group=self)
+        return group_of_students.get_absolute_url()
 
     def get_disciplines(self, teacher=None, discipline = None):
         if teacher:
@@ -290,6 +298,10 @@ class Groups_stud(models.Model):
         verbose_name = u'студент группы'
         verbose_name_plural = u'студенты группы'
         db_table = 'groups_stud'
+
+    def get_absolute_url(self):
+        return reverse('action_page', kwargs={'page': 'group_of_students', 'pk': self.id})
+
 
     def __unicode__(self):
         return u'%s' % (self.group.name, )
@@ -394,9 +406,6 @@ class Tariffication(models.Model):
         verbose_name = u'тарификация'
         verbose_name_plural = u'тарификации'
         db_table = 'tariffication'
-
-    def get_absolute_url(self):
-        return 'tariffication/%s' % str(self.pk),
 
     @property
     def semestr(self):
