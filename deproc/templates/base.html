@@ -35,7 +35,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="#">@dmitrovdpk</a>
+                <a class="brand" href="/">@dmitrovdpk</a>
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li class="active">
@@ -45,6 +45,42 @@
                             <a href="{% url teachers %}">Журнал</a>
                         </li>
 
+                        <ul class="nav">
+                            <li class="divider-vertical"></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-user icon-white"></i>
+                                    Меню
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Студентам</a></li>
+                                    <li><a href="#">Преподавателям</a></li>
+                                    <li><a href="#">Отчеты</a></li>
+                                    <li><a href="{% url teachers %}">Журнал</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="nav">
+                            <li class="divider-vertical"></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-user icon-white"></i>
+                                    Администратор
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url tariffication %}">Тарификация</a></li>
+                                    <li><a href="{% url schedule %}">Расписание</a></li>
+                                    <li><a href="{% url group_plan %}">Группы учебного года</a></li>
+                                    <li><a href="{% url profiles 'teachers' %}">Преподаватели</a></li>
+                                    <li><a href="{% url profiles 'students' %}">Студенты</a></li>
+                                    {% for page in pages %}
+                                        <li><a href="/{{ page.0 }}/">{{ page.1 }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
                     </ul>
 
                     {% if user.is_authenticated %}
@@ -80,36 +116,8 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span3">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Пользовательские</li>
-                        <li class="active"><a href="/">Главная</a></li>
-                        {% block sidebar %}
-                        {% endblock %}
-                        <li class="nav-header">Меню</li>
-                        <li><a href="#">Студентам</a></li>
-                        <li><a href="#">Преподавателям</a></li>
-                        <li><a href="#">Отчеты</a></li>
-                        <li><a href="{% url teachers %}">Журнал</a></li>
-
-                        <li class="nav-header">Администратор</li>
-                        <li><a href="{% url tariffication %}">Тарификация</a></li>
-                        <li><a href="{% url schedule %}">Расписание</a></li>
-                        <li><a href="{% url group_plan %}">Группы учебного года</a></li>
-                        <li><a href="{% url profiles 'teachers' %}">Преподаватели</a></li>
-                        <li><a href="{% url profiles 'students' %}">Студенты</a></li>
-                        {% for page in pages %}
-                            <li><a href="/{{ page.0 }}/">{{ page.1 }}</a></li>
-                        {% endfor %}
-
-                    </ul>
-                </div><!--/.well -->
-            </div><!--/span-->
-
-            <div class="span9">
+            <div class="span12">
                 {% block main %}
-
                 {% endblock %}
             </div>
         </div>
