@@ -9,13 +9,13 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'Students.elder'
-        db.add_column('students', 'elder', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
+        db.add_column('students', 'is_elder', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
 
 
     def backwards(self, orm):
         
         # Deleting field 'Students.elder'
-        db.delete_column('students', 'elder')
+        db.delete_column('students', 'is_elder')
 
 
     models = {

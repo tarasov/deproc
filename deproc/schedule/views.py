@@ -184,11 +184,21 @@ def lesson(request, year, month, day, group, lesson):
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
 
-def index(request, id_teacher = None):
-
+def index(request, id_profile = None):
+    id_teacher, id_student = None, None
     backlink = '/schedule/calendar/'
+    if main_models.Teachers.objects.filter(id=id_profile):
+        id_teacher = id_profile
+    else:
+        id_student = id_profile
 
-    groups = main_models.Groups.objects.all()
+
+    if id_student:
+        student = main_models.Students.objects.get(id=id_student)
+        groups = main_models.Groups.objects.filter(id=student.group.pk)
+    else:
+        groups = main_models.Groups.objects.all()
+
     if id_teacher:
         teacher_list = main_models.Teachers.objects.filter(id=id_teacher)
     else:
@@ -270,7 +280,7 @@ def index(request, id_teacher = None):
                                 sc = get_object_or_404(sch, num_less = i)
                                 teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
                                 hourtype = sc.plan.uch_plan_hour.type_hour.short_name
-                                lessons[i] = sch.get(num_less = i).plan.uch_plan_hour.uch_plan.disc, teach, hourtype
+                                lessons[i] = sch.get(num_less = i).plan.disc.name, teach, hourtype
                             except MultipleObjectsReturned:
                                 sc = sch.filter(num_less = i)
                                 j = 1
@@ -278,7 +288,7 @@ def index(request, id_teacher = None):
                                 for ss in sc:
                                     teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
                                     hourtype = ss.plan.uch_plan_hour.type_hour.short_name
-                                    ls[j] = ss.plan.uch_plan_hour.uch_plan.disc, teach, hourtype
+                                    ls[j] = ss.plan.disc.name, teach, hourtype
                                     j += 1
                                 lessons[i] = ls
                         else:
@@ -288,6 +298,11 @@ def index(request, id_teacher = None):
                         lessons[i] = ''
 
                 schedule_group[group.name] = lessons
+
+                if id_student:
+                    if not any(schedule_group.values()[0].values()):
+                        schedule_group = {}
+                    return HttpResponse(json.dumps(schedule_group))
 
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))

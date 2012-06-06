@@ -64,16 +64,16 @@ class Profile(User):
 
 class Students(Profile):
     cart = models.IntegerField("Номер студенческого")
-    elder = models.BooleanField('Староста')
+    is_elder = models.BooleanField('Староста', default = False)
 
     class Meta:
         verbose_name = u'студента'
         verbose_name_plural = u'студенты'
         db_table = 'students'
 
-    def get_students(self):
-        students = Students.objects.all()
-        return ((student.pk, student.username) for student in students)
+    @property
+    def group(self):
+        return Groups_stud.objects.filter(student=self)[0].group
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
@@ -154,8 +154,6 @@ class Speciality(models.Model):
 
 class Disc_type(models.Model):
     name = models.CharField(u"Тип дисциплины", max_length=150, null=False, blank=False)
-#    short_name = models.CharField(u"Короткое название", max_length=150, null=True, blank=True)
-#    color = models.CharField(u"Цвет дисциплины", max_length=150, null=True, blank=True)
 
     class Meta:
         verbose_name = u'тип дисциплины'

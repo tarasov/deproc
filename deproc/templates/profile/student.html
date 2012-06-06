@@ -8,19 +8,16 @@
         <div class="span9">
             <p>
                 <h3>
-                    {{ teacher }}
+                    {{ student }}
                 </h3>
             </p>
-            {% if teacher.manager %}
+            {% if student.is_elder %}
                 <p>
-                    Руководитель <a href="{{ teacher.manager.get_group_students_absolute_url }}"> группы {{ teacher.manager }}</a>
+                    Староста группы {{ student.group }}
                 </p>
             {% endif %}
             <p>
-                Часы остаток
-            </p>
-            <p>
-                <a class = "visible_schedule" rel="{% url schedule_index id_teacher=user.pk %}" href="#">
+                <a class = "visible_schedule" rel="{% url schedule_index id_profile=student.pk %}" href="#">
                     <span id="{{ today }}" class="show">показать расписание на сегодня</span>
                     <span class="hide">скрыть расписание на сегодня</span>
                 </a>

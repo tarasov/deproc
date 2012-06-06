@@ -11,10 +11,17 @@ from deproc.profile import forms as profile_forms
 
 
 
-def profile(request):
-    teacher = models.Teachers.objects.get(id=request.user.pk)
+def profile(request, pk = None):
+    if not pk:
+        pk = request.user.pk
     today = datetime.datetime.today().strftime("%d.%m.%Y")
-    return render_to_response('profile/profile.html', locals(), context_instance=RequestContext(request))
+
+    if models.Teachers.objects.filter(id=pk):
+        teacher = models.Teachers.objects.get(id=pk)
+        return render_to_response('profile/teacher.html', locals(), context_instance=RequestContext(request))
+    else:
+        student = models.Students.objects.get(id=pk)
+        return render_to_response('profile/student.html', locals(), context_instance=RequestContext(request))
 
 def users(request, who):
     if who == 'teachers':
@@ -23,15 +30,16 @@ def users(request, who):
         users = models.Students.objects.all()
     return render_to_response('profile/users.html', locals(), context_instance=RequestContext(request))
 
-def user(request, user):
-    if models.Teachers.objects.filter(id=user):
-        user = models.Teachers.objects.get(pk = user)
-        form = profile_forms.TeacherForm()
-    elif models.Students.objects.filter(id=user):
-        user = models.Students.objects.get(pk = user)
-        form = profile_forms.StudentForm()
+def user(request, pk):
+    return profile(request, pk)
+#    if models.Teachers.objects.filter(id=user):
+#        user = models.Teachers.objects.get(pk = user)
+#        form = profile_forms.TeacherForm()
+#    elif models.Students.objects.filter(id=user):
+#        user = models.Students.objects.get(pk = user)
+#        form = profile_forms.StudentForm()
 
-    return render_to_response('profile/user.html', locals(), context_instance=RequestContext(request))
+#    return render_to_response('profile/user.html', locals(), context_instance=RequestContext(request))
 
 def group(request, group):
     group = models.Groups_stud.objects.get(pk = group)

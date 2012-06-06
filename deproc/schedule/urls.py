@@ -14,7 +14,7 @@ url_end = r'$'
 
 urlpatterns = patterns('deproc.schedule.views',
     url(r'^calendar/$', 'schedule', name='schedule'),
-    url(r'^index/(?:(?P<id_teacher>\d+)/)?$', 'index', name='schedule_index'),
+    url(r'^index/(?:(?P<id_profile>\d+)/)?$', 'index', name='schedule_index'),
     url(url_lesson + url_end, 'lesson'),
     url(url_lesson + url_lesson_add + url_end, 'add_lesson'),
     url(url_lesson + url_lesson_del + url_end, 'delete_lesson')

@@ -4,24 +4,22 @@
 {% endblock %}
 
 {% block main %}
-
-    <div class="span7">
-
-        <table class="tariffication span11">
+    <div class="row-fluid">
+        <div class="span4">&nbsp;</div>
+        <table class="tariffication span4">
             <tr>
                 {% for th in ths %}
-                    <th align="left"><b>{{ th.1|capfirst }}</b></th>
+                    <th><b>{{ th.1|capfirst }}</b></th>
                 {% endfor %}
             </tr>
             {% for user in users %}
                 <tr style="height: 30px;">
-                    <td align="left"><a href="{{ user.get_absolute_url }}">{{ user }}</a></td>
+                    <td><a href="{{ user.get_absolute_url }}">{{ user }}</a></td>
                 </tr>
             {% endfor %}
             <tr>
-                <td class="addin" colspan="{{ ths|length }}"><a href="./add"><div><b>+</b></div></a></td>
+                <td class="addin"><a href="./add"><div><b>+</b></div></a></td>
             </tr>
         </table>
-
     </div>
 {% endblock %}
