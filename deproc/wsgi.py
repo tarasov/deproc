@@ -14,6 +14,9 @@ framework.
 
 """
 import os
+import sys
+
+sys.path.append('/home/tarasov/deproc')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "deproc.settings")
 
