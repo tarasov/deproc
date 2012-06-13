@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-from telepathy._generated.errors import DoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
 from django.db.models.aggregates import Sum
 from django.http import Http404, HttpResponseRedirect, HttpResponse
