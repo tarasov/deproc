@@ -71,15 +71,12 @@ def delete_lesson(request, year, month, day, group, lesson, id_lesson):
 
 def lesson(request, year, month, day, group, lesson):
 
-# TODO сумма всех показателей
-
     if request.GET.get('error', False):
         oshibka = True
     else:
         oshibka = False
 
     backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
-#    backlink = request.META['HTTP_REFERER']
 
     typehour = main_models.TypeHour.objects.all()
 
@@ -184,8 +181,11 @@ def lesson(request, year, month, day, group, lesson):
 
 
 def index(request, id_profile = None):
+
     id_teacher, id_student = None, None
+
     backlink = '/schedule/calendar/'
+
     if main_models.Teachers.objects.filter(id=id_profile):
         id_teacher = id_profile
     else:
@@ -208,6 +208,7 @@ def index(request, id_profile = None):
         "plan__group_plan__group",
         "plan__teacher",
     )
+
     if request.method == 'GET':
         if 'day' in request.GET and request.GET['day']:
             date = request.GET['day']

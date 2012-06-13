@@ -30,9 +30,9 @@
 
                     {% for n, lesson in values.items %}
                         {% if lesson == ''%}
-                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>-</b></div></a> </td>
+                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="/schedule/lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>-</b></div></a> </td>
                         {% elif lesson.items > 1 %}
-                            <td class="double" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/">
+                            <td class="double" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="/schedule/lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/">
                                 <div>
                                 {% for kl, ls in lesson.items %}
                                     <b>{{ ls.0 }}</b><b class="type_hour" m="{{ ls.2 }}">{{ ls.2 }}</b> <span class="teacher">{{ ls.1 }}</span><br/>
@@ -40,7 +40,7 @@
                                 </div></a>
                             </td>
                         {% else %}
-                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>{{ lesson.0 }}</b><b class="type_hour" m="{{ lesson.2 }}">{{ lesson.2 }}</b><br/>{{ lesson.1 }}</div></a> </td>
+                            <td class="group group_{{ key }}" id="lesson_{{ lesson.pk }}" gr="{{ key }}" ls="{{ lesson.pk }}" align="left"> <a href="/schedule/lesson/{{ day }}/{{ key }}/{{ forloop.counter }}/"><div><b>{{ lesson.0 }}</b><b class="type_hour" m="{{ lesson.2 }}">{{ lesson.2 }}</b><br/>{{ lesson.1 }}</div></a> </td>
                         {% endif %}
                     {% endfor %}
                 </tr>
