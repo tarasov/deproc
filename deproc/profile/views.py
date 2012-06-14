@@ -9,6 +9,40 @@ from django.template.defaulttags import csrf_token
 from deproc.tariffication import forms, models
 from deproc.profile import forms as profile_forms
 
+def registration(request):
+
+#    student = User()
+#    studentProfile = Students()
+#    if request.method == "POST":
+#        studentForm = StudentsForm(request.POST, instance = student)
+#        studentProfileForm = StudentsProfileForm(request.POST, instance = studentProfile)
+#        if studentForm.is_valid() and studentProfileForm.is_valid():
+#            userData = studentForm.cleaned_data
+#            student.username = userData['username']
+#            student.last_name = userData['last_name']
+#            student.first_name = userData['first_name']
+#            student.set_password(userData['pass1'])
+#            student.save()
+#            st = User.objects.get(pk = student.pk)
+#
+#            studentProfile = student.get_profile()
+#            studentProfileData = studentProfileForm.cleaned_data
+#            #            studentProfile.user = st
+#            studentProfile.other_name = studentProfileData['other_name']
+#            studentProfile.b_day = studentProfileData['b_day']
+#            studentProfile.phone = studentProfileData['phone']
+#            studentProfile.sex = studentProfileData['sex']
+#            studentProfile.cart = studentProfileData['cart']
+#            studentProfile.is_elder = studentProfileData['is_elder']
+#            studentProfile.save()
+#            user = authenticate(username = userData['username'], password = userData['pass1'] )
+#            login(request, user)
+#            return HttpResponseRedirect('/')
+#    else:
+#        studentForm = StudentsForm(instance = student)
+#        studentProfileForm = StudentsProfileForm(instance = studentProfile)
+
+    return render_to_response("profile/registration.html", locals(), context_instance = RequestContext(request))
 
 
 def profile(request, pk = None):

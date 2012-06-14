@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <SCRIPT TYPE="text/javascript" SRC="{{ MEDIA_URL }}js/report.js"></SCRIPT>
+{% endblock %}
+
+{% block main %}
+
+    <div id="report" class="container-fluid">
+        <div class="row-fluid">
+            <div class="span1">
+
+            </div>
+
+            <div class="span3">
+            <h3 style="color: #b94a48;">{{ teacher_full_name }}</h3>
+            <a href="#">#ДАВАЙДОСВИДАНИЯ</a><hr/>
+
+            {% for keys,values in report.items %}
+               <h3 style="color: #339bb9;"> {{ keys.0 }} {{ keys.1 }}</h3> <hr/>
+                {% for key, value in values.items %}
+                    {{ key }}: <b>{{ value.vidano }}/{{ value.vsego }}</b>
+                    <div class="bar progress progress-striped active " m="{{ key }}" style="margin-bottom: 9px;">
+                        <div class="bar" style="width: {{ value.vidano }}%"><span class="pull-right" style="color: #080808;"></span></div>
+                    </div>
+                {% endfor %}
+                <hr/>
+            {% endfor %}
+
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+<div class="progress progress-striped active">
+    <div class="bar" style="width: 45%"></div>
+</div>

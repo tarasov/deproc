@@ -60,6 +60,12 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/profile/'
+
+#AUTH_PROFILE_MODULE = 'tariffication.students'
+
+
 # для отображения иконки календаря
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
@@ -84,7 +90,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:

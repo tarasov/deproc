@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 from django.contrib import admin
+from django.contrib.auth.views import login, logout_then_login
 from deproc.tariffication.views import actions
 import settings
 
@@ -29,6 +30,9 @@ urlpatterns += patterns('',
 
 # Аккаунт
 urlpatterns += patterns('',
+    url(r'^login/$', login, { "template_name": "profile/login.html"}, name='login'),
+    url(r'^logout/$', logout_then_login, name='logout'),
+    url(r'^registration/$', 'deproc.profile.views.registration', name='registration'),
     url(r'^profile/', include('deproc.profile.urls')),
 )
 
