@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<h3>Авторизация</h3>
+
+
+{% if user.is_authenticated %}
+
+    Что такое, {{ user.username }}? Вы же уже авторизорваны.
+
+    Впрочем, всегда можно <a href="{% url logout %}">выйти</a>.<br/><br/>
+
+{% else %}
+
+
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Вход">
+
+        </form>
+
+{% endif %}
+
+{% endblock %}
+

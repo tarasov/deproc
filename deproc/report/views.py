@@ -25,9 +25,7 @@ def select(request):
 
             tariffs = Tariffication.objects.filter(
                 teacher = teacher,
-#            ).order_by('uch_plan_hour__type_hour__pk').select_related()
             ).order_by('group_plan__group', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour').select_related()
-#            ).order_by('group_plan__group', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour').select_related()
 
             reports = {}
             for i, tariff in enumerate(tariffs):
@@ -49,6 +47,8 @@ def select(request):
                 reports[i]['type'] = tariff.uch_plan_hour.type_hour.name
                 reports[i]['vidano'] = vidano['count']
                 reports[i]['vsego'] = vsego
+                if vsego != 0:
+                    reports[i]['procent'] = vidano['count']*100/vsego
 
             report = defaultdict(dict)
 #            type = defaultdict(dict)
@@ -63,11 +63,5 @@ def select(request):
                 report[(copy.pop('group'), copy.pop('disc'))].update(type)
 
             report = dict(report)
-
-            print report
-
-
-
-
 
     return render_to_response('report/select.html', locals(), context_instance=RequestContext(request))

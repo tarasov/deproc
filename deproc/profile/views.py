@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.contrib.auth.models import User
 from django.contrib.auth.views import login, logout
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse, HttpResponseNotFound
@@ -54,7 +55,13 @@ def profile(request, pk = None):
         teacher = models.Teachers.objects.get(id=pk)
         return render_to_response('profile/teacher.html', locals(), context_instance=RequestContext(request))
     else:
-        student = models.Students.objects.get(id=pk)
+        # TODO предусмотреть профиль других пользователей (admin, is_staff,)
+        try:
+            student = models.Students.objects.get(id=pk)
+        except:
+            pass
+        else:
+            student = User.objects.get(id=pk)
         return render_to_response('profile/student.html', locals(), context_instance=RequestContext(request))
 
 def users(request, who):

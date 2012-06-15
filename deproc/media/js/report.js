@@ -8,15 +8,11 @@
 $(function() {
 
 
-    $('div.bar progress').each(function() {
+    $('div.bar').each(function() {
         var m = $.trim($(this).html());
 
         if (m == 'Лекция') {
 //            $($(this).attr('class') + "progress-danger");
-            $(this).addClass('progress-danger');
-//            this.addClass('progress-danger')
-//            $(this).hide();
-//            this.hide();
         }
         if (m == 'Проверка курсового проекта') {
             $(this).css({'color': '#df73ff'});

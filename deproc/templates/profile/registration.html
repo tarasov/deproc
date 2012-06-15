@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <H3>Добавление студента</H3>
+    <HR />
+    <FORM ACTION="{% url registration %}" METHOD="POST">
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+                    <div class="span2">
+                        {{ studentForm.as_p }}
+                    </div>
+
+                    <div class="span2">
+                        {{ studentProfileForm.as_p }}
+                    </div>
+
+            </div>
+        </div>
+
+        <BR />
+{#        <A HREF="/main/schools/" CLASS="btn";">Назад</A>#}
+        <INPUT CLASS="btn btn-inverse" TYPE="SUBMIT" VALUE="Зарегистрироваться">
+    </FORM>
+{% endblock %}

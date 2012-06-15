@@ -19,10 +19,17 @@
             {% for keys,values in report.items %}
                <h3 style="color: #339bb9;"> {{ keys.0 }} {{ keys.1 }}</h3> <hr/>
                 {% for key, value in values.items %}
-                    {{ key }}: <b>{{ value.vidano }}/{{ value.vsego }}</b>
-                    <div class="bar progress progress-striped active " m="{{ key }}" style="margin-bottom: 9px;">
-                        <div class="bar" style="width: {{ value.vidano }}%"><span class="pull-right" style="color: #080808;"></span></div>
-                    </div>
+
+                    {% if value.vsego != 0 %}
+                        {{ key }}: <b>{{ value.vidano }}/{{ value.vsego }}</b>
+
+                        <div class="row-fluid">
+                                <div class="bar progress progress-striped active " m="{{ key }}" style="margin-bottom: 9px">
+                                    <div class="bar" style="width: {{ value.procent }}%"><span class="pull-right" style="color: #080808;"></span></div>
+                                </div>
+                        </div>
+
+                    {% endif %}
                 {% endfor %}
                 <hr/>
             {% endfor %}

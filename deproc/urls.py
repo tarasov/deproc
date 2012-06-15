@@ -2,19 +2,21 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login
+from deproc.schedule.views import index
 from deproc.tariffication.views import actions
 import settings
 
 admin.autodiscover()
 
 urlpatterns = patterns('deproc.tariffication.views',
-    url(r'^$', 'wellcome', name='wellcome'),
+#    url(r'^$', 'wellcome', name='wellcome'),
     url(r'^tariffication/$', 'tariffication', name='tariffication'),
     url(r'^group_plan/$', 'group_plan', name='group_plan'),
 )
 
 # Расписание
 urlpatterns += patterns('',
+    url(r'^$', index, name='schedule_onmain'),
     url(r'schedule/', include('deproc.schedule.urls'))
 )
 

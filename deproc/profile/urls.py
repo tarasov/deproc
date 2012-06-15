@@ -10,6 +10,6 @@ urlpatterns = patterns('deproc.profile.views',
     url(r'^(\d+)/$', 'user', name='user'),
     url(r'^group/(\d+)/$', 'group', name='profile_group'),
     url(r'^settings/$', 'settings', name='settings'),
-    url(r'^logout/$', 'logout_user', name='logout'),
-    url(r'^login/$', 'login_user', name='login'),
+#    url(r'^logout/$', 'logout_user', name='logout'),
+#    url(r'^login/$', 'login_user', name='login'),
 )
