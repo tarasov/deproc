@@ -59,6 +59,7 @@ $(function() {
                             }
                         }
                     }
+                    html += '<hr/>';
                 }
                 html += '</div>';
                 $('a.visible_report .show').hide();

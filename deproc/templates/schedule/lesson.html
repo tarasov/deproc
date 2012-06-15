@@ -11,7 +11,8 @@
     <a class="btn btn-primary" href="{{ backlink }}"><i class="icon-arrow-left icon-white"></i> Назад</a>
     <br><br><br>
 
-    <h2> {{ day }}.{{ month }}.{{ year }},</h2>  <span style="font-size: 20px;">группа <b>{{ group }}</b></span>
+    <h2> {{ day }}.{{ month }}.{{ year }},</h2>
+    <span style="font-size: 20px;">группа <b>{{ group }}</b></span>
     <b>пара № {{ lesson }}</b>
     <br/><br/><br/>
 
@@ -39,11 +40,17 @@
 
                         {% for teach, disc in lessons.items %}
                                 <tr>
-                                        <td class="group osn" align="left"><b style="color: #faa732;"> {{ teach }} </b></td>
-                                        <td class="group osn" id="" align="left"> <div><b style="color: #ff7518;"> {{ disc.0 }}</b></div> </td>
-                                        <td class="group" id="" align="left"> <div><b style="color: #2f96b4;" >{{ disc.1 }}</b></div> </td>
-                                        <td class="group" id="" align="left"> <div><b style="color: #2f96b4;" >{{ disc.2 }}</b></div> </td>
-                                        <td class="group" id="" align="left"><div>
+                                        <td class="group osn" align="left">
+                                            <div>
+                                                <a href="/profile/{{ disc.4 }}">
+                                                    <b style="color: #faa732;"> {{ teach }}</b>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="group osn" align="left"> <div><b style="color: #ff7518;"> {{ disc.0 }}</b></div> </td>
+                                        <td class="group" align="left"> <div><b style="color: #2f96b4;" >{{ disc.1 }}</b></div> </td>
+                                        <td class="group" align="left"> <div><b style="color: #2f96b4;" >{{ disc.2 }}</b></div> </td>
+                                        <td class="group" align="left"><div>
                                             <b>
                                                 <a title = "Удалить" class="icon-remove" href="delete/{{ disc.3 }}"></a>
                                             </b>
@@ -90,15 +97,17 @@
                     {% for value in tr.values %}
                         {% for v in value %}
                             {% if v == '' %}
-                                    <td class="group" id="" align="left"> <a href=""><div><b></b></div></a> </td>
+                                    <td class="group" align="left">
+                                        <div>
+                                            <b></b>
+                                        </div>
+                                    </td>
                                 {% else %}
                                     <td class="group" id="{{ v.3 }}" align="left">
                                         <a id="go" rel="leanModal" name="form_hours" href="#form_hours">
                                             <b> {{ v.2 }} / {{ v.1 }}</b>
-
-{#                                        <a href="add/{{ v.3 }}"><div><b>{{ v.0 }} {{ v.2 }} / {{ v.1 }}</b></div>#}
-
-                                        </a> </td>
+                                        </a>
+                                    </td>
                             {% endif %}
                         {% endfor %}
                     {% endfor %}

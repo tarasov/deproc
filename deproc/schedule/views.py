@@ -126,7 +126,7 @@ def lesson(request, year, month, day, group, lesson):
         dsc = lt.plan.uch_plan_hour.uch_plan.disc
         tpdsc = lt.plan.uch_plan_hour.type_hour.name
         count_hours = lt.count_hours
-        lessons[teach] = dsc, tpdsc, count_hours, lt.pk
+        lessons[teach] = dsc, tpdsc, count_hours, lt.pk, lt.plan.teacher.pk
 
     tariffs = main_models.Tariffication.objects.filter(
         group_plan__group__name = group,
@@ -253,14 +253,14 @@ def index(request, id_profile = None, day = None):
                             for tt in tc:
                                 teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
                                 hourtype = tt.plan.uch_plan_hour.type_hour.short_name
-                                ls[j] = tt.plan.disc.name, teach, hourtype
+                                ls[j] = tt.plan.disc.short_name, teach, hourtype
                                 j += 1
                             lessons[i] = ls
                         else:
                             tc = tch.get(num_less = i)
                             teach = '%s %s. %s.' % (tc.plan.teacher.last_name, tc.plan.teacher.first_name[0], tc.plan.teacher.other_name[0])
                             hourtype = tc.plan.uch_plan_hour.type_hour.short_name
-                            lessons[i] = tc.plan.disc.name, tc.plan.group_plan.group.name, hourtype
+                            lessons[i] = tc.plan.disc.short_name, tc.plan.group_plan.group.name, hourtype
                     else:
                         lessons[i] = ''
             else:
@@ -288,7 +288,7 @@ def index(request, id_profile = None, day = None):
                             sc = get_object_or_404(sch, num_less = i)
                             teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
                             hourtype = sc.plan.uch_plan_hour.type_hour.short_name
-                            lessons[i] = sch.get(num_less = i).plan.disc.name, teach, hourtype
+                            lessons[i] = sch.get(num_less = i).plan.disc.short_name, teach, hourtype
                         except MultipleObjectsReturned:
                             sc = sch.filter(num_less = i)
                             j = 1
@@ -296,7 +296,7 @@ def index(request, id_profile = None, day = None):
                             for ss in sc:
                                 teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
                                 hourtype = ss.plan.uch_plan_hour.type_hour.short_name
-                                ls[j] = ss.plan.disc.name, teach, hourtype
+                                ls[j] = ss.plan.disc.short_name, teach, hourtype
                                 j += 1
                             lessons[i] = ls
                     else:

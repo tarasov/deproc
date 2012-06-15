@@ -34,7 +34,11 @@ def select(request, tch = None):
 
             tariffs = Tariffication.objects.filter(
                 teacher = teacher,
-            ).order_by('group_plan__group', 'uch_plan_hour__uch_plan__disc', 'uch_plan_hour__type_hour').select_related()
+            ).order_by(
+                'group_plan__group',
+                'uch_plan_hour__uch_plan__disc',
+                'uch_plan_hour__type_hour'
+            ).select_related()
 
             reports = {}
             for i, tariff in enumerate(tariffs):
@@ -60,7 +64,6 @@ def select(request, tch = None):
                     reports[i]['procent'] = vidano['count']*100/vsego
 
             report = defaultdict(dict)
-#            type = defaultdict(dict)
             for i, item in reports.items():
                 type = defaultdict(dict)
                 copy = item.copy()
