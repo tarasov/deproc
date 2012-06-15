@@ -5,14 +5,14 @@ $(function() {
         var url = $(this.parentNode).attr('rel');
         var date = $(this).attr('id');
         var html = '';
-//        var now = new Date();
-//        var curr_date = '14';
-//        var curr_month = '05';
-//        var curr_year = now.getFullYear();
+        var now = new Date();
+        var curr_date = '14';
+        var curr_month = '05';
+        var curr_year = now.getFullYear();
         $.get(
             url,
-            {'day': date},
-//            {'day': curr_date + '.' + curr_month + '.' + curr_year},
+//            {'day': date},
+            {'day': curr_date + '.' + curr_month + '.' + curr_year},
             function(data) {
                 if (data != '{}') {
                     html = '' +
@@ -38,13 +38,13 @@ $(function() {
                 }
                 $('a.visible_schedule .show').hide();
                 $('a.visible_schedule .hide').show();
-                $('p#schedule').html(html);
+                $('#schedule').html(html);
             }
         )
     });
 
     $('a.visible_schedule .hide').click(function() {
-        $('p#schedule').html('');
+        $('#schedule').html('');
         $('a.visible_schedule .show').show();
         $('a.visible_schedule .hide').hide();
     });

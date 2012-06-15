@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block styles %}
     <script type="text/javascript" src="{{ MEDIA_URL }}js/profile.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/report.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -16,17 +17,22 @@
                     Руководитель <a href="{{ teacher.manager.get_group_students_absolute_url }}"> группы {{ teacher.manager }}</a>
                 </p>
             {% endif %}
-            <p>
-                Часы остаток
+            <p class="span12">
+                <a class = "visible_report" rel="{% url select_teacher teacher.pk %}" href="#">
+                    <span id="{{ today }}" class="show">Часы остаток</span>
+                    <span class="hide">скрыть часы остаток</span>
+                </a>
             </p>
-            <p>
+            <div id = "report" class="span4">
+            </div>
+            <p class="span12">
                 <a class = "visible_schedule" rel="{% url schedule_index id_profile=teacher.pk %}" href="#">
                     <span id="{{ today }}" class="show">показать расписание на сегодня</span>
                     <span class="hide">скрыть расписание на сегодня</span>
                 </a>
             </p>
-            <p id = "schedule">
-            </p>
+            <div id = "schedule">
+            </div>
         </div>
         <div class="span3">
             <img src="{{ MEDIA_URL }}img/alien.jpg" width="140px" height="240px">

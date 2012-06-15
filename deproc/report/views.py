@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Sum
 from django.http import HttpResponse
@@ -67,12 +68,18 @@ def select(request, tch = None):
                 tp.pop('group')
                 tp.pop('disc')
                 type[(tp.pop('type'))].update(tp)
-                print tp
+#                print tp
                 report[(copy.pop('group'), copy.pop('disc'))].update(type)
 
             report = dict(report)
 
     if tch:
-        return HttpResponse(report)
+        reports = report
+        new_reports = {}
+        for key,value in reports.items():
+            group, discipline = key
+            new_reports['%s_%s' % (group, discipline)] = value
+
+        return HttpResponse(json.dumps(new_reports))
     else:
         return render_to_response('report/select.html', locals(), context_instance=RequestContext(request))
