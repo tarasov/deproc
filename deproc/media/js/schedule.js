@@ -20,22 +20,22 @@ $(function() {
     $('b.type_hour').each(function() {
         var m = $.trim($(this).html());
 
-        if (m == 'ЛК') {
+        if (m == 'лк') {
             $(this).css({'color': '#dc143c'});
         }
-        if (m == 'ПР') {
+        if (m == 'пр') {
             $(this).css({'color': '#df73ff'});
         }
-        if (m == 'КН') {
+        if (m == 'кн') {
             $(this).css({'color': '#77dd77'});
         }
-        if (m == 'ЭК') {
+        if (m == 'эк') {
             $(this).css({'color': '#ff7518'});
         }
-        if (m == 'КП') {
+        if (m == 'кп') {
             $(this).css({'color': '#d2b48c'});
         }
-        if (m == 'ПК') {
+        if (m == 'пк') {
             $(this).css({'color': '#c9a0dc'});
         }
     });

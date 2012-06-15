@@ -1,6 +1,7 @@
 from collections import defaultdict
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Sum
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from deproc.schedule.models import Schedule
@@ -12,12 +13,19 @@ def report_all(request):
     teachers = tar_models.Teachers.objects.all()
     return render_to_response('report/teachers.html', locals(), context_instance=RequestContext(request))
 
-def select(request):
-    if 'teacher' in request.POST and request.POST['teacher']:
+def select(request, tch = None):
+    teacherID = None
+    report = {}
+
+    if 'teacher' in request.POST:
         teacherID = request.POST['teacher']
+    elif tch:
+        teacherID = tch
+
+    if teacherID:
         try:
             teacher = get_object_or_404(User, pk = teacherID)
-        except:
+        except Exception:
             pass
         else:
             teacher = Teachers.objects.get(pk = teacherID)
@@ -64,4 +72,7 @@ def select(request):
 
             report = dict(report)
 
-    return render_to_response('report/select.html', locals(), context_instance=RequestContext(request))
+    if tch:
+        return HttpResponse(report)
+    else:
+        return render_to_response('report/select.html', locals(), context_instance=RequestContext(request))

@@ -2,7 +2,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login
-from deproc.schedule.views import index
+from deproc.schedule.views import index, index_now
 from deproc.tariffication.views import actions
 import settings
 
@@ -16,7 +16,7 @@ urlpatterns = patterns('deproc.tariffication.views',
 
 # Расписание
 urlpatterns += patterns('',
-    url(r'^$', index, name='schedule_onmain'),
+    url(r'^$', index_now, name='schedule_onmain'),
     url(r'schedule/', include('deproc.schedule.urls'))
 )
 

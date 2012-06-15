@@ -8,26 +8,26 @@
 $(function() {
 
 
-    $('div.bar').each(function() {
-        var m = $.trim($(this).html());
+    $('.bar.progress.progress-striped.active').each(function() {
+        var m = $(this).attr('m');
 
         if (m == 'Лекция') {
-//            $($(this).attr('class') + "progress-danger");
+            $(this).addClass("progress-danger");
         }
         if (m == 'Проверка курсового проекта') {
-            $(this).css({'color': '#df73ff'});
+            $(this).addClass("progress-indigo");
         }
         if (m == 'Консультация') {
-            $(this).css({'color': '#77dd77'});
+            $(this).addClass("progress-success");
         }
         if (m == 'Практика') {
-            $(this).css({'color': '#ff7518'});
+            $(this).addClass("progress-warning");
         }
         if (m == 'Курсовое проектирование') {
-            $(this).css({'color': '#d2b48c'});
+            $(this).addClass("progress-info");
         }
         if (m == 'Экзамен') {
-            $(this).css({'color': '#c9a0dc'});
+            $(this).addClass("progress-cabal");
         }
     });
 

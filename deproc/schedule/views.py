@@ -179,8 +179,18 @@ def lesson(request, year, month, day, group, lesson):
 
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
+def index_now(request):
+    day = datetime.datetime.now().strftime('%d.%m.%Y')
+    return index(request, None, day)
 
-def index(request, id_profile = None):
+def index(request, id_profile = None, day = None):
+    date = None
+
+    if day:
+        date = day
+    elif request.GET and 'day' in request.GET:
+        date = request.GET['day']
+
 
     id_teacher, id_student = None, None
 
@@ -209,100 +219,98 @@ def index(request, id_profile = None):
         "plan__teacher",
     )
 
-    if request.method == 'GET':
-        if 'day' in request.GET and request.GET['day']:
-            date = request.GET['day']
-            date = date.split('.')
-            new_date = ('%s-%s-%s' % tuple(date[::-1]))
-            schdl_day = sch_models.Schedule_day.objects.all()
-            new_date = datetime.datetime.strptime(new_date, '%Y-%m-%d')
-            if not schdl_day.filter(day = str(new_date.date())):
-                this_day = schdl_day.create(day = new_date.date())
+    if date:
+        date = date.split('.')
+        new_date = ('%s-%s-%s' % tuple(date[::-1]))
+        schdl_day = sch_models.Schedule_day.objects.all()
+        new_date = datetime.datetime.strptime(new_date, '%Y-%m-%d')
+        if not schdl_day.filter(day = str(new_date.date())):
+            this_day = schdl_day.create(day = new_date.date())
+        else:
+            this_day = schdl_day.get(day = str(new_date.date()))
+        day = '%s-%s-%s' % (this_day.day.year, this_day.day.month, this_day.day.day)
+        rng = range(1,6)
+
+        schedule_group = {}
+        schedule_teacher = {}
+
+        for teacher in teacher_list:
+            lessons = {}
+            tch = schedule_queryset.filter(
+                plan__teacher = teacher,
+                day = this_day
+            )
+
+            if tch:
+                for i in range(1,6):
+                    if (tch.filter(num_less = i)):
+                        try:
+                            tc = get_object_or_404(tch, num_less = i)
+                        except MultipleObjectsReturned:
+                            tc = tch.filter(num_less = i)
+                            j = 1
+                            ls = {}
+                            for tt in tc:
+                                teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
+                                hourtype = tt.plan.uch_plan_hour.type_hour.short_name
+                                ls[j] = tt.plan.disc.name, teach, hourtype
+                                j += 1
+                            lessons[i] = ls
+                        else:
+                            tc = tch.get(num_less = i)
+                            teach = '%s %s. %s.' % (tc.plan.teacher.last_name, tc.plan.teacher.first_name[0], tc.plan.teacher.other_name[0])
+                            hourtype = tc.plan.uch_plan_hour.type_hour.short_name
+                            lessons[i] = tc.plan.disc.name, tc.plan.group_plan.group.name, hourtype
+                    else:
+                        lessons[i] = ''
             else:
-                this_day = schdl_day.get(day = str(new_date.date()))
-            day = '%s-%s-%s' % (this_day.day.year, this_day.day.month, this_day.day.day)
-            rng = range(1,6)
+                for i in range(1,6):
+                    lessons[i] = ''
+            t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0])
+            schedule_teacher[t] = lessons
 
-            schedule_group = {}
-            schedule_teacher = {}
+        if id_teacher:
+            if not any(schedule_teacher.values()[0].values()):
+                schedule_teacher = {}
+            return HttpResponse(json.dumps(schedule_teacher))
 
-            for teacher in teacher_list:
-                lessons = {}
-                tch = schedule_queryset.filter(
-                    plan__teacher = teacher,
-                    day = this_day
-                )
+        for group in groups:
+            lessons = {}
+            sch = schedule_queryset.filter(
+                plan__group_plan__group = group,
+                day = this_day
+            )
 
-                if tch:
-                    for i in range(1,6):
-                        if (tch.filter(num_less = i)):
-                            try:
-                                tc = get_object_or_404(tch, num_less = i)
-                            except MultipleObjectsReturned:
-                                tc = tch.filter(num_less = i)
-                                j = 1
-                                ls = {}
-                                for tt in tc:
-                                    teach = '%s %s. %s.' % (tt.plan.teacher.last_name, tt.plan.teacher.first_name[0], tt.plan.teacher.other_name[0])
-                                    hourtype = tt.plan.uch_plan_hour.type_hour.short_name
-                                    ls[j] = tt.plan.disc.name, teach, hourtype
-                                    j += 1
-                                lessons[i] = ls
-                            else:
-                                tc = tch.get(num_less = i)
-                                teach = '%s %s. %s.' % (tc.plan.teacher.last_name, tc.plan.teacher.first_name[0], tc.plan.teacher.other_name[0])
-                                hourtype = tc.plan.uch_plan_hour.type_hour.short_name
-                                lessons[i] = tc.plan.disc.name, tc.plan.group_plan.group.name, hourtype
-                        else:
-                            lessons[i] = ''
-                else:
-                    for i in range(1,6):
+            if sch:
+                for i in range(1,6):
+                    if (sch.filter(num_less = i)):
+                        try:
+                            sc = get_object_or_404(sch, num_less = i)
+                            teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
+                            hourtype = sc.plan.uch_plan_hour.type_hour.short_name
+                            lessons[i] = sch.get(num_less = i).plan.disc.name, teach, hourtype
+                        except MultipleObjectsReturned:
+                            sc = sch.filter(num_less = i)
+                            j = 1
+                            ls = {}
+                            for ss in sc:
+                                teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
+                                hourtype = ss.plan.uch_plan_hour.type_hour.short_name
+                                ls[j] = ss.plan.disc.name, teach, hourtype
+                                j += 1
+                            lessons[i] = ls
+                    else:
                         lessons[i] = ''
-                t = '%s %s. %s.' % (teacher.last_name, teacher.first_name[0], teacher.other_name[0])
-                schedule_teacher[t] = lessons
+            else:
+                for i in range(1,6):
+                    lessons[i] = ''
 
-            if id_teacher:
-                if not any(schedule_teacher.values()[0].values()):
-                    schedule_teacher = {}
-                return HttpResponse(json.dumps(schedule_teacher))
+            schedule_group[group.name] = lessons
 
-            for group in groups:
-                lessons = {}
-                sch = schedule_queryset.filter(
-                    plan__group_plan__group = group,
-                    day = this_day
-                )
-
-                if sch:
-                    for i in range(1,6):
-                        if (sch.filter(num_less = i)):
-                            try:
-                                sc = get_object_or_404(sch, num_less = i)
-                                teach = '%s %s. %s.' % (sc.plan.teacher.last_name, sc.plan.teacher.first_name[0], sc.plan.teacher.other_name[0])
-                                hourtype = sc.plan.uch_plan_hour.type_hour.short_name
-                                lessons[i] = sch.get(num_less = i).plan.disc.name, teach, hourtype
-                            except MultipleObjectsReturned:
-                                sc = sch.filter(num_less = i)
-                                j = 1
-                                ls = {}
-                                for ss in sc:
-                                    teach = '%s %s. %s.' % (ss.plan.teacher.last_name, ss.plan.teacher.first_name[0], ss.plan.teacher.other_name[0])
-                                    hourtype = ss.plan.uch_plan_hour.type_hour.short_name
-                                    ls[j] = ss.plan.disc.name, teach, hourtype
-                                    j += 1
-                                lessons[i] = ls
-                        else:
-                            lessons[i] = ''
-                else:
-                    for i in range(1,6):
-                        lessons[i] = ''
-
-                schedule_group[group.name] = lessons
-
-                if id_student:
-                    if not any(schedule_group.values()[0].values()):
-                        schedule_group = {}
-                    return HttpResponse(json.dumps(schedule_group))
+            if id_student:
+                if not any(schedule_group.values()[0].values()):
+                    schedule_group = {}
+                return HttpResponse(json.dumps(schedule_group))
 
 
     return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
