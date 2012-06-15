@@ -6,7 +6,10 @@
 
 {% block main %}
     <div class="row-fluid">
-        <div class="span9">
+        <div class="span1">
+            &nbsp;
+        </div>
+        <div class="span8">
             <p>
                 <h3>
                     {{ teacher }}
@@ -23,7 +26,7 @@
                     <span class="hide">скрыть часы остаток</span>
                 </a>
             </p>
-            <div id = "report" class="span4">
+            <div id="report" class="span6">
             </div>
             <p class="span12">
                 <a class = "visible_schedule" rel="{% url schedule_index id_profile=teacher.pk %}" href="#">
@@ -31,11 +34,14 @@
                     <span class="hide">скрыть расписание на сегодня</span>
                 </a>
             </p>
-            <div id = "schedule">
+            <div id = "schedule" class="span6">
             </div>
         </div>
-        <div class="span3">
+        <div class="span2">
             <img src="{{ MEDIA_URL }}img/alien.jpg" width="140px" height="240px">
+        </div>
+        <div class="span1">
+            &nbsp;
         </div>
     </div>
 {% endblock %}

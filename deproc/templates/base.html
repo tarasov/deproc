@@ -39,7 +39,7 @@
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li class="active">
-                            <a href="{% url schedule_onmain %}"><i class="icon-home icon-white"></i> Главная</a>
+                            <a href="{% url deproc %}"><i class="icon-home icon-white"></i> Главная</a>
                         </li>
                         <li class="active">
                             <a href="{% url teachers %}"><i class="icon-book icon-white"></i> Журнал</a>
@@ -60,6 +60,7 @@
                                 </ul>
                             </li>
                         </ul>
+                    {% if user.is_staff %}
                         <ul class="nav">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -79,6 +80,7 @@
                                 </ul>
                             </li>
                         </ul>
+                    {% endif %}
                     </ul>
 
                     {% if user.is_authenticated %}
@@ -107,7 +109,7 @@
                                 {% csrf_token %}
                                 <input class="search-query span2" type="text" placeholder="Пользователь" id="id_username" name="username" maxlength="30" >
                                 <input class="search-query span2" type="password" placeholder="Пароль" name="password" id="id_password" >
-                                <button type="submit" class="btn">Войти</button>
+                                <input type="submit" class="btn">Войти</input>
                             </form>
                         </ul>
                     {% endif %}

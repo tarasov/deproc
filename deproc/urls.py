@@ -9,14 +9,13 @@ import settings
 admin.autodiscover()
 
 urlpatterns = patterns('deproc.tariffication.views',
-#    url(r'^$', 'wellcome', name='wellcome'),
     url(r'^tariffication/$', 'tariffication', name='tariffication'),
     url(r'^group_plan/$', 'group_plan', name='group_plan'),
 )
 
 # Расписание
 urlpatterns += patterns('',
-    url(r'^$', index_now, name='schedule_onmain'),
+    url(r'^$', index_now, name='deproc'),
     url(r'schedule/', include('deproc.schedule.urls'))
 )
 

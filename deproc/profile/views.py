@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login, logout
 from django.shortcuts import render_to_response
@@ -7,62 +8,59 @@ from django.http import HttpResponseRedirect, HttpResponseServerError, HttpRespo
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.template.defaulttags import csrf_token
+from deproc.profile.forms import StudentsForm
 from deproc.tariffication import forms, models
 from deproc.profile import forms as profile_forms
+from deproc.tariffication.models import Students
 
 def registration(request):
 
-#    student = User()
-#    studentProfile = Students()
-#    if request.method == "POST":
-#        studentForm = StudentsForm(request.POST, instance = student)
-#        studentProfileForm = StudentsProfileForm(request.POST, instance = studentProfile)
-#        if studentForm.is_valid() and studentProfileForm.is_valid():
-#            userData = studentForm.cleaned_data
-#            student.username = userData['username']
-#            student.last_name = userData['last_name']
-#            student.first_name = userData['first_name']
-#            student.set_password(userData['pass1'])
-#            student.save()
-#            st = User.objects.get(pk = student.pk)
-#
-#            studentProfile = student.get_profile()
-#            studentProfileData = studentProfileForm.cleaned_data
-#            #            studentProfile.user = st
-#            studentProfile.other_name = studentProfileData['other_name']
-#            studentProfile.b_day = studentProfileData['b_day']
-#            studentProfile.phone = studentProfileData['phone']
-#            studentProfile.sex = studentProfileData['sex']
-#            studentProfile.cart = studentProfileData['cart']
-#            studentProfile.is_elder = studentProfileData['is_elder']
-#            studentProfile.save()
-#            user = authenticate(username = userData['username'], password = userData['pass1'] )
-#            login(request, user)
-#            return HttpResponseRedirect('/')
-#    else:
-#        studentForm = StudentsForm(instance = student)
-#        studentProfileForm = StudentsProfileForm(instance = studentProfile)
+    student = Students()
+    if request.method == "POST":
+        studentForm = StudentsForm(request.POST)
+        if studentForm.is_valid():
+            userData = studentForm.cleaned_data
+            student.username = userData['username']
+            student.last_name = userData['last_name']
+            student.first_name = userData['first_name']
+            student.other_name = userData['other_name']
+            student.b_day = userData['b_day']
+            student.phone = userData['phone']
+            student.sex = userData['sex']
+            student.cart = userData['cart']
+            student.is_elder = userData['is_elder']
+            student.set_password(userData['pass1'])
+            student.save()
+            user = authenticate(username = userData['username'], password = userData['pass1'] )
+            login(request, user)
+            return HttpResponseRedirect('/')
+        else:
+            studentForm = StudentsForm(request.POST)
+    else:
+        studentForm = StudentsForm()
 
     return render_to_response("profile/registration.html", locals(), context_instance = RequestContext(request))
 
 
 def profile(request, pk = None):
+    # TODO создать декаратор
+    if not User.objects.filter(id=request.user.id):
+        return HttpResponseRedirect(reverse('deproc'))
+    # END TODO создать декаратор
+
     if not pk:
         pk = request.user.pk
     today = datetime.datetime.today().strftime("%d.%m.%Y")
 
-    if models.Teachers.objects.filter(id=pk):
-        teacher = models.Teachers.objects.get(id=pk)
+    if models.Teachers.objects.filter(user_ptr = pk):
+        teacher = models.Teachers.objects.get(user_ptr = pk)
         return render_to_response('profile/teacher.html', locals(), context_instance=RequestContext(request))
-    else:
+    elif models.Students.objects.filter(user_ptr = pk):
         # TODO предусмотреть профиль других пользователей (admin, is_staff,)
-        try:
-            student = models.Students.objects.get(id=pk)
-        except:
-            pass
-        else:
-            student = User.objects.get(id=pk)
+        student = models.Students.objects.get(user_ptr = pk)
         return render_to_response('profile/student.html', locals(), context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect(reverse('deproc'))
 
 def users(request, who):
     if who == 'teachers':
@@ -88,11 +86,3 @@ def group(request, group):
 
 def settings(request):
     return render_to_response('profile/settings.html', locals(), context_instance=RequestContext(request))
-
-def logout_user(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('wellcome'))
-
-def login_user(request):
-    login(request)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])

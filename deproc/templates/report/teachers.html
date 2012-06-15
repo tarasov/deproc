@@ -8,6 +8,7 @@
         <div class="row-fluid">
 
             <form action="{% url select %}" method="POST">
+                {% csrf_token %}
 
                 <select name="teacher" class="span5">
                     {% for teacher in teachers %}

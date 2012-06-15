@@ -73,7 +73,10 @@ class Students(Profile):
 
     @property
     def group(self):
-        return Groups_stud.objects.filter(student=self)[0].group
+        if Groups_stud.objects.filter(student=self):
+            return Groups_stud.objects.filter(student=self)[0].group
+        else:
+            return None
 
     def __unicode__(self):
         return u'%s %s %s' % (self.last_name, self.first_name, self.other_name)
