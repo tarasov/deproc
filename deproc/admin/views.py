@@ -48,8 +48,9 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
                     'group_plan': group_plan
                 }
             )
+# MultipleObjectsReturned  get() returned more than one UchPlan -- it returned 2! Lookup parameters were {'semestr': u'1', 'disc': u'26'}
 
-            uch_plan = models.UchPlan.objects.get(
+            uch_plan = models.UchPlan.objects.filter(
                 disc = discipline,
                 semestr = semestr,
             )

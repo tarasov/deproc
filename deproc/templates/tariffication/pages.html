@@ -4,13 +4,16 @@
     <div class="row-fluid">
         <table class="tariffication span12">
             <tr>
-                {% for th in ths %}
+                <td class="addin" colspan="{{ ths|length }}"><a href="./add"><div><b>+</b></div></a></td>
+            </tr>
+            <tr>
+            {% for th in ths %}
                     <th align="left"><b>{{ th.1|capfirst }}</b></th>
                 {% endfor %}
             </tr>
             {% for tr in table %}
                 <tr style="height: 30px;">
-                    {% for td in tr %}
+                {% for td in tr %}
                         {% if forloop.counter0 %}
                             {% if td not in actions %}
                                 <td><b>{{ td }}</b></td>
@@ -21,9 +24,6 @@
                     {% endfor %}
                 </tr>
             {% endfor %}
-                <tr>
-                    <td class="addin" colspan="{{ ths|length }}"><a href="./add"><div><b>+</b></div></a></td>
-                </tr>
         </table>
     </div>
 {% endblock %}

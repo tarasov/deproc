@@ -11,21 +11,27 @@
     <a class="btn btn-primary" href="{{ backlink }}"><i class="icon-arrow-left icon-white"></i> Назад</a>
     <br><br><br>
 
-    <h2> {{ day }}.{{ month }}.{{ year }},</h2>
-    <span style="font-size: 20px;">группа <b>{{ group }}</b></span>
-    <b>пара № {{ lesson }}</b>
+    <h2 style="color: #953b39;"> {{ this_day.day }}</h2>
+    <span style="font-size: 20px; color: #b94a48;">группа <b>{{ group }}</b></span>
+    <b style="color: #b94a48;">пара № {{ lesson }}</b>
     <br/><br/><br/>
 
-    {% if oshibka %}
-        <div class="alert alert-error">
-            <button class="close" data-dismiss="alert">×</button>
-            <strong> Ошибка! </strong> Нельзя добавлять больше пар!
+        <div class="row-fluid">
+            <div class="span3">
+                {% if warning %}
+
+                    <div class="alert alert-heading">
+                        <button class="close" data-dismiss="alert">×</button>
+                        <strong> Внимание! </strong> {{ message }}
+                    </div>
+
+                {% endif %}
+            </div>
         </div>
-    {% endif %}
 
     {% if lessons %}
 
-            <h3> Уже существующие пары </h3>
+        <h3 style="color: #b94a48;"> Уже существующие пары </h3>
 
             <div class="row-fluid">
                 <table class="schedule span6">
@@ -66,83 +72,110 @@
     {% endif %}
 
 
-    <h3> Тарификации на текущую группу </h3>
+    {% if table %}
 
-    <div class="row-fluid">
-        <table class="schedule span11" id="schedule">
-            <tbody>
-            <tr class="nso">
-                <th align="left"><b> # </b></th>
-                <th align="left"><b> Дисциплина / Преподаватель </b></th>
+        <div class="row-fluid">
 
-                {% for type in typehour %}
-                    <th align="left"><b> {{ type }} </b></th>
-                {% endfor %}
-            </tr>
+            <div class="span12 pagination pagination-centered">
+                <ul>
+                    {% for i in frange %}
+                        {% if i == now_lesson %}
+                            <li class="active"><a href="/schedule/lesson/{{ year }}-{{ month }}-{{ day }}/{{ group }}/{{ i }}/">{{ i }}</a></li>
+                        {% else %}
+                            <li style="background: #faa732;"><a href="/schedule/lesson/{{ year }}-{{ month }}-{{ day }}/{{ group }}/{{ i }}/">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
 
-            {% for tr in table %}
+        </div>
 
-                <tr>
-                    <td align="left"><b class="forloop"> {{ forloop.counter }} </b></td>
-                    <td class="group osn" align="left">
+        <h3 style="color: #b94a48;"> Тарификации на текущую группу </h3>
+        <div class="row-fluid">
+            <table class="schedule span12" id="schedule">
+                <tbody>
+                <tr class="nso">
+                    <th align="left"><b> # </b></th>
+                    <th align="left"><b> Дисциплина / Преподаватель </b></th>
 
-                        <div>
-
-                                {% for key in tr.keys %}
-                                    <b style="color: #faa732;">{{ key.0 }}</b> - <b style="color: #ff7518;"> {{ key.1 }} </b><br/>
-                                {% endfor %}
-
-                        </div>
-                    </td>
-                    {% for value in tr.values %}
-                        {% for v in value %}
-                            {% if v == '' %}
-                                    <td class="group" align="left">
-                                        <div>
-                                            <b></b>
-                                        </div>
-                                    </td>
-                                {% else %}
-                                    <td class="group" id="{{ v.3 }}" align="left">
-                                        <a id="go" rel="leanModal" name="form_hours" href="#form_hours">
-                                            <b> {{ v.2 }} / {{ v.1 }}</b>
-                                        </a>
-                                    </td>
-                            {% endif %}
-                        {% endfor %}
+                    {% for type in typehour %}
+                        <th align="left"><b> {{ type }} </b></th>
                     {% endfor %}
                 </tr>
 
-            {% endfor %}
+                {% for tr in table %}
+
+                    <tr>
+                        <td align="left"><b class="forloop"> {{ forloop.counter }} </b></td>
+                        <td class="group osn" align="left">
+
+                            <div>
+
+                                    {% for key in tr.keys %}
+                                        <b style="color: #faa732;">{{ key.0 }}</b> - <b style="color: #ff7518;"> {{ key.1 }} </b><br/>
+                                    {% endfor %}
+
+                            </div>
+                        </td>
+                        {% for value in tr.values %}
+                            {% for v in value %}
+                                {% if v == '' %}
+                                        <td class="group" align="left">
+                                            <div>
+                                                <b></b>
+                                            </div>
+                                        </td>
+                                    {% else %}
+                                        <td class="group" id="{{ v.3 }}" align="left">
+                                            <a id="go" rel="leanModal" name="form_hours" href="#form_hours">
+                                                <b> {{ v.2 }} / {{ v.1 }}</b>
+                                            </a>
+                                        </td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+
+                {% endfor %}
 
 
-            <tr class="nso">
-                <th align="left"><b> # </b></th>
-                <th align="left"><b> итого </b></th>
-                    {% for sh in sum_hours %}
-                        <th align="left"><b> {{ sh.vidano }} / {{ sh.vsego }} </b></th>
-                    {% endfor %}
-            </tr>
+                <tr class="nso">
+                    <th align="left"><b> # </b></th>
+                    <th align="left"><b> итого </b></th>
+                        {% for sh in sum_hours %}
+                            <th align="left"><b> {{ sh.vidano }} / {{ sh.vsego }} </b></th>
+                        {% endfor %}
+                </tr>
 
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
 
-    <div id="form_hours">
-        <div id="ct">
-            <div id="ct-header">
-                <h2 style="text-align: center;">Количество часов</h2>
-            </div>
+    {% else %}
 
-            <div style="padding-top: 10px; margin-left: 80px;">
-                <form action="">
-                    <p style="font-size: 23px;"><a class="hour_1" count_hours="1" href="#"> 1 час </a></p>
-                    <p style="font-size: 23px;"><a class="hour_2" count_hours="2" href="#"> 2 часа </a></p>
-                </form>
+        <h3 style="color: #b94a48;"> Тарификаций на текующую группу отсутствуют.</h3>
+
+    {% endif %}
+
+
+        {% if user.is_staff %}
+
+        <div id="form_hours">
+            <div id="ct">
+                <div id="ct-header">
+                    <h2 style="text-align: center;">Количество часов</h2>
+                </div>
+
+                <div style="padding-top: 10px; margin-left: 80px;">
+                    <form action="">
+                        <p style="font-size: 23px;"><a class="hour_1" count_hours="1" href="#"> 1 час </a></p>
+                        <p style="font-size: 23px;"><a class="hour_2" count_hours="2" href="#"> 2 часа </a></p>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
+    {% endif %}
 
 
 

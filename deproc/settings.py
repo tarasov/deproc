@@ -63,12 +63,6 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/profile/'
 
-#AUTH_PROFILE_MODULE = 'tariffication.students'
-
-
-# для отображения иконки календаря
-ADMIN_MEDIA_PREFIX = '/static/admin/'
-
 STATICFILES_DIRS = (
     #
 )

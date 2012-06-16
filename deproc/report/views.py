@@ -71,7 +71,6 @@ def select(request, tch = None):
                 tp.pop('group')
                 tp.pop('disc')
                 type[(tp.pop('type'))].update(tp)
-#                print tp
                 report[(copy.pop('group'), copy.pop('disc'))].update(type)
 
             report = dict(report)

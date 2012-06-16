@@ -11,14 +11,6 @@ from deproc.schedule import models as sch_models
 from deproc.schedule import forms
 import json
 
-def sql_schedule(request):
-    return locals()
-
-
-def schedule(request):
-    cal = forms.MyCalendarForm()
-    return render_to_response('schedule/schedule.html', locals(), context_instance=RequestContext(request))
-
 def add_lesson(request, year, month, day, group, lesson, plan, count_hours = 2):
 
     link = '/schedule/lesson/' + year + '-' + month + '-' + day + '/' + group + '/' + lesson
@@ -52,17 +44,25 @@ def add_lesson(request, year, month, day, group, lesson, plan, count_hours = 2):
     if not vidano['count']:
         vidano['count'] = 0
 
-    if flt_teacher.count() > 0 or flt_group.count() >= 2 or vidano['count'] >= vsego.uch_plan_hour.count_hours or int(count_hours) + int(vidano['count']) > vsego.uch_plan_hour.count_hours:
-        er = True
+
+    if flt_teacher.count() > 0:
+        er = 1
+        link += "?error=%s" % er
+    elif flt_group.count() >= 2:
+        er = 2
+        link += "?error=%s" % er
+    elif  vidano['count'] >= vsego.uch_plan_hour.count_hours:
+        er = 3
+        link += "?error=%s" % er
+    elif  int(count_hours) + int(vidano['count']) > vsego.uch_plan_hour.count_hours:
+        er = 4
         link += "?error=%s" % er
     else:
-        er = False
+        er = 0
         link += '/'
         sch_models.Schedule.objects.create(plan = this_plan, day = this_day, num_less = lesson, count_hours = count_hours)
 
     return HttpResponseRedirect(link)
-
-
 
 
 def delete_lesson(request, year, month, day, group, lesson, id_lesson):
@@ -70,11 +70,22 @@ def delete_lesson(request, year, month, day, group, lesson, id_lesson):
     return HttpResponseRedirect('/schedule/lesson/' + year + '-' + month + '-' + day + '/' + group + '/' + lesson + '/')
 
 def lesson(request, year, month, day, group, lesson):
+    warning = False
 
-    if request.GET.get('error', False):
-        oshibka = True
-    else:
-        oshibka = False
+    if request.GET.get('error') == '1':
+        warning = True
+        message = 'У преподавателя уже есть пара'
+    elif request.GET.get('error') == '2':
+        warning = True
+        message = 'У группы не может быть больше 2 пар'
+    elif request.GET.get('error') == '3':
+        warning = True
+        message = 'Все часы выданы'
+    elif request.GET.get('error') == '4':
+        warning = True
+        message = 'Достигнут предел часов, попробуйте выбрать меньшее количество часов'
+    elif request.GET.get('error') == '0':
+        warning = False
 
     backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
 
@@ -105,7 +116,8 @@ def lesson(request, year, month, day, group, lesson):
                 'vidano': vidano['count']
             })
 
-    print sum_hours
+    frange = range(1,6)
+    now_lesson = int(lesson)
 
     this_day = sch_models.Schedule_day.objects.get(
         day__day = day,
@@ -313,4 +325,4 @@ def index(request, id_profile = None, day = None):
                 return HttpResponse(json.dumps(schedule_group))
 
 
-    return render_to_response('schedule/index.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('schedule/schedule.html', locals(), context_instance=RequestContext(request))
