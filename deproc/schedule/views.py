@@ -71,23 +71,21 @@ def delete_lesson(request, year, month, day, group, lesson, id_lesson):
 
 def lesson(request, year, month, day, group, lesson):
     warning = False
-
-    if request.GET.get('error') == '1':
+    error = request.GET.get('error')
+    if error == '1':
         warning = True
         message = 'У преподавателя уже есть пара'
-    elif request.GET.get('error') == '2':
+    elif error == '2':
         warning = True
         message = 'У группы не может быть больше 2 пар'
-    elif request.GET.get('error') == '3':
+    elif error == '3':
         warning = True
         message = 'Все часы выданы'
-    elif request.GET.get('error') == '4':
+    elif error == '4':
         warning = True
         message = 'Достигнут предел часов, попробуйте выбрать меньшее количество часов'
-    elif request.GET.get('error') == '0':
+    elif error == '0':
         warning = False
-
-    backlink = '/schedule/index?day=' + day + '.' + month + '.' + year
 
     typehour = main_models.TypeHour.objects.all()
 
@@ -189,6 +187,7 @@ def lesson(request, year, month, day, group, lesson):
             table.append(tr)
         last_teacher = tariff.teacher
 
+
     return render_to_response('schedule/lesson.html', locals(), context_instance=RequestContext(request))
 
 def index_now(request):
@@ -197,16 +196,19 @@ def index_now(request):
 
 def index(request, id_profile = None, day = None):
     date = None
-
     if day:
         date = day
-    elif request.GET and 'day' in request.GET:
+        tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
+    elif 'day' in request.GET:
         date = request.GET['day']
+        dd = date.split('.')[::-1]
+        date_ = datetime.date(int(dd[0]), int(dd[1]), int(dd[2]))
+        tomorrow = date_ + datetime.timedelta(days=1)
 
 
     id_teacher, id_student = None, None
 
-    backlink = '/schedule/calendar/'
+    backlink = '/schedule/'
 
     if main_models.Teachers.objects.filter(id=id_profile):
         id_teacher = id_profile

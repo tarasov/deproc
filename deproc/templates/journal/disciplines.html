@@ -10,7 +10,6 @@
 {% block main %}
     <div class="container-fluid">
         <div class="row-fluid">
-
             {% for discipline in disciplines %}
                 <p style="text-align: center; font-size: 20px;">
                     <a href="{% url journal teacher=teacher.id group=group.pk discipline=discipline.pk %}">
@@ -18,7 +17,6 @@
                     </a>
                 </p>
             {% endfor %}
-
         </div>
     </div>
 

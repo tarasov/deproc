@@ -7,35 +7,33 @@
 {% endblock %}
 
 {% block main %}
-
-    <a class="btn btn-primary" href="{{ backlink }}"><i class="icon-arrow-left icon-white"></i> Назад</a>
-    <br><br><br>
-
-    <h2 style="color: #953b39;"> {{ this_day.day }}</h2>
-    <span style="font-size: 20px; color: #b94a48;">группа <b>{{ group }}</b></span>
-    <b style="color: #b94a48;">пара № {{ lesson }}</b>
-    <br/><br/><br/>
-
-        <div class="row-fluid">
-            <div class="span3">
+    <div class="row-fluid">
+        <div class="pull-right">
+            <div class="span6">
                 {% if warning %}
-
                     <div class="alert alert-heading">
                         <button class="close" data-dismiss="alert">×</button>
                         <strong> Внимание! </strong> {{ message }}
                     </div>
-
                 {% endif %}
             </div>
         </div>
+    </div>
 
-    {% if lessons %}
+    <div class="row-fluid">
+        <div class="span2">
+            <span style="font-size: 22px; color: #953b39;"> {{ this_day.day }}</span>
+            <br/>
+            <span style="font-size: 20px; color: #b94a48;">группа <b>{{ group }}</b></span>
+            <b style="color: #b94a48;">пара № {{ lesson }}</b>
+        </div>
 
-        <h3 style="color: #b94a48;"> Уже существующие пары </h3>
-
-            <div class="row-fluid">
-                <table class="schedule span6">
-                    <tbody>
+        <div class="span8" style="text-align: center;">
+            {% if lessons %}
+                <h3 style="color: #b94a48;">Уже существующие пары </h3>
+                <div class="row-fluid">
+                    <table class="schedule span12">
+                        <tbody>
                         <tr class="nso" id="lesson">
                             <th align="left"><b> Преподаватель </b></th>
                             <th align="left"><b> Дисциплина </b></th>
@@ -45,51 +43,39 @@
                         </tr>
 
                         {% for teach, disc in lessons.items %}
-                                <tr>
-                                        <td class="group osn" align="left">
-                                            <div>
-                                                <a href="/profile/{{ disc.4 }}">
-                                                    <b style="color: #faa732;"> {{ teach }}</b>
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td class="group osn" align="left"> <div><b style="color: #ff7518;"> {{ disc.0 }}</b></div> </td>
-                                        <td class="group" align="left"> <div><b style="color: #2f96b4;" >{{ disc.1 }}</b></div> </td>
-                                        <td class="group" align="left"> <div><b style="color: #2f96b4;" >{{ disc.2 }}</b></div> </td>
-                                        <td class="group" align="left"><div>
-                                            <b>
-                                                <a title = "Удалить" class="icon-remove" href="delete/{{ disc.3 }}"></a>
-                                            </b>
-                                        </div> </td>
-                                </tr>
+                            <tr>
+                                <td class="group osn" align="left">
+                                    <div>
+                                        <a href="/profile/{{ disc.4 }}">
+                                            <b style="color: #faa732;"> {{ teach }}</b>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="group osn" align="left"> <div><b style="color: #ff7518;"> {{ disc.0 }}</b></div> </td>
+                                <td class="group" align="left"> <div><b style="color: #2f96b4;" >{{ disc.1 }}</b></div> </td>
+                                <td class="group" align="left"> <div><b style="color: #2f96b4;" >{{ disc.2 }}</b></div> </td>
+                                <td class="group" align="left"><div>
+                                    <b>
+                                        <a title = "Удалить" class="icon-remove" href="delete/{{ disc.3 }}"></a>
+                                    </b>
+                                </div> </td>
+                            </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-             <br/><br/><br/>
-
-    {% endif %}
-
-
-    {% if table %}
-
-        <div class="row-fluid">
-
-            <div class="span12 pagination pagination-centered">
-                <ul>
-                    {% for i in frange %}
-                        {% if i == now_lesson %}
-                            <li class="active"><a href="/schedule/lesson/{{ year }}-{{ month }}-{{ day }}/{{ group }}/{{ i }}/">{{ i }}</a></li>
-                        {% else %}
-                            <li style="background: #faa732;"><a href="/schedule/lesson/{{ year }}-{{ month }}-{{ day }}/{{ group }}/{{ i }}/">{{ i }}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                &nbsp;
+            {% endif %}
         </div>
 
+        <div class="span2" style="text-align: right">
+            <a class="btn btn-primary" href="{% url schedule_index %}?day={{ day }}.{{ month }}.{{ year }}"><i class="icon-arrow-left icon-white"></i> Назад</a>
+        </div>
+    </div>
+
+    {% if table %}
+        <br/><br/>
         <h3 style="color: #b94a48;"> Тарификации на текущую группу </h3>
         <div class="row-fluid">
             <table class="schedule span12" id="schedule">
@@ -150,10 +136,23 @@
                 </tbody>
             </table>
         </div>
+        <div class="row-fluid">
+            <div class="span12 pagination pagination-centered">
+                <ul>
+                    {% for i in frange %}
+                        {% if i == now_lesson %}
+                            <li class="active"><a href="/schedule/lesson/{{ year }}-{{ month }}-{{ day }}/{{ group }}/{{ i }}/">{{ i }}</a></li>
+                        {% else %}
+                            <li style="background: #faa732;"><a href="/schedule/lesson/{{ year }}-{{ month }}-{{ day }}/{{ group }}/{{ i }}/">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
     {% else %}
 
-        <h3 style="color: #b94a48;"> Тарификаций на текующую группу отсутствуют.</h3>
+        <h3 style="color: #b94a48;">Тарификаций на текующую группу отсутствуют.</h3>
 
     {% endif %}
 

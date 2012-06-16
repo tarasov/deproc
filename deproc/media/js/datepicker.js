@@ -8,7 +8,14 @@
 $(function() {
 
     $('.add-on').click(function() {
-        $('#datepicker').datepicker();
+        $('#datepicker').datepicker()
+            .on('changeDate', function(ev){
+                var day = ev.date.getDate();
+                var month = ev.date.getMonth()+1;
+                var year = ev.date.getFullYear();
+                window.location = '/schedule/choose/?day='+ day + '.' + month + '.' + year;
+                $('#datepicker').datepicker('hide');
+            });
     });
 
     var startDate = new Date(2012,1,20);

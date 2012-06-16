@@ -7,7 +7,7 @@ $(function() {
     $('.del').css({'opacity': '0.2'});
 
     $('#mark td.mark').each(function() {
-        var id_td = '#' + this.id + ' a';
+        var id_td = '#' + this.id;
         var marks = this.outerText.split(', ');
         change_color_of_mark(id_td, marks)
     });
@@ -69,23 +69,23 @@ $(function() {
         );
     });
 
-    $('#mark td.mark').mousemove(function() {
-        $(this).css({'background-color': '#eee'});
-    });
+    $('#mark td.mark').hover(
+        function(){
+            $(this).css({'background-color': '#eee'});
+        },
+        function(){
+            $(this).css({'background-color': '#FFF'});
+        }
+    );
 
-    $('#mark td.mark').mouseout(function() {
-        $(this).css({'background-color': '#FFF'});
-    });
-
-    $('#days td.theme').mousemove(function() {
-        $(this).css({'background-color': '#eee'});
-    });
-
-    $('#days td.theme').mouseout(function() {
-        $(this).css({'background-color': '#FFF'});
-    });
-
-
+    $('#days td.theme').hover(
+        function(){
+            $(this).css({'background-color': '#eee'});
+        },
+        function(){
+            $(this).css({'background-color': '#FFF'});
+        }
+    );
 
 
     $('#days td.theme').hover(function(){

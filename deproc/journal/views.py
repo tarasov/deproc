@@ -14,11 +14,8 @@ def journal(request, teacher, group, discipline):
 
     discipline = Discipline.objects.get(id=discipline)
     teacher = Teachers.objects.get(id=teacher)
-    if Groups_stud.objects.filter(group_id = group):
-        group = Groups.objects.get(id=group)
-        group_stud = Groups_stud.objects.get(group_id=group)
-    else:
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    group = Groups.objects.get(id=group)
+    group_stud = Groups_stud.objects.get(group_id=group)
     days_of_schedule = Schedule.objects.filter(
                         plan__teacher = teacher,
                         plan__group_plan__group = group
@@ -88,6 +85,10 @@ def teachers(request):
 
 
 def groups(request, teacher):
+    if request.GET.get('err') == '1':
+        warning = True
+        message = 'В выбранной группе еще нету студентов'
+
     teacher = Teachers.objects.get(id = teacher)
     if isinstance(teacher, Teachers):
         groups = teacher.get_groups()
@@ -97,20 +98,13 @@ def groups(request, teacher):
 
 
 def disciplines(request, teacher, group):
+    if not Groups_stud.objects.filter(group_id = group):
+        return HttpResponseRedirect(reverse('groups', kwargs={'teacher': teacher}) + '?err=1')
+
     teacher = Teachers.objects.get(id=teacher)
     group = Groups.objects.get(id=group)
     disciplines = teacher.get_disciplines_current_group(group.id)
     return render_to_response('journal/disciplines.html', locals(), context_instance=RequestContext(request))
-
-def select_discipline(request, id_group, id_discpiline):
-    """
-    Журнал по выбранной предмету
-    ###
-    брать дисциплины указанной группы из тариффикации?
-    """
-    discipline = Discipline.objects.all()[0]
-    return render_to_response('journal/journal.html', locals(), context_instance=RequestContext(request))
-
 
 
 from django.views.decorators.csrf import csrf_protect

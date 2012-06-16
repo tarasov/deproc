@@ -789,7 +789,7 @@ input[class*="span"],
 select[class*="span"],
 textarea[class*="span"],
 .uneditable-input {
-  float: none;
+  /*float: none;*/
   margin-left: 0;
 }
 input,
