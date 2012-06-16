@@ -37,6 +37,15 @@ $(function() {
             var expr = /(\d+)_(\d+)/;
             student = expr.exec($(this).attr('id'))[1];
             day = expr.exec($(this).attr('id'))[2];
+
+//            var studElem = '#stud_' + s;
+//            $('#mark td.name').css({'background-color': '#FFF'});
+//            $(studElem).css({'background-color': '#9CF'});
+//        },
+//        function(){
+//            $('#days tr').css({'background-color': '#FFF'})
+//            $('#mark td.name').css({'background-color': '#FFF'});
+//
         }
     );
 

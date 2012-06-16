@@ -7,75 +7,79 @@
 {% endblock %}
 
 {% block title %}
-    {{ group }} группы, дисциплина {{ discipline }}
+    Журнал {{ group }} группы по дисциплине {{ discipline.name }}, преподователь {{ teacher }}
 {% endblock %}
 
 {% block main %}
     <div class="container-fluid">
-    <div class="row-fluid">
+        <div class="row-fluid">
+            <table id = "mark"  class="span8">
+                <tr>
+                    <th class="span1">#</th>
+                    <th class="span3">
+                    ФИО
+                    </th>
+                    {% for day in journal_days %}
+                        <th l="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
+                    {% endfor %}
+                </tr>
 
-    <table id = "mark"  class="span8">
-        <tr>
-            <th class="span1">#</th>
-            <th class="span3">
-            ФИО
-            </th>
-            {% for day in journal_days %}
-                <th l="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
-            {% endfor %}
-        </tr>
-
-        {% for tr in table %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td class="name">{{ tr.student }}</td>
-                {% for mark in tr.marks %}
-                    <td class="mark {{ mark.id }}" id="{{ tr.student.id }}_{{ mark.0 }}">
-                        <a id="go" rel="leanModal" name="form_marks" href="#form_marks">
-                            {% for mark in mark.1 %}
-                                {% if not forloop.last %}
-                                    <span class="{{ mark }}">{{ mark }}</span>,
+                {% for tr in table %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="name">{{ tr.student }}</td>
+                        {% for mark in tr.marks %}
+                            <td class="mark {{ mark.id }}" id="{{ tr.student.id }}_{{ mark.0 }}">
+                                {% ifequal user.id teacher.id %}
+                                    <a id="go" rel="leanModal" name="form_marks" href="#form_marks">
+                                        {% include "journal/marks.html" %}
+                                    </a>
                                 {% else %}
-                                    <span class="{{ mark }}">{{ mark }}</span>
-                                {% endif %}
-                            {% endfor %}
-                        </a>
-                    </td>
+                                    {% include "journal/marks.html" %}
+                                {% endifequal %}
+                            </td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
+            </table>
 
-    <table id="days" class="span4">
-        <tr>
-            <th>Дата</th>
-            <th class="span3">
-               Темы
-            </th>
-        </tr>
-        {% for day in journal_days %}
-            <tr id="{{ day.id }}">
-                <td class="day span1">
-                    <span>
-                        <p>{{ day.day|date:"m.d" }}</p>
-                        <p>
-                            {{ day.num_less }} пара ({{ day.count_hours }})
-                        </p>
-                        <p>
-                            {{ day.shor_name}}
-                        </p>
-                    </span>
-                </td>
-                <td id="day_{{ day.id }}" class="theme">
-                    <a id="go" rel="leanModal" name="form_themes" href="#form_themes">
-                        <p>{{ day.describe }}</p>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-</div>
-</div>
+            <table id="days" class="span4">
+                <tr>
+                    <th>Дата</th>
+                    <th class="span3">
+                       Темы
+                    </th>
+                </tr>
+                {% for day in journal_days %}
+                    <tr id="{{ day.id }}">
+                        <td class="day span1">
+                            <span>
+                                <p>{{ day.day|date:"m.d" }}</p>
+                                <p>
+                                    {{ day.num_less }} пара ({{ day.count_hours }})
+                                </p>
+                                <p>
+                                    {{ day.shor_name}}
+                                </p>
+                            </span>
+                        </td>
+                        <td id="day_{{ day.id }}" class="theme">
+                            {% ifequal user.id teacher.id %}
+                                <a id="go" rel="leanModal" name="form_themes" href="#form_themes">
+                                    <p>{{ day.describe }}</p>
+                                </a>
+                            {% else %}
+                                <p>{{ day.describe }}</p>
+                            {% endifequal %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Модал формы -->
     <div id="form_themes">
         <div id="ct">
             <div id="ct-header">
@@ -100,13 +104,13 @@
                 <h2 style="text-align: center;">Добавить оценку</h2>
             </div>
 
-            <div style="padding-top: 10px; margin-left: 80px;">
+            <div style="padding-top: 10px; text-align: center">
                 <form action="">
-                    <p style="font-size: 23px;"><a class="mark_2" mark="2" href="#">2 (не о чем)</a></p>
-                    <p style="font-size: 23px;"><a class="mark_3" mark="3" href="#">3 (так се)</a></p>
-                    <p style="font-size: 23px;"><a class="mark_4" mark="4" href="#">4 (нормально)</a></p>
-                    <p style="font-size: 23px;"><a class="mark_5" mark="5" href="#">5 (круто)</a></p>
-                    <p style="font-size: 23px;"><a class="mark_0" mark="0" href="#">clear <img src="{{ MEDIA_URL }}img/clear.png" align="absmiddle"></a></p>
+                    <p style="font-size: 23px;"><a class="mark_5" mark="5" href="#">5</a></p>
+                    <p style="font-size: 23px;"><a class="mark_4" mark="4" href="#">4</a></p>
+                    <p style="font-size: 23px;"><a class="mark_3" mark="3" href="#">3</a></p>
+                    <p style="font-size: 23px;"><a class="mark_2" mark="2" href="#">2</a></p>
+                    <p style="font-size: 23px;"><a class="mark_0" mark="0" href="#">Удалить оценки</a></p>
                 </form>
             </div>
         </div>

@@ -58,7 +58,6 @@ th {
 #mark .mark {
     font-size: 17px;
     text-align: center;
-    cursor: pointer;
 }
 
 a {
@@ -78,7 +77,6 @@ a {
 
 #days td.theme {
     font-size: 15px;
-    cursor: pointer;
 }
 
 #form_themes {
@@ -97,4 +95,16 @@ a {
     background: #FFF;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
     box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+}
+#form_marks .mark_5 {
+    color: red;
+}
+#form_marks .mark_4 {
+    color: green;
+}
+#form_marks .mark_3 {
+    color: blue;
+}
+#form_marks .mark_2 {
+    color: #000000;
 }

@@ -1,0 +1,7 @@
+{% for mark in mark.1 %}
+    {% if not forloop.last %}
+        <span class="{{ mark }}">{{ mark }}</span>,
+    {% else %}
+        <span class="{{ mark }}">{{ mark }}</span>
+    {% endif %}
+{% endfor %}

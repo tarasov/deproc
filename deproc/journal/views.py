@@ -13,14 +13,14 @@ def journal(request, teacher, group, discipline):
     form_lab = ThemeForm(label_suffix='')
 
     discipline = Discipline.objects.get(id=discipline)
-
+    teacher = Teachers.objects.get(id=teacher)
     if Groups_stud.objects.filter(group_id = group):
         group = Groups.objects.get(id=group)
         group_stud = Groups_stud.objects.get(group_id=group)
     else:
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     days_of_schedule = Schedule.objects.filter(
-                        plan__teacher_id = teacher,
+                        plan__teacher = teacher,
                         plan__group_plan__group = group
                     ).order_by('day')[:10]
     students = group_stud.student.all()
