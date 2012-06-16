@@ -10,11 +10,11 @@ $(function() {
     $('.add-on').click(function() {
         $('#datepicker').datepicker()
             .on('changeDate', function(ev){
-                var day = ev.date.getDate();
-                var month = ev.date.getMonth()+1;
-                var year = ev.date.getFullYear();
-                window.location = '/schedule/choose/?day='+ day + '.' + month + '.' + year;
-                $('#datepicker').datepicker('hide');
+                            var day = ev.date.getDate();
+                            // почему-то месяц на один меньше, если выбрать июнь, то будет май, по этому прибавляю 1 месяц
+                            var month = ev.date.getMonth()+1;
+                            var year = ev.date.getFullYear();
+                            window.location = '/schedule/choose/?day='+ day + '.' + month + '.' + year;
             });
     });
 
