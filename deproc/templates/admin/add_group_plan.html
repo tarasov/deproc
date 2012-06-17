@@ -2,21 +2,24 @@
 
 
 {% block main %}
-    <a href="{% url plan_group %}">Вернуться</a>
-    <br><br><br>
+    <a class="btn btn-primary" href="{% url group_plan %}"><i class="icon-arrow-left icon-white"></i> Назад</a>
+    <br><br>
     <div class="row-fluid">
-        <form action="" method="POST">{% csrf_token %}
-            <table class="group_plan span9">
-                <tr>
-                    <th colspan="2">План группы</th>
-                </tr>
+        <div class="span4">&nbsp;</div>
+
+        <table class="tariffication span4">
+            <tr>
+                <th colspan="2">План группы</th>
+            </tr>
+            <form action="" method="POST">{% csrf_token %}
                 {{ form_plan_group.as_table }}
                 <tr>
                     <td colspan="2">
                         <input type="submit" value="Добавить"/>
                     </td>
                 </tr>
-            </table>
-        </form>
+            </form>
+        </table>
     </div>
+
 {% endblock %}
