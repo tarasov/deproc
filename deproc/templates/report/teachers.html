@@ -7,17 +7,25 @@
     <div class="container-fluid">
         <div class="row-fluid">
 
-            <form action="{% url select %}" method="POST">
-                {% csrf_token %}
+            <div class="span4">&nbsp;</div>
 
-                <select name="teacher" class="span5">
-                    {% for teacher in teachers %}
-                        <option value="{{ teacher.pk }}">{{ teacher }}</option>
-                    {% endfor %}
-                </select><br/>
-                <INPUT CLASS="btn btn-inverse" TYPE="SUBMIT" VALUE="Посмотреть">
+            <div class="span4">
 
-            </form>
+                <form action="{% url select %}" method="POST">
+                    {% csrf_token %}
+
+                    <select name="teacher" style="width: 100%">
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.pk }}">{{ teacher }}</option>
+                        {% endfor %}
+                    </select><br/>
+
+                    <INPUT CLASS="btn btn-inverse" TYPE="SUBMIT" VALUE="Посмотреть">
+                </form>
+
+            </div>
+
+            <div class="span4">&nbsp;</div>
         </div>
     </div>
 
