@@ -4,7 +4,9 @@
 {% endblock %}
 
 {% block main %}
-    <br>
+    <div class="row-fluid">
+        <a class="btn btn-success pull-right" href="{% url add_plan_group %}" style="margin-bottom: 30px;"><i class="icon-plus icon-white"></i> Добавить</a>
+    </div>
     <div class="row-fluid">
         <table class="group-plan span12" style="text-align: center;">
             <tr>
@@ -22,13 +24,6 @@
                     <td>{{ tr.3.0 }}, {{ tr.3.1}} семестр</td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td class="addin" colspan="3">
-                    <a href="{% url add_plan_group %}" style="display: block; font-weight: bolder">
-                        +
-                    </a>
-                </td>
-            </tr>
         </table>
     </div>
     <p>
