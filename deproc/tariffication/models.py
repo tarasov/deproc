@@ -264,8 +264,8 @@ class Groups(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = u'группу студентов'
-        verbose_name_plural = u'группы студентов'
+        verbose_name = u'группу'
+        verbose_name_plural = u'группы'
         db_table = 'groups'
 
     def get_absolute_url(self):
