@@ -20,16 +20,16 @@
                     ФИО
                     </th>
                     {% for day in journal_days %}
-                        <th l="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
+                        <th day="{{ day.id }}">{{ day.day|date:"m.d" }}</th>
                     {% endfor %}
                 </tr>
 
                 {% for tr in table %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td class="name">{{ tr.student }}</td>
+                        <td id="student_{{ tr.student.id }}" class="name">{{ tr.student }}</td>
                         {% for mark in tr.marks %}
-                            <td class="mark {{ mark.id }}" id="{{ tr.student.id }}_{{ mark.0 }}">
+                            <td class="mark day_{{ mark.0 }}" id="{{ tr.student.id }}_{{ mark.0 }}">
                                 {% ifequal user.id teacher.id %}
                                     <a id="go" rel="leanModal" name="form_marks" href="#form_marks">
                                         {% include "journal/marks.html" %}

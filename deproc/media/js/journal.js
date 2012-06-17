@@ -35,17 +35,21 @@ $(function() {
     $('td.mark').hover(
         function(){
             var expr = /(\d+)_(\d+)/;
-            student = expr.exec($(this).attr('id'))[1];
             day = expr.exec($(this).attr('id'))[2];
+            student = expr.exec($(this).attr('id'))[1];
+            this.td_of_day = '#day_' + day;
+            this.td_of_student = '#student_' + student;
 
-//            var studElem = '#stud_' + s;
-//            $('#mark td.name').css({'background-color': '#FFF'});
-//            $(studElem).css({'background-color': '#9CF'});
-//        },
-//        function(){
-//            $('#days tr').css({'background-color': '#FFF'})
-//            $('#mark td.name').css({'background-color': '#FFF'});
-//
+            $(this).css({'background-color': '#eee'});
+
+            $(this.td_of_student).css({'background-color': 'blanchedAlmond'});
+            $(this.td_of_day).css({'background-color': 'blanchedAlmond'});
+        },
+        function(){
+            $(this).css({'background-color': '#FFF'});
+
+            $(this.td_of_student).css({'background-color': '#FFC'});
+            $(this.td_of_day).css({'background-color': '#FFF'});
         }
     );
 
@@ -69,29 +73,19 @@ $(function() {
         );
     });
 
-    $('#mark td.mark').hover(
-        function(){
-            $(this).css({'background-color': '#eee'});
-        },
-        function(){
-            $(this).css({'background-color': '#FFF'});
-        }
-    );
-
     $('#days td.theme').hover(
         function(){
+            var expr = /day_(\d+)/;
+            day = expr.exec($(this).attr('id'))[1];
+            this.td_of_day = '.mark.day_' + day;
+
             $(this).css({'background-color': '#eee'});
-        },
-        function(){
-            $(this).css({'background-color': '#FFF'});
+            $(this.td_of_day).css({'background-color': '#FFC'});
+        }, function() {
+            $(this).css({'background-color': '#fff'});
+            $(this.td_of_day).css({'background-color': '#fff'});
         }
     );
-
-
-    $('#days td.theme').hover(function(){
-        var expr = /day_(\d+)/;
-        day = expr.exec($(this).attr('id'))[1]
-    });
 
     // если тема уже есть, то подставляем в инпут
     $("a[name=form_themes]").click(function(){
