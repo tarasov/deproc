@@ -72,7 +72,15 @@ def add_tariffication(request, action, teacher = None, group = None, discipline 
     return render_to_response('admin/add_tariffication.html', locals(), context_instance=RequestContext(request))
 
 def add_plan_group(request):
-    form_plan_group = forms.PlanGroupForm()
+    if request.POST:
+        form = forms.PlanGroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('group_plan'))
+        else:
+            return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))
+    else:
+        form = forms.PlanGroupForm()
     return render_to_response('admin/add_group_plan.html', locals(), context_instance=RequestContext(request))
 
 def action_page(request, page, pk = None, action = None):
