@@ -66,7 +66,7 @@ def add_mark(request, day, student, mark):
         schedule_day = get_object_or_404(Schedule, pk=day)
         theme, created = Theme_of_day.objects.get_or_create(day_of_schedule=schedule_day, defaults = {'describe': ''})
         student = get_object_or_404(Students, pk=student)
-        if mark != "0":
+        if mark != 0:
             assessment = Assessment(mark = mark, student = student, theme_of_day = theme)
             assessment.save()
             return HttpResponse(mark)
@@ -78,8 +78,8 @@ def add_mark(request, day, student, mark):
 
 
 def teachers(request):
-    if request.user.is_authenticated() and Teachers.objects.filter(id = request.user.pk):
-        return HttpResponseRedirect(reverse('groups', kwargs = {'teacher': request.user.pk}))
+#    if request.user.is_authenticated() and Teachers.objects.filter(id = request.user.pk):
+#        return HttpResponseRedirect(reverse('groups', kwargs = {'teacher': request.user.pk}))
     teachers = Teachers.objects.all()
     return render_to_response('journal/teachers.html', locals(), context_instance=RequestContext(request))
 

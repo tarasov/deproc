@@ -45,21 +45,25 @@
                             <a href="{% url teachers %}"><i class="icon-book icon-white"></i> Журнал</a>
                         </li>
 
-                        <ul class="nav">
-                            <li class="divider-vertical"></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="icon-asterisk icon-white"></i>
-                                    Меню
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Студентам</a></li>
-                                    <li><a href="#">Преподавателям</a></li>
-                                    <li><a href="{% url report_all %}">Отчеты</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <li class="active">
+                            <a href="{% url report_all %}"><i class="icon-align-left icon-white"></i> Отчеты</a>
+                        </li>
+
+{#                        <ul class="nav">#}
+{#                            <li class="divider-vertical"></li>#}
+{#                            <li class="dropdown">#}
+{#                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+{#                                    <i class="icon-asterisk icon-white"></i>#}
+{#                                    Меню#}
+{#                                    <b class="caret"></b>#}
+{#                                </a>#}
+{#                                <ul class="dropdown-menu">#}
+{#                                    <li><a href="#">Студентам</a></li>#}
+{#                                    <li><a href="#">Преподавателям</a></li>#}
+{#                                    <li><a href="{% url report_all %}">Отчеты</a></li>#}
+{#                                </ul>#}
+{#                            </li>#}
+{#                        </ul>#}
                     {% if user.is_staff %}
                         <ul class="nav">
                             <li class="dropdown">

@@ -7,7 +7,11 @@
     <div class="container-fluid">
         <div class="row-fluid">
             {% for teacher in teachers %}
-                <p style="text-align: center; font-size: 20px;"><a href="{% url groups teacher=teacher.id %}">{{ teacher }}</a></p>
+                {% if teacher.id == user.pk %}
+                    <p style="text-align: center; font-size: 20px;"><a href="{% url groups teacher=teacher.id %}" style=" color: #5BB75B;">{{ teacher }}</a></p>
+                {% else %}
+                    <p style="text-align: center; font-size: 20px;"><a href="{% url groups teacher=teacher.id %}">{{ teacher }}</a></p>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

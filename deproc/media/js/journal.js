@@ -65,8 +65,13 @@ $(function() {
                 if (html_marks.trim()) {
                     span_mark = ', ' + span_mark;
                 }
-                $(id_td).html(html_marks.trim() + span_mark);
-                change_color_of_mark(id_td, [mark]);
+                // если оценка пустая, значит удалили
+                if (mark == "") {
+                    $(id_td).html("");
+                } else {
+                    $(id_td).html(html_marks.trim() + span_mark);
+                    change_color_of_mark(id_td, [mark]);
+                }
                 $("#lean_overlay").fadeOut(200);
                 $('#form_marks').css({"display":"none"});
             }

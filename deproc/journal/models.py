@@ -4,18 +4,6 @@ from deproc.tariffication import models as main_models
 from deproc.schedule.models import Schedule_day, Schedule
 
 
-class Types_themes(models.Model):
-    name = models.CharField(u"Название", max_length=150, null=False, blank=False)
-
-    class Meta:
-        verbose_name = ('тип темы')
-        verbose_name_plural = ('типы тем')
-        db_table = 'types_themes'
-
-    def __unicode__(self):
-        return u'%s' % self.name
-
-
 class Theme_of_day(models.Model):
     day_of_schedule = models.ForeignKey(Schedule, verbose_name='День') # день из расписания
     describe = models.CharField("Название", max_length=255, null = False, blank = False)
