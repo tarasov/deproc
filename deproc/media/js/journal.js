@@ -108,17 +108,6 @@ $(function() {
     });
 
 
-//    // реализовать в hover
-//    $('#days td.day').mousemove(function() {
-//        $(this).css({'background-color': '#5D5'});
-//        $('#add_theme_of_day').hide();
-//    });
-//    $('#days td.day').mouseout(function() {
-//        $(this).css({'background-color': '#FFF'});
-//    });
-
-
-
     // for csfr
     $('html').ajaxSend(function(event, xhr, settings) {
         function getCookie(name) {

@@ -211,6 +211,9 @@ class TypeHour(models.Model):
         verbose_name_plural = u'типы часов'
         db_table = 'typehour'
 
+    def get_absolute_url(self):
+        return reverse('action_page', kwargs={'page': 'type_hour', 'pk': self.id})
+
     def __unicode__(self):
         return u'%s' % self.short_name
 

@@ -17,6 +17,7 @@ pages_list = {
     'year': ('Year', 'Учебные года'),
     'group_of_students': ('Groups_stud', 'Группа студентов'),
     'uch_plan': ('UchPlan', 'Учебный план'),
+    'type_hour': ('TypeHour', 'Тип часа'),
     }
 
 actions = (
