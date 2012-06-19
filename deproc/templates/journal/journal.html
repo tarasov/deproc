@@ -13,6 +13,7 @@
 {% block main %}
     <div class="container-fluid">
         <div class="row-fluid">
+	    <p style="font-size: 130%;">Журнал <span style="font-weight:bolder;">{{ group }}</span> группы по дисциплине <span style="font-weight:bolder;">{{ discipline.name }}</span>, преподователь <span style="font-weight:bolder;">{{ teacher }}</span></p>
             <table id = "mark"  class="span8">
                 <tr>
                     <th class="span1">#</th>
@@ -110,7 +111,7 @@
                     <p style="font-size: 23px;"><a class="mark_4" mark="4" href="#">4</a></p>
                     <p style="font-size: 23px;"><a class="mark_3" mark="3" href="#">3</a></p>
                     <p style="font-size: 23px;"><a class="mark_2" mark="2" href="#">2</a></p>
-                    <p style="font-size: 23px;"><a class="mark_0" mark="0" href="#"><img src="{{ MEDIA_URL }}/img/delete_point.png"/></a></p>
+                    <p style="font-size: 23px;"><a class="mark_0" mark="0" href="#"><img src="{{ MEDIA_URL }}/img/delete_point.png" title="Удалить"/></a></p>
                 </form>
             </div>
         </div>

@@ -17,18 +17,20 @@
         </div>
     </div>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
+    <div class="row-fluid">
+        <div class="span4">&nbsp;</div>
+        <table class="tariffication span4">
             {% for group in groups %}
-                <p style="text-align: center; font-size: 20px;">
-                    <a href="{% url disciplines teacher=teacher.pk group=group.pk %}">
-                        {{ group }}
-                    </a>
-                </p>
+                <tr>
+                    <td>
+                        <a href="{% url disciplines teacher=teacher.pk group=group.pk %}" style="font-size:120%;">
+                            {{ group }}
+                        </a>
+                    </td>
+                </tr>
             {% endfor %}
-        </div>
+        </table>
     </div>
-
 
 
 {% endblock %}

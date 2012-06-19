@@ -4,15 +4,22 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container-fluid">
-        <div class="row-fluid">
+    <div class="row-fluid">
+        <div class="span4">&nbsp;</div>
+        <table class="tariffication span4">
             {% for teacher in teachers %}
-                {% if teacher.id == user.pk %}
-                    <p style="text-align: center; font-size: 20px;"><a href="{% url groups teacher=teacher.id %}" style=" color: #5BB75B;">{{ teacher }}</a></p>
-                {% else %}
-                    <p style="text-align: center; font-size: 20px;"><a href="{% url groups teacher=teacher.id %}">{{ teacher }}</a></p>
-                {% endif %}
+                <tr style="height: 30px;">
+                    {% if teacher.id == user.pk %}
+                        <td>
+                            <a href="{% url groups teacher=teacher.id %}" style="color: #00b724;">{{ teacher }}</a></p>
+                        </td>
+                    {% else %}
+                        <td>
+                            <a href="{% url groups teacher=teacher.id %}">{{ teacher }}</a></p>
+                        </td>
+                    {% endif %}
+                </tr>
             {% endfor %}
-        </div>
+        </table>
     </div>
-{% endblock %}
+{% endblock %}еу

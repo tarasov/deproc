@@ -7,19 +7,14 @@
     <div class="row-fluid">
         <div class="span4">&nbsp;</div>
         <table class="tariffication span4">
-            <tr>
-                {% for th in ths %}
-                    <th><b>{{ th.1|capfirst }}</b></th>
-                {% endfor %}
-            </tr>
             {% for user in users %}
                 <tr style="height: 30px;">
                     <td><a href="{{ user.get_absolute_url }}">{{ user }}</a></td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td class="addin"><a href="./add"><div><b>+</b></div></a></td>
-            </tr>
+{#            <tr>#}
+{#                <td class="addin"><a href="./add"><div><b>+</b></div></a></td>#}
+{#            </tr>#}
         </table>
     </div>
 {% endblock %}
