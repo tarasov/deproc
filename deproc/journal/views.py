@@ -18,8 +18,9 @@ def journal(request, teacher, group, discipline):
     group_stud = Groups_stud.objects.get(group_id=group)
     days_of_schedule = Schedule.objects.filter(
                         plan__teacher = teacher,
-                        plan__group_plan__group = group
-                    ).order_by('day')[:10]
+                        plan__group_plan__group = group,
+                        plan__uch_plan_hour__uch_plan__disc = discipline,
+    ).order_by('day')[:10]
     students = group_stud.student.all()
     journal_days = []
     for day_of_schedule in days_of_schedule:
@@ -49,8 +50,14 @@ def journal(request, teacher, group, discipline):
         journal['student'] = student
         journal['marks'] = []
         for day_of_schedule in days_of_schedule:
-            theme = Theme_of_day.objects.filter(day_of_schedule=day_of_schedule)
-            marks = Assessment.objects.filter(student=student, theme_of_day=theme)
+            theme = Theme_of_day.objects.filter(
+                day_of_schedule = day_of_schedule,
+                day_of_schedule__plan__uch_plan_hour__uch_plan__disc = discipline,
+            )
+            marks = Assessment.objects.filter(
+                student = student, theme_of_day = theme,
+                theme_of_day__day_of_schedule__plan__uch_plan_hour__uch_plan__disc = discipline,
+            )
             if marks:
                 marks_of_day = [int(mark.mark) for mark in marks]
                 journal['marks'].append((day_of_schedule.id, marks_of_day,))
